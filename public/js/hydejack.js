@@ -236,6 +236,7 @@
     var startTranslateX = 0;
     var translateX = 0;
     var animationFrameRequested = false;
+    var touching = false;
 
     var animationStartTime;
     var animationStartX;
@@ -275,42 +276,44 @@
     }
 
     function onTouchMove(e) {
-      var touch = getNearestTouch(e.touches);
-      pageX = touch.pageX;
-      pageY = touch.pageY;
+      if (touching) {
+        var touch = getNearestTouch(e.touches);
+        pageX = touch.pageX;
+        pageY = touch.pageY;
 
-      if (typeof isScrolling === 'undefined' && startedMoving) {
-        isScrolling = Math.abs(startY - pageY) > Math.abs(startX - pageX);
-        if (!isScrolling) {
-          state = START_TOUCHING;
-          requestAnimationLoop();
+        if (typeof isScrolling === 'undefined' && startedMoving) {
+          isScrolling = Math.abs(startY - pageY) > Math.abs(startX - pageX);
+          if (!isScrolling) {
+            state = START_TOUCHING;
+            requestAnimationLoop();
+          }
         }
+
+        if (isScrolling && !menuOpen) return;
+
+        e.preventDefault();
+
+        startedMoving = true;
       }
-
-      if (isScrolling && !menuOpen) return;
-
-      e.preventDefault();
-
-      startedMoving = true;
     }
 
     function onTouchEnd(e) {
-      if (isScrolling || e.touches.length > 0) {
-        return;
+      if (touching) {
+        if (isScrolling || e.touches.length > 0) {
+          return;
+        }
+
+        if (startedMoving) {
+          menuOpen = velocity > VELOCITY_THRESHOLD ? 1 :
+            velocity < -VELOCITY_THRESHOLD ? 0 :
+              translateX >= sliderWidth / 2 ? 1 :
+              0;
+        }
+
+        touching = false;
+        state = START_ANIMATING;
+        startedMoving = false;
       }
-
-      if (startedMoving) {
-        menuOpen = velocity > VELOCITY_THRESHOLD ? 1 :
-          velocity < -VELOCITY_THRESHOLD ? 0 :
-            translateX >= sliderWidth / 2 ? 1 :
-            0;
-      }
-
-      state = START_ANIMATING;
-      startedMoving = false;
-
-      document.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('touchend', onTouchEnd);
     }
 
     function onTouchStart(e) {
@@ -336,9 +339,8 @@
         startX = pageX = lastPageX = touch.pageX;
         startY = pageY = lastPageY = touch.pageY;
 
-        if (menuOpen || (!menuOpen && pageX < window.innerWidth / 3 && !isCodeBlock(e.path))) {
-          document.addEventListener('touchmove', onTouchMove);
-          document.addEventListener('touchend', onTouchEnd);
+        if (menuOpen || (!menuOpen && pageX < window.innerWidth / 3/* && !isCodeBlock(e.path)*/)) {
+          touching = true;
         }
       }
     }
@@ -452,6 +454,8 @@
     function enableSlider() {
       document.body.classList.add('drawer');
       document.addEventListener('touchstart', onTouchStart);
+      document.addEventListener('touchmove', onTouchMove);
+      document.addEventListener('touchend', onTouchEnd);
       menu.addEventListener('tap', onMenuClick);
       backdrop.addEventListener('tap', onBackdropClick);
       animateTo(menuOpen);
@@ -460,6 +464,8 @@
     function disableSlider() {
       document.body.classList.remove('drawer')
       document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
       menu.removeEventListener('tap', onMenuClick);
       backdrop.removeEventListener('tap', onBackdropClick);
     }
