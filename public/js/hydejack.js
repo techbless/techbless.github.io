@@ -503,29 +503,33 @@
   }
 
   // KaTeX support
-  var mathBlocks = document.querySelectorAll('script[type^="math/tex"]');
+  if ('querySelectorAll' in document &&
+      'classList' in document.body) {
 
-  // only load if math blocks are present
-  if (mathBlocks.length) {
-    // enable math blocks using KaTeX
-    loadCSS("https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css");
-    loadScript("https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js", function () {
-      requestAnimationFrame(function () {
-        // hide the preview
-        document.body.classList.add('katex-loaded');
+    var mathBlocks = document.querySelectorAll('script[type^="math/tex"]');
 
-        // kramdown generates script tags with type "math/tex"
-        Array.prototype.forEach.call(mathBlocks, function(el) {
-          var tex = el.textContent
-            .replace('% <![CDATA[', '')
-            .replace('%]]>', '');
+    // only load if math blocks are present
+    if (mathBlocks.length) {
+      // enable math blocks using KaTeX
+      loadCSS("https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css");
+      loadScript("https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js", function () {
+        requestAnimationFrame(function () {
+          // hide the preview
+          document.body.classList.add('katex-loaded');
 
-          // replace the script tag with KaTeX
-          el.outerHTML = katex.renderToString(tex, {
-            displayMode: el.type === 'math/tex; mode=display'
+          // kramdown generates script tags with type "math/tex"
+          Array.prototype.forEach.call(mathBlocks, function(el) {
+            var tex = el.textContent
+              .replace('% <![CDATA[', '')
+              .replace('%]]>', '');
+
+            // replace the script tag with KaTeX
+            el.outerHTML = katex.renderToString(tex, {
+              displayMode: el.type === 'math/tex; mode=display'
+            });
           });
         });
       });
-    });
+    }
   }
 }());
