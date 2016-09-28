@@ -10,6 +10,7 @@
   <meta name="description" content="{{ page.excerpt | strip_html }}">
   {% endif %}{% endif %}
 
+<!--[if gt IE 8]> -->
   <!-- CSS -->
   {% if site.load_google_fonts %}
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family={{ site.load_google_fonts }}" type="text/css">
@@ -62,6 +63,7 @@
       background: {{ color }};
     }
   </style>
+<!-- <![endif]-->
 
   <!-- Icons -->
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ site.baseurl }}/public/apple-touch-icon-144-precomposed.png">
@@ -70,7 +72,7 @@
   <!-- RSS -->
   <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ site.baseurl }}/atom.xml">
 
-  <!--[if lt IE 9]>
-    <script src="https://unpkg.com/html5shiv/dist/html5shiv.min.js"></script>
-  <![endif]-->
+<!--[if lt IE 9]>
+  <script src="https://unpkg.com/html5shiv/dist/html5shiv.min.js"></script>
+<![endif]-->
 </head>
