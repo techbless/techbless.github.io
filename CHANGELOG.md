@@ -6,8 +6,19 @@ redirect_from:
   - /docs/versions/
 ---
 
+## v6.6.0
+Aug 7 2017
+{:.heading.post-date}
+
+* Dependencies from external domains have been removed
+  (with the exception of those that are explicitly defined and optional: Google Analytics, Google Fonts and Disqus).
+  Instead, they are now located in the assets folder and managed via Bower.
+* KaTeX is no longer loaded on pages that do not contain math blocks.
+* `preload` link tags no longer use `onload`. Instead callbacks are registered within a script tag.
+* Code in code blocks is no longer smaller sized than inline code.
+
 ## v6.5.0
-July 27 2017
+Jul 27 2017
 {:.heading.post-date}
 
 This maintenance release includes various quality-of-life improvements when using the gem-based version of the theme.
@@ -103,13 +114,13 @@ To remove the border radius, open (or create) `_sass/my-inline.scss` and add the
 ~~~
 
 ## v6.4.1
-June 23 2017
+Jun 23 2017
 {:.heading.post-date}
 
 * Fix invalid color hex
 
 ## v6.4.0
-June 21 2017
+Jun 21 2017
 {:.heading.post-date}
 
 In this release I've added a "Other Projects" section to the bottom of each project page,
@@ -144,7 +155,7 @@ Specifically, the semantics of the resume layout have been improved.
 * No more empty attributes on `img` tags.
 
 ## v6.3.0
-June 6 2017
+Jun 6 2017
 {:.heading.post-date}
 
 This release makes including third party plugins easier.
@@ -359,6 +370,6 @@ Oct 15 2013
 {:.heading.post-date}
 
 [tag]: http://www.minddust.com/post/tags-and-categories-on-github-pages/
-[migration]: docs/6.5.0/migration.md
-[writing]: docs/6.5.0/writing.md
-[scripts]: docs/6.5.0/scripts.md
+[migration]: docs/6.6.0/migration.md
+[writing]: docs/6.6.0/writing.md
+[scripts]: docs/6.6.0/scripts.md
