@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Introducing Hydejack (v3)
-tags: [hydejack]
 description: >
   Hydejack is a pretentious two-column [Jekyll](http://jekyllrb.com) theme,
-  stolen by [`@qwtel`](https://twitter.com/qwtel) from [Hyde](http://hyde.getpoole.com).
+  stolen by [@qwtel](https://twitter.com/qwtel) from [Hyde](http://hyde.getpoole.com).
   You could say it was.. [hydejacked](http://media3.giphy.com/media/makedRIckZBW8/giphy.gif).
+tags: [hydejack]
 excerpt_separator: <!--more-->
 ---
 
@@ -26,7 +26,7 @@ Features include:
 <!--more-->
 
 **NOTE**: This post is outdated and only included for legacy reasons.
-See the [Documentation][docs] for up-to-date instructions.
+See the [Documentation][docs]{:.heading.flip-title} for up-to-date instructions.
 {:.message}
 
 ## Download
@@ -105,5 +105,6 @@ as each tag requires some setup work. I tend to think of it as categories that c
    sidebar_tags: [mytag, othertag]
    ~~~
 
-[docs]: https://qwtel.com/hydejack/docs/
+
+[docs]: ../docs/7.0.0/index.md
 [tag]: http://www.minddust.com/post/tags-and-categories-on-github-pages/

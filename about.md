@@ -36,9 +36,7 @@ Both the PRO *and* free version includes all of the features listed below:
 * RSS feed
 * Print layout
 
-Open `about.md` to edit this text.
-
-### [Documentation][docs]{:data-flip="title"}
+### [Documentation][docs]{:.flip-title}
 Hydejack is documented extensively.
 You can read it [on this site][docs], in the [repository's wiki][wiki], or [download the PDF][download].
 
@@ -73,8 +71,7 @@ Open `about.md` to edit this text.
 [portfolio]: https://qwtel.com/hydejack/projects/
 [resume]: https://qwtel.com/hydejack/resume/
 [welcome]: https://qwtel.com/hydejack/
-
-[docs]: docs/6.6.0/index.md
+[docs]: docs/7.0.0/index.md
 [license]: LICENSE.md
 [pro]: licenses/PRO-license.md
 

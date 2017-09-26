@@ -1,0 +1,25 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+{% unless page.redirect %}
+  {% seo %}
+
+  {% if site.keywords or page.keywords %}
+    <meta name="keywords" content="{{ page.keywords | default:site.keywords | join:',' }}">
+  {% endif %}
+{% else %}
+  <meta http-equiv="refresh" content="0; url={{ page.redirect.to }}">
+  <title>{{ site.data.strings.redirecting | default:"Redirecting..." }}</title>
+{% endunless %}
+
+<meta name="apple-mobile-web-app-title" content="{{ site.title }}">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<meta name="application-name" content="{{ site.title }}">
+<meta name="msapplication-config" content="{{ '/assets/ieconfig.xml' | relative_url }}">
+
+<meta name="theme-color" content="{{ color | default:'#4fb1ba' }}">
+
+<meta name="generator" content="Hydejack v7.0.0" />

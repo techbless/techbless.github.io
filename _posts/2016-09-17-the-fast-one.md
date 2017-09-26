@@ -1,9 +1,9 @@
 ---
 layout: post
 title: 'The Fast One (v5)'
-tags: [hydejack]
 description: >
-  This release dramatically increases page load speed which matters to Google and visitors with slow connections alike.
+  Hydejack v5 dramatically increases page load speed which matters to Google and visitors with slow connections alike.
+tags: [hydejack]
 ---
 
 This major release increases page load speed dramatically.
@@ -11,7 +11,7 @@ The page now scores roughly 90/100 on [Google's PageSpeed Insights][gpsi] (up fr
 has a high score on similar tools.
 
 **NOTE**: This post is outdated and only included for legacy reasons.
-See the [Documentation][docs] for up-to-date instructions.
+See the [Documentation][docs]{:.heading.flip-title} for up-to-date instructions.
 {:.message}
 
 Most importantly, the critical rendering path is no longer blocked by loading styles or scripts,
@@ -47,7 +47,7 @@ help with loading speed as well (burred images get compressed by JPG much better
 
 [Get *The Fast One* on GitHub](https://github.com/qwtel/hydejack/releases)
 
-[docs]: https://qwtel.com/hydejack/docs/
+[docs]: ../docs/7.0.0/index.md
 [gpsi]: https://developers.google.com/speed/pagespeed/insights/?url=http%3A%2F%2Fqwtel.com%2Fhydejack%2F
 
 *[FOUC]: Flash Of Unstyled Content

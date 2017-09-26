@@ -1,8 +1,14 @@
-@mixin pre() {
+@mixin pre($padding: 1rem) {
   margin-left: -1rem;
   margin-right: -1rem;
-  padding: 1rem;
-  background-color: $gray-bg;
+  padding: $padding;
+  background-color: $code-bg;
+
+  @media print {
+    width: 100%!important;
+    page-break-inside: avoid;
+    break-inside: avoid-page;
+  }
 }
 
 @mixin aspect-ratio($width, $height) {

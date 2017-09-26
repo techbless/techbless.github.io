@@ -1,6 +1,9 @@
 ---
 layout: post
 title: 'Related Projects and Data Tables (v6.4)'
+description: >
+  In Hydejack v6.4 I've added a "Other Projects" section to the bottom of each project page,
+  making it easier for users to navigate through your collection and discover other projects.
 tags: [hydejack]
 ---
 
@@ -87,4 +90,4 @@ There's many more minor changes and fixes that you can read below.
 * Fixed bug that caused the project animation to "jump" when using long project titles.
 * No more empty attributes on `img` tags.
 
-[writing]: https://qwtel.com/hydejack/docs/writing/
+[writing]: ../docs/7.0.0/writing.md

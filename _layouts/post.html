@@ -4,6 +4,16 @@ layout: base
 
 {% include post.html post=page link_title=false %}
 
-{% include about.html %}
+<hr class="dingbat related" />
 
-{% include related.html post=page %}
+{% assign addons = site.hydejack.post_addons %}
+{% unless addons %}{% assign addons = "about,newsletter,related,random" | split:"," %}{% endunless %}
+{% for addon in addons %}
+  {% case addon %}
+  {% when 'about' %}
+     {% include about.html %}
+  {% when 'related' %}
+    {% include related-posts.html post=post %}
+  {% else %}
+  {% endcase %}
+{% endfor %}

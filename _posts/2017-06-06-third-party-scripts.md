@@ -1,6 +1,8 @@
 ---
 layout: post
 title: 'Third Party Scripts (v6.3)'
+description: >
+  Hydejack v6.3 makes including third party plugins easier.
 tags: [hydejack]
 ---
 
@@ -68,4 +70,4 @@ Maybe you won't even notice the difference.
 ### Fixes
 * Fix default color in gem-based theme
 
-[scripts]: https://qwtel.com/hydejack/docs/scripts/
+[scripts]: ../docs/7.0.0/scripts.md

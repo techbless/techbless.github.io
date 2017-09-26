@@ -1,11 +1,20 @@
-<div id="_yDrawer">
-  <div id="_sidebar" class="sidebar">
-    <div class="sidebar-bg" style="background-color:{{ color }};background-image:url({{ image }})"></div>
-    <header class="sidebar-sticky" role="banner">
-      <div class="sidebar-about">
-        <h1><a id="_title" href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
-        {{ site.description | truncatewords:50 | markdownify }}
-      </div>
+<hy-drawer>
+  <aside id="_sidebar" class="sidebar">
+    {% if image.background %}
+      {% capture bg_style %}background:{{ image.background }}{% endcapture %}
+      {% capture bg_class %}sidebar-bg {% if image.overlay %}sidebar-overlay{% endif %}{% endcapture %}
+    {% else %}
+      {% capture bg_style %}background-color:{{ color }};{% if image != 'none' %}background-image:url({{ image }}){% endif %}{% endcapture %}
+      {% capture bg_class %}sidebar-bg {% if image != 'none' %}sidebar-overlay{% endif %}{% endcapture %}
+    {% endif %}
+    <div class="{{ bg_class }}" style="{{ bg_style }}"></div>
+    <div class="sidebar-sticky">
+      <header class="sidebar-about">
+        <h2 class="h1"><a id="_title" href="{{ '/' | relative_url }}">{{ site.title }}</a></h2>
+        <p class="{% if site.description.size > 100 %}fine{% endif %}">
+          {{ site.description | markdownify | replace:'<p>','' | replace:'</p>','' }}
+        </p>
+      </header>
 
       <nav class="sidebar-nav heading" role="navigation">
         {% include nav.html %}
@@ -13,11 +22,9 @@
 
       {% assign author = site.data.authors.first[1] | default:site.author %}
 
-      {% if author.social or site.github_username or site.twitter_username %}
-        <div class="sidebar-social">
-          {% include social.html social=author.social %}
-        </div>
-      {% endif %}
-    </header>
-  </div>
-</div>
+      <div class="sidebar-social">
+        {% include social.html author=author %}
+      </div>
+    </div>
+  </aside>
+</hy-drawer>

@@ -1,55 +1,98 @@
-// Copyright (c) 2017 Florian Klampfer
-// Licensed under MIT
+// Copyright (c) 2017 Florian Klampfer <https://qwtel.com/>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import YDrawer from 'y-drawer/src/vanilla';
+import { Drawer, VANILLA_FEATURE_TESTS } from 'hy-drawer/src/vanilla';
+import { HTMLDrawerElement } from 'hy-drawer/src/webcomponent';
 
-import { hasFeatures } from './common';
+import { hasFeatures, isSafari, isMobileSafari } from './common';
 
 const REQUIREMENTS = [
-  'eventlistener',
-  'queryselector',
-  'matchmedia',
-  'requestanimationframe',
-  'classlist',
-  'opacity',
-  'csstransforms',
-  'csspointerevents',
+  ...VANILLA_FEATURE_TESTS,
   'cssremunit',
+  'classlist',
+  'eventlistener',
+  'matchmedia',
 ];
 
-const MEDIA_QUERY = '(min-width: 54em)';
+// HACK: hard-coded SCSS value
+const MEDIA_QUERY = '(min-width: 64em)';
 
 function resizeCallback() {
-  const hasChanged = window.isDesktop !== window.matchMedia(MEDIA_QUERY).matches;
-  if (hasChanged) {
-    window.isDesktop = !window.isDesktop;
-    window.drawer.persistent = window.isDesktop;
-    window.drawer.jumpTo(window.isDesktop);
+  const isDesktop = window.matchMedia(MEDIA_QUERY).matches;
+  if (window._isDesktop !== isDesktop) {
+    window._isDesktop = isDesktop;
+    window._drawer.persistent = isDesktop;
+    window._drawer._jumpTo(isDesktop);
   }
 }
 
 function menuClickClallback(e) {
-  if (!window.isDesktop) {
+  if (!window._isDesktop) {
     e.preventDefault();
-    window.drawer.toggle();
+    window._drawer.toggle();
   }
 }
 
-function addEventListeners(drawer) {
-  window.drawer = drawer;
-  window.addEventListener('resize', resizeCallback);
-  document.getElementById('_menu').addEventListener('click', menuClickClallback);
+function getRange() {
+  if (isMobileSafari) {
+    if (navigator.standalone) return [0, 150];
+    return [35, 150];
+  }
+  return [0, 50];
 }
 
-if (!window.disableDrawer && hasFeatures(REQUIREMENTS)) {
-  window.isDesktop = window.matchMedia(MEDIA_QUERY).matches;
-  const drawer = document.getElementById('_yDrawer');
+function setupWebComponent(drawerEl) {
+  const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
-  addEventListeners(new YDrawer(drawer, {
-    opened: window.isDesktop,
-    persistent: window.isDesktop,
-    transitionDuration: 150,
-  }));
+  if (window._isDesktop) drawerEl.setAttribute('opened', '');
+  if (window._isDesktop) drawerEl.setAttribute('persistent', '');
+  drawerEl.setAttribute('align', 'left');
+  drawerEl.setAttribute('range', getRange().join(','));
+  drawerEl.setAttribute('threshold', isSafari ? 0 : 10);
+  drawerEl.setAttribute('peek', 0.5 * rem);
+  drawerEl.setAttribute('prevent-default', '');
 
-  drawer.classList.add('loaded');
+  customElements.define('hy-drawer', HTMLDrawerElement);
+  return drawerEl;
+}
+
+function setupVanilla(drawerEl) {
+  const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+  return new Drawer(drawerEl, {
+    opened: window._isDesktop,
+    persistent: window._isDesktop,
+    align: 'left',
+    range: getRange(),
+    threshold: isSafari ? 0 : 10,
+    peek: 0.5 * rem,
+    preventDefault: true,
+  });
+}
+
+if (!window._noDrawer && hasFeatures(REQUIREMENTS)) {
+  const drawerEl = document.getElementsByTagName('hy-drawer')[0];
+  const menuEl = document.getElementById('_menu');
+
+  window._isDesktop = window.matchMedia(MEDIA_QUERY).matches;
+
+  window._drawer = 'customElements' in window && 'attachShadow' in Element.prototype ?
+    setupWebComponent(drawerEl) :
+    setupVanilla(drawerEl);
+
+  drawerEl.classList.add('loaded');
+  window.addEventListener('resize', resizeCallback);
+  menuEl.addEventListener('click', menuClickClallback);
 }

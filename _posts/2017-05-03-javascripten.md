@@ -1,11 +1,9 @@
 ---
 layout: post
 title: 'JavaScripten (v6)'
-tags: [hydejack]
 description: >
-  The last release made the theme fast in the eyes of Google, but not so much in the eyes of its readers.
-  This release addresses this by adding a layer of JavaScript, effectively turning the whole site into a single page app.
-redirect_from: /2017/04/15/javascripten-beta/
+  Hydejack v6 adds a layer of JavaScript, effectively turning the whole site into a single page app.
+tags: [hydejack]
 ---
 
 Hydejack has always featured a JavaScript-heavy sidebar, but other than that, JS has been used sparingly.
@@ -30,7 +28,7 @@ At the same time, the FOUC introduced in the last release will no longer occur (
 * Added `not-found` layout.
 * Added `redirect` layout
 
-See the [the migration guide][migration] for instructions on how to upgrade.
+See the [the migration guide][upgrade] for instructions on how to upgrade.
 
 ## Minor
 * The "accent" font (heading font) is now used for all headings.
@@ -62,7 +60,7 @@ See the [the migration guide][migration] for instructions on how to upgrade.
 
 [Get *JavaScripten* on GitHub](https://github.com/qwtel/hydejack/releases)
 
-[migration]: https://qwtel.com/hydejack/docs/migration/
-[writing]: https://qwtel.com/hydejack/docs/writing/
+[upgrade]: ../docs/7.0.0/upgrade.md
+[writing]: ../docs/7.0.0/writing.md
 
 *[FOUC]: Flash of Unstyled Content

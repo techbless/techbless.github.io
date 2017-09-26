@@ -1,10 +1,10 @@
 ---
 layout: post
 title: 'Social Media Impocalypse (v4)'
-tags: [hydejack]
 description: >
-  This release adds *a lot* of social media icons and introduces a new default layout.
+  Hydejack v4 adds *a lot* of social media icons and introduces a new default layout.
   It also breaks things, hence a new major release number.
+tags: [hydejack]
 excerpt_separator: <!--more-->
 ---
 
@@ -18,7 +18,7 @@ excerpt_separator: <!--more-->
 <!--more-->
 
 **NOTE**: This post is outdated and only included for legacy reasons.
-See the [Documentation][docs] for up-to-date instructions.
+See the [Documentation][docs]{:.heading.flip-title} for up-to-date instructions.
 {:.message}
 
 ## New features
@@ -41,4 +41,5 @@ See the [Documentation][docs] for up-to-date instructions.
 
 [Get *Social Media Impocalypse* on GitHub](https://github.com/qwtel/hydejack/releases)
 
-[docs]: https://qwtel.com/hydejack/docs/
+
+[docs]: ../docs/7.0.0/index.md

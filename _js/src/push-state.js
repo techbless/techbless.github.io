@@ -1,227 +1,349 @@
-// Copyright (c) 2017 Florian Klampfer
-// Licensed under MIT
+// Copyright (c) 2017 Florian Klampfer <https://qwtel.com/>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import 'core-js/fn/array/for-each';
+import 'core-js/fn/object/assign';
+import 'core-js/fn/string/includes';
+
+import { PushState, VANILLA_FEATURE_TESTS } from 'hy-push-state/src/vanilla';
+import { HTMLPushStateElement } from 'hy-push-state/src/webcomponent';
 
 import { Observable } from 'rxjs/Observable';
+
+import { animationFrame } from 'rxjs/scheduler/animationFrame';
+
 import { fromEvent } from 'rxjs/observable/fromEvent';
+import { merge } from 'rxjs/observable/merge';
+import { timer } from 'rxjs/observable/timer';
+import { of } from 'rxjs/observable/of';
 
 import { _catch as recover } from 'rxjs/operator/catch';
 import { _do as effect } from 'rxjs/operator/do';
 import { debounceTime } from 'rxjs/operator/debounceTime';
-import { exhaustMap } from 'rxjs/operator/exhaustMap';
 import { filter } from 'rxjs/operator/filter';
 import { map } from 'rxjs/operator/map';
+import { mapTo } from 'rxjs/operator/mapTo';
 import { mergeMap } from 'rxjs/operator/mergeMap';
+import { observeOn } from 'rxjs/operator/observeOn';
 import { pairwise } from 'rxjs/operator/pairwise';
 import { share } from 'rxjs/operator/share';
 import { startWith } from 'rxjs/operator/startWith';
+import { exhaustMap } from 'rxjs/operator/exhaustMap';
 import { switchMap } from 'rxjs/operator/switchMap';
 import { takeUntil } from 'rxjs/operator/takeUntil';
 import { zipProto as zipWith } from 'rxjs/operator/zip';
 
-import PushState from 'y-push-state/src/vanilla';
-import elemDataset from 'elem-dataset';
-
-import { hasFeatures, animate } from './common';
+import { animate, empty, hasFeatures, isSafari } from './common';
 import CrossFader from './cross-fader';
 import upgradeMathBlocks from './katex';
 
-import Flip from './flip/flip';
-import './flip/title';
+import flip from './flip';
+
+const { forEach } = Array.prototype;
+const assign = ::Object.assign;
 
 const REQUIREMENTS = [
+  ...VANILLA_FEATURE_TESTS,
+  'classlist',
+  'cssanimations',
+  'cssremunit',
+  'documentfragment',
   'eventlistener',
+  'history',
+  'matchmedia',
+  'opacity',
   'queryselector',
   'requestanimationframe',
-  'classlist',
-  'documentfragment',
-  'history',
-  'opacity',
-  'cssanimations',
+  'template',
 ];
 
-const DURATION = 250;
-const FADE_DURATION = 500;
+const HEADING_SELECTOR = 'h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]';
 
-// whenever the source observable encounters an error,
-// we log it to the console, but continue as if it never happend
-function makeUnstoppable() {
-  return this::recover((error, caught) => {
-    console.error(error); // eslint-disable-line
-    return caught;
+const DURATION = 250;
+const FADE_DURATION = 600;
+
+const FADE_OUT = [
+  { opacity: 1 },
+  { opacity: 0 },
+];
+
+const FADE_IN = [
+  { opacity: 0, transform: 'translateY(-3rem)' },
+  { opacity: 1, transform: 'translateY(0)' },
+];
+
+// TODO: rename?
+const SETTINGS = {
+  duration: DURATION,
+  easing: 'cubic-bezier(0,0,0.32,1)',
+};
+
+function upgradeHeading(h) {
+  const hash = `#${h.id}`;
+  const a = document.createElement('a');
+  const span = document.createElement('span');
+  span.textContent = 'Permalink';
+  span.classList.add('sr-only');
+  a.appendChild(span);
+  a.href = hash;
+  a.classList.add('permalink');
+  h.appendChild(a);
+}
+
+// We log errors to the console, but continue as if it never happend
+function subscribe(ne, er, co) {
+  return this
+    ::effect({ error: ::console.error })
+    ::recover((e, c) => c)
+    .subscribe(ne, er, co);
+}
+
+function setupAnimationMain(pushStateEl) {
+  const template = document.getElementById('_animation-main-template');
+  const animationMain = document.importNode(template.content, true);
+  pushStateEl.parentNode.insertBefore(animationMain, pushStateEl);
+  return pushStateEl.previousElementSibling;
+}
+
+function setupLoading(navbarEl) {
+  const template = document.getElementById('_loading-template');
+  const loading = document.importNode(template.content, true);
+  navbarEl.appendChild(loading);
+  return navbarEl.lastElementChild;
+}
+
+function setupErrorPage(main, { pathname }) {
+  const template = document.getElementById('_error-template');
+  const error = document.importNode(template.content, true);
+  const anchor = error.querySelector('.this-link');
+  if (anchor) {
+    anchor.href = pathname;
+    anchor.textContent = pathname;
+  }
+  main.appendChild(error);
+  return main.lastElementChild;
+}
+
+function setupStandaloneUI(navbarEl) {
+  const template = document.getElementById('_standalone-template');
+  const standalone = document.importNode(template.content, true);
+  standalone.querySelector('.back').addEventListener('click', () => window.history.back());
+  navbarEl.appendChild(standalone);
+  return navbarEl.lastElementChild;
+}
+
+function getFlipType(t) {
+  if (!t || !t.classList) return null;
+  if (t.classList.contains('flip-title')) return 'title';
+  if (t.classList.contains('flip-project')) return 'project';
+  return t.getAttribute && t.getAttribute('data-flip');
+}
+
+function shouldAnimate({ type }) {
+  return type === 'push' || navigator.standalone || !isSafari;
+}
+
+function shouldRestoreScroll() {
+  if (isSafari) { return !!navigator.standalone; }
+  return true;
+}
+
+function setupWebComponent(pushStateEl) {
+  pushStateEl.setAttribute('replace-ids', '_main');
+  pushStateEl.setAttribute('link-selector', 'a[href^="/"]:not(.no-push-state)');
+  if (shouldRestoreScroll()) pushStateEl.setAttribute('scroll-restoration', '');
+  pushStateEl.setAttribute('duration', DURATION);
+  if (isSafari && !navigator.standalone) pushStateEl.setAttribute('_instant-pop', '');
+  pushStateEl.setAttribute('_script-selector', 'script:not([type^="math/tex"])');
+
+  customElements.define('hy-push-state', HTMLPushStateElement);
+  return pushStateEl;
+}
+
+function setupVanilla(pushStateEl) {
+  return new PushState(pushStateEl, {
+    replaceIds: ['_main'],
+    linkSelector: 'a[href^="/"]:not(.no-push-state)',
+    scrollRestoration: shouldRestoreScroll(),
+    duration: DURATION,
+    _instantPop: isSafari && !navigator.standalone,
+    _scriptSelector: 'script:not([type^="math/tex"])',
   });
 }
 
-if (!window.disablePushState && hasFeatures(REQUIREMENTS)) {
-  const ua = navigator.userAgent.toLowerCase();
-  const isSafari = ua.indexOf('safari') > 0 && ua.indexOf('chrome') < 0;
+if (!window._noPushState && hasFeatures(REQUIREMENTS)) {
+  const isStandalone =
+    !!navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
 
-  const crossFader = new CrossFader({ duration: FADE_DURATION });
+  const pushStateEl = document.getElementsByTagName('hy-push-state')[0];
+  const navbarEl = document.querySelector('.navbar .content .nav-btn-bar');
 
-  const pushState = document.getElementById('_yPushState');
+  const animationMain = setupAnimationMain(pushStateEl);
+  const loading = setupLoading(navbarEl);
+  if (isStandalone) setupStandaloneUI(navbarEl);
 
-  const animationMain = document.createElement('div');
-  animationMain.classList.add('animation-main');
-  animationMain.classList.add('fixed-top');
-  animationMain.innerHTML = `
-    <div class="content">
-      <div class="page"></div>
-    </div>`;
-  pushState.parentNode.insertBefore(animationMain, pushState);
-
-  const loading = document.createElement('div');
-  loading.classList.add('loading');
-  loading.innerHTML = `
-    <span class="sr-only">Loading...</span>
-    <div class="sk-folding-cube">
-      <div class="sk-cube1 sk-cube"></div>
-      <div class="sk-cube2 sk-cube"></div>
-      <div class="sk-cube4 sk-cube"></div>
-      <div class="sk-cube3 sk-cube"></div>
-    </div>
-  `;
-  document.querySelector('.navbar .content').appendChild(loading);
-
-  const start$ = Observable::fromEvent(pushState, 'y-push-state-start')
-    ::map(({ detail }) => detail)
-    ::map(detail => [detail, document.getElementById('_main')])
-    ::effect(() => {
-      // If a link on the drawer has been clicked, close it
-      if (!window.isDesktop && window.drawer.opened) {
-        window.drawer.close();
-      }
-    })
+  const start$ = Observable::fromEvent(pushStateEl, 'hy-push-state-start')
+    ::map(({ detail }) => assign(detail, { flipType: getFlipType(detail.anchor) }))
     ::share();
 
-  const ready$ = Observable::fromEvent(pushState, 'y-push-state-ready')
+  const ready$ = Observable::fromEvent(pushStateEl, 'hy-push-state-ready')
     ::map(({ detail }) => detail)
     ::share();
 
-  const progress$ = Observable::fromEvent(pushState, 'y-push-state-progress')
-    ::map(({ detail }) => detail);
-    // ::share();
-
-  const after$ = Observable::fromEvent(pushState, 'y-push-state-after')
+  const after$ = Observable::fromEvent(pushStateEl, 'hy-push-state-after')
     ::map(({ detail }) => detail)
     ::share();
 
-  // const error$ = Observable.fromEvent(pushState, 'y-push-state-error');
+  const progress$ = Observable::fromEvent(pushStateEl, 'hy-push-state-progress')
+    ::map(({ detail }) => detail)
+    ::share();
 
-  // HACK
-  if (isSafari) {
-    Observable::fromEvent(window, 'popstate')
-      .subscribe(() => { document.body.style.minHeight = '999999px'; });
-
-    after$
-      .subscribe(() => { document.body.style.minHeight = ''; });
-  }
-
-  // FLIP animation (when applicable)
-  start$
-    ::switchMap(([detail]) => {
-      const { event: { currentTarget } } = detail;
-
-      const flip = Flip.create(
-        currentTarget.getAttribute &&
-        currentTarget.getAttribute('data-flip'), {
-          animationMain,
-          currentTarget,
-          duration: DURATION,
-        });
-
-      // HACK: This assumes knowledge of the internal rx pipeline.
-      // Could possibly be replaced with `withLatestFrom` shinanigans,
-      // but it's more convenient like that.
-      detail.flip = flip;
-
-      return flip.start(currentTarget);
-    })
-    ::makeUnstoppable()
-    .subscribe();
+  const error$ = Observable::fromEvent(pushStateEl, 'hy-push-state-fetch-error')
+    ::map(({ detail }) => detail)
+    ::share();
 
   // Fade main content out
-  start$
-    ::effect(([, main]) => { main.style.opacity = 0; })
-    ::filter(([{ type }]) => type === 'push' || !isSafari)
-    ::exhaustMap(([{ type }, main]) =>
-      animate(main, [
-        { opacity: 1 },
-        { opacity: 0 },
-      ], {
-        duration: DURATION,
-        // easing: 'ease',
-        easing: 'cubic-bezier(0,0,0.32,1)',
-      })
-        ::effect(() => { if (type === 'push') window.scroll(0, 0); })
-        ::zipWith(after$))
-    ::makeUnstoppable()
-    .subscribe();
+  const fadeOut$ = start$
+    ::map(snowball => assign(snowball, { main: document.getElementById('_main') }))
+    ::effect(({ type, main }) => {
+      if (!window._isDesktop && window._drawer.opened) {
+        window._drawer.close();
+      }
+
+      document.querySelectorAll('.sidebar-nav-item')
+        ::forEach((item) => {
+          if (window.location.href.includes(item.href)) item.classList.add('active');
+          else item.classList.remove('active');
+        });
+
+      if (shouldAnimate({ type })) {
+        main.style.pointerEvents = 'none';
+        main.style.opacity = 0;
+      }
+    })
+    ::exhaustMap(({ type, main }) => (shouldAnimate({ type }) ?
+      animate(main, FADE_OUT, SETTINGS)::mapTo(main) :
+      Observable::of(main)))
+    ::effect((main) => {
+      main::empty();
+      window.scroll(window.pageXOffset, 0);
+    });
 
   // Show loading bar when taking longer than expected
-  progress$
-    ::effect(() => { loading.style.display = 'block'; })
-    ::makeUnstoppable()
-    .subscribe();
-
-  // TODO: error message!?
-  // error$
-  //   // .delay(DURATION) // HACK
-  //   .do(() => {
-  //     loading.style.display = 'none';
-  //   })
-  //   .subscribe();
+  progress$::subscribe(() => { loading.style.display = 'block'; });
 
   // Prepare showing the new content
-  ready$
-    ::effect(() => { loading.style.display = 'none'; })
-    ::filter(({ type }) => type === 'push' || !isSafari)
-    ::switchMap(({ flip, content: [main] }) => flip.ready(main)::takeUntil(start$))
-    ::makeUnstoppable()
-    .subscribe();
+  ready$::subscribe(({ type, content: [main] }) => {
+    loading.style.display = 'none';
+    main.classList.remove('fade-in');
+    main.querySelectorAll(HEADING_SELECTOR)::forEach(upgradeHeading);
+    if (shouldAnimate({ type })) main.style.pointerEvents = 'none';
+  });
 
-  ready$
-    ::switchMap(({ content: [main] }) =>
-      crossFader.fetchImage(elemDataset(main))::takeUntil(start$))
-    ::startWith(document.querySelector('.sidebar-bg'))
+  // Fade the new content in
+  const fadeIn$ = after$
+    ::switchMap(({ type, content: [main], flipType }) => (shouldAnimate({ type }) ?
+        animate(main, FADE_IN, SETTINGS)
+          ::effect(() => { main.style.pointerEvents = ''; })
+          ::mapTo({ flipType }) :
+        Observable::of({ flipType })))
+    ::share();
+
+  const flip$ = flip(start$, ready$, Observable::merge(fadeIn$, error$), {
+    animationMain,
+    settings: SETTINGS,
+  });
+
+  // Every click starts a timer that lasts as long
+  // as it takes for the flip and fade out animations to complete.
+  const anim$ = start$::switchMap(() => Observable::timer(DURATION))
+    ::zipWith(flip$, fadeOut$)
+    ::share();
+
+  const crossFader = new CrossFader(FADE_DURATION);
+
+  // Swap out the sidebar image (if applicable)
+  after$
+    ::switchMap(snowball =>
+      crossFader.fetchImage(snowball)
+        ::zipWith(fadeIn$, x => x)
+        ::takeUntil(start$))
+    ::startWith([document.querySelector('.sidebar-bg')])
     ::pairwise()
-    ::mergeMap(::crossFader.crossFade)
-    ::makeUnstoppable()
-    .subscribe();
+    ::mergeMap(::crossFader.fade)
+    ::subscribe();
 
-  // Animate the new content
-  after$
-    ::filter(({ type }) => type === 'push' || !isSafari)
-    ::map(kind => [kind, document.querySelector('main')])
-    ::switchMap(([, main]) =>
-      animate(main, [
-        { transform: 'translateY(-2rem)', opacity: 0 },
-        { transform: 'translateY(0)', opacity: 1 },
-      ], {
-        duration: DURATION,
-        // easing: 'ease',
-        easing: 'cubic-bezier(0,0,0.32,1)',
-      }))
-    ::makeUnstoppable()
-    .subscribe();
-
-  after$
-    // Don't send a pageview when the user blasts through the history..
-    ::debounceTime(2 * DURATION)
-    ::effect(() => {
-      // Send google analytics pageview
+  // Send google analytics pageview and upgrade math blocks.
+  // Add some delay to avoid intermediate vales to be sent.
+  fadeIn$
+    ::debounceTime(DURATION)
+    ::subscribe(() => {
       if (window.ga) window.ga('send', 'pageview', location.pathname);
-
-      // Upgrade math blocks
       upgradeMathBlocks();
-    })
-    ::makeUnstoppable()
-    .subscribe();
+    });
 
-  new PushState(pushState, {
-    replaceIds: ['_main'],
-    linkSelector: 'a[href^="/"]',
-    scriptSelector: 'script:not([type^="math/tex"])',
-    duration: DURATION,
-    noPopDuration: isSafari,
-    scrollRestoration: !isSafari,
-  }).startHistory();
+  // Show error page
+  error$::subscribe(({ url }) => {
+    const main = document.getElementById('_main');
+    loading.style.display = 'none';
+    animationMain.querySelector('.page')::empty();
+    main::empty();
+
+    main.style.pointerEvents = '';
+    main.style.opacity = '';
+
+    setupErrorPage(main, url);
+  });
+
+  // Safari doesn't support manual scroll restoration and it immediately jumps to the old scroll
+  // position after the `popstate` event handler completes.
+  // To make sure Safari can scroll to that position, the body needs to have sufficient height,
+  // otherwise it will simply scroll to the bottom.
+  if (isSafari && !navigator.standalone) {
+    Observable::fromEvent(window, 'popstate')
+      // Make sure this the previous entry was pushed by us and isn't a jump to a `#`:
+      ::filter(() => history.state && history.state['hy-push-state'] && !history.state.hash)
+      // Empty the content immediately to prevent flickering and
+      // set the old `scrollHeigt` as the body's `minHeight`.
+      ::subscribe(() => {
+        document.getElementById('_main')::empty();
+        document.body.style.minHeight = `${history.state.scrollHeight}px`;
+      });
+
+    // Restore `minHeight` once the content has been replaced (or an error occurred, etc):
+    Observable::merge(after$, progress$, error$)
+      ::observeOn(animationFrame)
+      ::subscribe(() => {
+        document.body.style.minHeight = '';
+      });
+  }
+
+  // Upgrade headlines to include "permalinks"
+  const main = document.getElementById('_main');
+  main.classList.remove('fade-in');
+  main.querySelectorAll(HEADING_SELECTOR)::forEach(upgradeHeading);
+
+  // Create the component
+  window._pushState = 'customElements' in window ?
+    setupWebComponent(pushStateEl) :
+    setupVanilla(pushStateEl);
+
+  // Provide the animation observable to the component.
+  // This API will most likely change!
+  window._pushState._animation$ = anim$;
+
+  // Make sure we stay subscribed to the animation observable.
+  anim$::subscribe();
 }

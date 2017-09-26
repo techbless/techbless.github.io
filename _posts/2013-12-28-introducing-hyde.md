@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Introducing Hyde
+description: >
+  Hyde is a brazen two-column [Jekyll](http://jekyllrb.com) theme that pairs a prominent sidebar with uncomplicated content.
 tags: [hyde]
 author: mdo
 ---
@@ -13,7 +15,7 @@ See the [Documentation][docs] for up-to-date instructions.
 
 ### Built on Poole
 
-Poole is the Jekyll Butler, serving as an upstanding and effective foundation for Jekyll themes by [`@mdo`](https://twitter.com/mdo). Poole, and every theme built on it (like Hyde here) includes the following:
+Poole is the Jekyll Butler, serving as an upstanding and effective foundation for Jekyll themes by [@mdo](https://twitter.com/mdo). Poole, and every theme built on it (like Hyde here) includes the following:
 
 * Complete Jekyll setup included (layouts, config, [404]({{ '/404' | relative_url }}), [RSS feed]({{'/feed.xml' | relative_url }}){:.no-push-state}, posts, and [example page]({{ '/about/' | relative_url }}))
 * Mobile friendly design and development
@@ -42,4 +44,4 @@ Hyde is developed on and hosted with GitHub. Head to the [GitHub repository](htt
 
 Thanks!
 
-[docs]: https://qwtel.com/hydejack/docs/
+[docs]: ../docs/7.0.0/index.md
