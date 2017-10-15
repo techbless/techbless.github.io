@@ -1,3 +1,4 @@
+// # src / cross-fader.js
 // Copyright (c) 2017 Florian Klampfer <https://qwtel.com/>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,6 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'core-js/fn/array/find';
+import 'core-js/fn/function/bind';
 
 import Color from 'color';
 
@@ -51,11 +53,11 @@ function updateStyle({ color = '#4fb1ba' } = {}) {
       // :focus
       this.rules[2].style.outlineColor = color;
 
-       // .btn-primary
+      // .btn-primary
       this.rules[3].style.backgroundColor = color;
       this.rules[3].style.borderColor = color;
 
-       // .btn-primary:focus
+      // .btn-primary:focus
       this.rules[4].style.boxShadow = `0 0 0 3px ${c.fade(0.5)}`;
 
       // .btn-primary:hover
@@ -66,7 +68,7 @@ function updateStyle({ color = '#4fb1ba' } = {}) {
       this.rules[6].style.backgroundColor = color;
       this.rules[6].style.borderColor = color;
 
-       // .btn-primary:active
+      // .btn-primary:active
       this.rules[7].style.backgroundColor = active;
       this.rules[7].style.borderColor = active;
 
@@ -76,12 +78,18 @@ function updateStyle({ color = '#4fb1ba' } = {}) {
   }
 }
 
-function pseudoHash({ color, image, background, overlay }) {
-  return `${color}${image || background}${overlay ? 'overlay' : ''}`;
+// Given a dataset, generate some string we can use the check if anything has changed...
+function pseudoHash({
+  background, color, image, overlay,
+}) {
+  return `${color}${image || background}${overlay === '' ? 'overlay' : ''}`;
 }
 
-function getImage$({ image }) {
-  if (!image || image === '' || image === 'none' || image === this.prevImage) {
+// Get an Observable that emits (once) when the `image` has been loaded,
+// or just remite immediately if there is no image, or it hasn't changed.
+// Note that the point is not to *use* the image object, just to make sure the image is in cache.
+function getImage$({ background, image }) {
+  if (background || !image || image === '' || image === 'none' || image === this.prevImage) {
     return Observable::of({});
   }
 
@@ -110,28 +118,31 @@ export default class CrossFader {
     this.themeColor = document.querySelector('meta[name="theme-color"]');
   }
 
-  fetchImage({ content: [main] }) {
+  fetchImage(main) {
     const dataset = elemDataset(main);
-    const { color, image, background, overlay } = dataset;
+    const {
+      background, color, image, overlay,
+    } = dataset;
 
     // HACK: Using `dataset` here to store some intermediate data
     const hash = pseudoHash(dataset);
     if (hash === this.prevHash) return Observable::empty();
-    // dataset.instant = type === 'pop' && isSafari();
 
     return this::getImage$(dataset)
       ::map(() => {
         const div = document.createElement('div');
         div.classList.add('sidebar-bg');
         if (image !== 'none' && overlay === '') div.classList.add('sidebar-overlay');
-        div.style.backgroundColor = color;
         if (background) div.style.background = background;
-        else if (image !== '' && image !== 'none') div.style.backgroundImage = `url(${image})`;
+        else {
+          div.style.backgroundColor = color;
+          if (image !== '' && image !== 'none') div.style.backgroundImage = `url(${image})`;
+        }
         return [div, dataset, hash];
       });
   }
 
-  fade([[prevDiv], [div, dataset, hash]]) {
+  fade([prevDiv], [div, dataset, hash]) {
     prevDiv.parentNode.insertBefore(div, prevDiv.nextElementSibling);
 
     this::updateStyle(dataset);

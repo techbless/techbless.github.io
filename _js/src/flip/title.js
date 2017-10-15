@@ -1,3 +1,4 @@
+// # src / flip / title.js
 // Copyright (c) 2017 Florian Klampfer <https://qwtel.com/>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,6 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'core-js/fn/function/bind';
+
+import { Observable } from 'rxjs/Observable';
+
+import { of } from 'rxjs/observable/of';
+
 import { _do as effect } from 'rxjs/operator/do';
 import { _finally as cleanup } from 'rxjs/operator/finally';
 import { filter } from 'rxjs/operator/filter';
@@ -24,10 +31,14 @@ import { animate, empty } from '../common';
 
 const TITLE_SELECTOR = '.page-title, .post-title';
 
-export default function flipTitle(start$, ready$, fadeIn$, { animationMain, settings }) {
+export default function setupFLIPTitle(start$, ready$, fadeIn$, { animationMain, settings }) {
+  if (!animationMain) return start$;
+
   const flip$ = start$
     ::filter(({ flipType }) => flipType === 'title')
     ::switchMap(({ anchor }) => {
+      if (!anchor) return Observable::of({});
+
       const title = document.createElement('h1');
 
       title.classList.add('page-title');
@@ -35,6 +46,7 @@ export default function flipTitle(start$, ready$, fadeIn$, { animationMain, sett
       title.style.transformOrigin = 'left top';
 
       const page = animationMain.querySelector('.page');
+      if (!page) return Observable::of({});
       page::empty();
       page.appendChild(title);
       animationMain.style.position = 'fixed';
@@ -63,7 +75,7 @@ export default function flipTitle(start$, ready$, fadeIn$, { animationMain, sett
   start$::switchMap(({ flipType }) =>
     ready$
       ::filter(() => flipType === 'title')
-      ::map(({ content: [main] }) => {
+      ::map(({ replaceEls: [main] }) => {
         const title = main.querySelector(TITLE_SELECTOR);
         if (title) title.style.opacity = 0;
         return title;

@@ -3,7 +3,8 @@
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 
 {% unless page.redirect %}
-  {% seo %}
+  {% if plugins contains 'jekyll-seo-tag' %}{% include head/seo-tag.html %}
+  {% else %}{% include head/seo-fallback.html %}{% endif %}
 
   {% if site.keywords or page.keywords %}
     <meta name="keywords" content="{{ page.keywords | default:site.keywords | join:',' }}">
@@ -13,13 +14,17 @@
   <title>{{ site.data.strings.redirecting | default:"Redirecting..." }}</title>
 {% endunless %}
 
-<meta name="apple-mobile-web-app-title" content="{{ site.title }}">
+<meta name="mobile-web-app-capable" content="yes">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="{{ site.title }}">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <meta name="application-name" content="{{ site.title }}">
 <meta name="msapplication-config" content="{{ '/assets/ieconfig.xml' | relative_url }}">
 
+{% unless site.hydejack.no_theme_color %}
 <meta name="theme-color" content="{{ color | default:'#4fb1ba' }}">
+{% endunless %}
 
-<meta name="generator" content="Hydejack v7.0.0" />
+<meta name="generator" content="Hydejack v7.0.0-beta.0" />
