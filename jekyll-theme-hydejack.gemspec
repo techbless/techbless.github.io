@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-theme-hydejack"
-  spec.version       = "7.0.0-beta.2"
+  spec.version       = "7.0.0-beta.3"
   spec.authors       = ["Florian Klampfer"]
   spec.email         = ["mail@qwtel.com"]
 
@@ -12,15 +12,22 @@ Gem::Specification.new do |spec|
 
   spec.files         = `git ls-files -z`.split("\x0").select { |f| f.match(%r{^(assets|_layouts|_includes|_sass|LICENSE|README)}i) }
 
-  spec.required_ruby_version = "~> 2.1"
+  spec.required_ruby_version = "~> 2.0"
 
-  spec.add_runtime_dependency "jekyll", "~> 3.6"
+  spec.add_runtime_dependency "jekyll", "~> 3.5"
 
-  spec.add_runtime_dependency "jekyll-feed", "~> 0.9"
-  spec.add_runtime_dependency "jekyll-paginate", "~> 1.1"
-  spec.add_runtime_dependency "jekyll-relative-links", "~> 0.4"
-  spec.add_runtime_dependency "jekyll-seo-tag", "~> 2.2"
-  spec.add_runtime_dependency "jekyll-sitemap", "~> 1.0"
+  # spec.add_runtime_dependency "jekyll-avatar", "~> 0.5"
+  # spec.add_runtime_dependency "jekyll-default-layout", "~> 0.1"
+  # spec.add_runtime_dependency "jekyll-feed", "~> 0.9"
+  # spec.add_runtime_dependency "jekyll-gist", "~> 1.4"
+  # spec.add_runtime_dependency "jekyll-optional-front-matter", "~> 0.2"
+  # spec.add_runtime_dependency "jekyll-paginate", "~> 1.1"
+  # spec.add_runtime_dependency "jekyll-readme-index", "~> 0.1"
+  # spec.add_runtime_dependency "jekyll-redirect-from", "~> 0.12"
+  # spec.add_runtime_dependency "jekyll-relative-links", "~> 0.4"
+  # spec.add_runtime_dependency "jekyll-seo-tag", "~> 2.3"
+  # spec.add_runtime_dependency "jekyll-sitemap", "~> 1.1"
+  # spec.add_runtime_dependency "jekyll-titles-from-headings", "~> 0.4"
 
   spec.add_development_dependency "bundler", "~> 1.12"
   spec.add_development_dependency "rake", "~> 10.0"
