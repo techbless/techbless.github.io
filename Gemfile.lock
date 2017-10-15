@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jekyll-theme-hydejack (7.0.0)
+    jekyll-theme-hydejack (7.0.0.pre.beta.0)
       jekyll (~> 3.6)
       jekyll-feed (~> 0.9)
       jekyll-paginate (~> 1.1)
