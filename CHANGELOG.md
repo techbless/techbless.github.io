@@ -4,20 +4,20 @@ title: CHANGELOG
 ---
 
 ## v7.0.0
-Oct XX 2017
+Oct 20 2017
 {:.heading.post-date}
 
-### License v7
-The **free version** of Hydejack is now [GPL-3.0] licensed, which is a more restrictive license than MIT (but still _Open Source_).
+### License Change
+The *free version* of Hydejack is now [GPL-3.0] licensed, which is a more restrictive license than MIT (but still *Open Source*).
 This was necessary because the two major components that make up Hydejack, [hy-push-state](https://qwtel.com/hy-push-state/) and
-[hy-drawer](https://qwtel.com/hy-drawer/), are now GPL licensed as well.
+[hy-drawer](https://qwtel.com/hy-drawer/), are now GPL licensed in turn.
 
 How will this affect you?
-* You can continue to use your current version of Hydejack according to the MIT license.
+* You can continue to use previous versions of Hydejack according to their license (MIT).
 * If you upgrade, keep the source code in a public repository and make sure you include the new `LICENSE.md` file.
-  DO NOT combine the *new code* with the *old license*.
-* If you upgrade AND make changes to the source codee, you are required to make those changes available to the public
-  under a GPL-3.0 compatible license~~
+  DO NOT publish the *new code* with an *old license*.
+* If you upgrade and make changes to the source code, you are required to make those changes available to the public
+  under a GPL-3.0 compatible license.
 
 The full license text is available [here][GPL-3.0].
 You can read a summary on [tl;drLegel](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)).
@@ -41,7 +41,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Event names described in the scripting chapter have changed from `y-push-state-*` to `hy-push-state-*`,
   except `y-push-state-animationend`, which has been removed. See the [docs][pstate] for more.
 
-[pstate]: docs/7.0.0-beta.3/scripts.md#registering-push-state-event-listeners
+[pstate]: docs/7.0.0-beta.4/scripts.md#registering-push-state-event-listeners
 
 ### Changes
 * `image` has been renamed to `accent_image`, but `image` continues to work unless you add the `jekyll-seo-tag` plugin.
@@ -59,6 +59,13 @@ That being said, you should be aware of these (small) breaking changes:
     no_push_state: false
     no_drawer: false
   ```
+
+* All plugins (gems) are now optional.
+  The gem-based version of the theme no longer uses any plugins by default,
+  while the download version follow a "batteries-included" approach and enables some by default.
+
+* Links to the `/assets/` folder are no longer intercepted by the push state features,
+  which means clickable images and download links should work fine now.
 
 * Reader views in Firefox and Safari have an easier time recognizing the main content.
 
@@ -233,7 +240,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Reduced building time during development.
   Roughly 50% of the time was spent rebuilding the inline CSS, which is now built once and included via `link` tag.
   Production builds still inlines CSS, so the building speed remains unchanged.
-  For more on how to improve building speeds, [see here](docs/7.0.0-beta.3/writing.md#a-word-on-building-speeds).
+  For more on how to improve building speeds, [see here](docs/7.0.0-beta.4/writing.md#a-word-on-building-speeds).
 
 ### Design
 * The default background image is no longer anti-selling the theme...
@@ -249,6 +256,8 @@ That being said, you should be aware of these (small) breaking changes:
   hydejack:
     no_break_layout: true
   ```
+
+* Margin below code blocks, math blocks and tables increased from `1rem` to `2rem`.
 
 * Gray text now has a higher contrast ratio:
   I don't want anybody to ["suffer from design"](https://lostinmobile.com/2016/10/25/im-suffering-from-design/).
@@ -669,9 +678,9 @@ Oct 15 2013
 {:.heading.post-date}
 
 [tag]: http://www.minddust.com/post/tags-and-categories-on-github-pages/
-[migration]: docs/7.0.0-beta.3/migration.md
-[writing]: docs/7.0.0-beta.3/writing.md
-[scripts]: docs/7.0.0-beta.3/scripts.md
+[migration]: docs/7.0.0-beta.4/migration.md
+[writing]: docs/7.0.0-beta.4/writing.md
+[scripts]: docs/7.0.0-beta.4/scripts.md
 
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 [PRO-license]: licenses/PRO.md

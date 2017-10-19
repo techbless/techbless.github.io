@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Better Gem Support (v6.5)'
+title: Better Gem Support (v6.5)
 description: >
   Hydejack v6.5 includes various quality-of-life improvements, especially when using the gem-based version of the theme.
 tags: [hydejack]
@@ -51,7 +51,7 @@ For the full patch notes, read on.
     social:
       github: https://github.com/qwtel/hydejack
       npm: https://www.npmjs.com/package/hydejack
-      download: https://github.com/qwtel/hydejack/archive/v7.0.0-beta.3.zip
+      download: https://github.com/qwtel/hydejack/archive/v7.0.0-beta.4.zip
 
   data_social:
     github:

@@ -66,14 +66,9 @@ This table details what is and isn't included in each respective version.
 | [Welcome] Layout                    |                    | &#x2714;           |
 | Newsletter Subscription Box         |                    | &#x2714;           |
 | Form Element Styles                 |                    | &#x2714;           |
-| Search Functionality                |                    | &#x2714;           |
-| Offline Support[^4]                 |                    | &#x2714;           |
-| Latest issue of "Fishing Quarterly" |                    |                    |
-| Three months supply of cat food     |                    |                    |
-| 10 free scuba diving coupons        |                    |                    |
 | License                             | [GPL-3.0][license] | [PRO]              |
-| Price                               | Free               | $59                |
-|| [Download on GitHub][github]<br/> -- or -- <br/>[Use the RubyGem][gem] | [**Buy Now – $59**][buy] [^3] |
+| Price                               | Free               | $39                |
+|| [Download on GitHub][github]<br/> – or – <br/>[Use the RubyGem][gem] | [Buy Now – $39][buy] [^3] |
 
 
 [^1]: Applies after the initial page load.  
@@ -88,10 +83,10 @@ usage of 3rd party plugins.
 
 [license]: LICENSE.md
 [pro]: licenses/PRO.md
-[docs]: docs/7.0.0-beta.3/index.md
+[docs]: docs/7.0.0-beta.4/index.md
 
-[download]: https://github.com/qwtel/hydejack/releases/tag/v7.0.0-beta.3
-[gem]: https://rubygems.org/gems/jekyll-theme-hydejack/versions/7.0.0-beta.3
+[download]: https://github.com/qwtel/hydejack/releases/tag/v7.0.0-beta.4
+[gem]: https://rubygems.org/gems/jekyll-theme-hydejack/versions/7.0.0-beta.4
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 [wiki]: https://github.com/qwtel/hydejack/wiki
 [gpss]: https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fqwtel.com%2Fhydejack%2F
