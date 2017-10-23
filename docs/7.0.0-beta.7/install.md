@@ -2,6 +2,8 @@
 layout: page
 title: Install
 description: >
+  There are multiple ways of installing Hydejack.
+  The easiest way is via the Ruby gem, but you can also download the zip or fork the git repository.
 ---
 
 There are multiple ways of installing Hydejack.
@@ -104,7 +106,7 @@ You can now continue with [running locally](#running-locally).
 If you bought the PRO version, you've received a zip archive with the following contents:
 
 ~~~
-├── hydejack-docs-7.0.0-beta.6.pdf
+├── hydejack-docs-7.0.0-beta.7.pdf
 ├── install
 ├── upgrade
 ├── favicons.psd
@@ -114,7 +116,7 @@ If you bought the PRO version, you've received a zip archive with the following 
 The following list describes what each of those are
 
 
-`hydejack-docs-7.0.0-beta.6.pdf`
+`hydejack-docs-7.0.0-beta.7.pdf`
 : This documentation in PDF form.
 
 `install`
@@ -138,7 +140,7 @@ For new installations only the `install` folder is interesting.
 Unzip the archive somewhere on your machine, then `cd` *into* the `install` folder, e.g.
 
 ~~~bash
-$ cd ~/Downloads/hydejack-pro-7.0.0-beta.6/install/
+$ cd ~/Downloads/hydejack-pro-7.0.0-beta.7/install/
 ~~~
 
 You can now continue with:
