@@ -24,7 +24,7 @@ import { empty } from 'rxjs/observable/empty';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { of } from 'rxjs/observable/of';
 
-import { _finally as cleanup } from 'rxjs/operator/finally';
+import { _finally as finalize } from 'rxjs/operator/finally';
 import { take } from 'rxjs/operator/take';
 import { map } from 'rxjs/operator/map';
 
@@ -88,17 +88,15 @@ function pseudoHash({
 // Get an Observable that emits (once) when the `image` has been loaded,
 // or just remite immediately if there is no image, or it hasn't changed.
 // Note that the point is not to *use* the image object, just to make sure the image is in cache.
-function getImage$({ background, image }) {
+function cacheImage$({ background, image }) {
   if (background || !image || image === '' || image === 'none' || image === this.prevImage) {
     return Observable::of({});
   }
 
   const imgObj = new Image();
-
   const image$ = Observable::fromEvent(imgObj, 'load')
     ::take(1)
-    ::cleanup(() => { imgObj.src = ''; });
-
+    ::finalize(() => { imgObj.src = ''; });
   imgObj.src = image;
 
   return image$;
@@ -128,7 +126,7 @@ export default class CrossFader {
     const hash = pseudoHash(dataset);
     if (hash === this.prevHash) return Observable::empty();
 
-    return this::getImage$(dataset)
+    return this::cacheImage$(dataset)
       ::map(() => {
         const div = document.createElement('div');
         div.classList.add('sidebar-bg');
@@ -156,6 +154,6 @@ export default class CrossFader {
     ], {
       duration: this.fadeDuration,
     })
-    ::cleanup(() => prevDiv.parentNode.removeChild(prevDiv));
+    ::finalize(() => prevDiv.parentNode.removeChild(prevDiv));
   }
 }
