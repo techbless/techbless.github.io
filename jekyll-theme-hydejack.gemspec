@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Florian Klampfer"]
   spec.email         = ["mail@qwtel.com"]
 
-  spec.summary       = %q{A pretentious two-column Jekyll theme, stolen by @qwtel from Hyde. You could say it was.. hydejacked.}
+  spec.summary       = %q{A Jekyll theme with JavaScript powers. "Best theme by a mile". Combines the best of static sites and web apps.}
   spec.homepage      = "https://qwtel.com/hydejack/"
   spec.license       = "GPL-3.0"
 
