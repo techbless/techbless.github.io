@@ -3,16 +3,32 @@ layout: page
 title: CHANGELOG
 ---
 
+## v7.0.1
+Oct 27 2017
+{:.heading.post-date}
+
+### Fixes
+* Removed readme files from `assets` that would show up as pages when building on GitHub Pages [#42](https://github.com/qwtel/hydejack/issues/42).
+* Disabled push state on Firefox for iOS
+
+### Other
+* Updated documentation
+* Changed some default settings in `_config.yml`
+* Removed outdated example script in `my-scripts.html`
+
 ## v7.0.0
 Oct 24 2017
 {:.heading.post-date}
 
 ### License Change
 The *free version* of Hydejack is now [GPL-3.0] licensed, which is a more restrictive license than MIT (but still *Open Source*).
-This was necessary because the two major components that make up Hydejack, [hy-push-state](https://qwtel.com/hy-push-state/) and
-[hy-drawer](https://qwtel.com/hy-drawer/), are now GPL licensed in turn.
+This was necessary because the two major components that make up Hydejack,
+[hy-push-state](https://qwtel.com/hy-push-state/){:.external} and
+[hy-drawer](https://qwtel.com/hy-drawer/){:.external},
+are now GPL licensed in turn.
 
 How will this affect you?
+* If you bought the *PRO version* you are not affected at all.
 * You can continue to use previous versions of Hydejack according to their license (MIT).
 * If you upgrade, keep the source code in a public repository and make sure you include the new `LICENSE.md` file.
   DO NOT publish the *new code* with an *old license*.
@@ -32,6 +48,8 @@ Some names have changed and are no longer mentioned in the docs, but they are st
 
 That being said, you should be aware of these (small) breaking changes:
 
+* The favicon is now located in `assets/icons`. To change the favicon of the page, edit `favicon.ico` (png) in the folder.
+
 * Changed the way tables work, so that they do the right thing more often.
   Tables are now scrollable by default, but small tables are no longer stretched to span the full width.
   Setting `scroll-table` on a larger table is sill recommended, as it will set `white-space: nowrap`.
@@ -41,7 +59,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Event names described in the scripting chapter have changed from `y-push-state-*` to `hy-push-state-*`,
   except `y-push-state-animationend`, which has been removed. See the [docs][pstate] for more.
 
-[pstate]: docs/7.0.0/scripts.md#registering-push-state-event-listeners
+[pstate]: docs/7.0.1/scripts.md#registering-push-state-event-listeners
 
 ### Changes
 * `image` has been renamed to `accent_image`, but `image` continues to work unless you add the `jekyll-seo-tag` plugin.
@@ -240,7 +258,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Reduced building time during development.
   Roughly 50% of the time was spent rebuilding the inline CSS, which is now built once and included via `link` tag.
   Production builds still inlines CSS, so the building speed remains unchanged.
-  For more on how to improve building speeds, [see here](docs/7.0.0/writing.md#a-word-on-building-speeds).
+  For more on how to improve building speeds, [see here](docs/7.0.1/writing.md#a-word-on-building-speeds).
 
 ### Design
 * The default background image is no longer anti-selling the theme...
@@ -678,9 +696,9 @@ Oct 15 2013
 {:.heading.post-date}
 
 [tag]: http://www.minddust.com/post/tags-and-categories-on-github-pages/
-[migration]: docs/7.0.0/migration.md
-[writing]: docs/7.0.0/writing.md
-[scripts]: docs/7.0.0/scripts.md
+[migration]: docs/7.0.1/migration.md
+[writing]: docs/7.0.1/writing.md
+[scripts]: docs/7.0.1/scripts.md
 
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 [PRO-license]: licenses/PRO.md
