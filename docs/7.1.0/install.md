@@ -41,7 +41,7 @@ Your site's root dir should look something like this
 ~~~
 
 **NOTE**: Hydejack works with Jekyll's default `config.yml`, but it is recommended that you replace it with
-[Hydejack's default config file](https://github.com/qwtel/hydejack/blob/master/_data/_config.yml).
+[Hydejack's default config file](https://github.com/qwtel/hydejack/blob/master/_config.yml).
 It contains the names of all config options known to Hydejack and provides sensible defaults (like minifying HTML and CSS in production builds).
 {:.message}
 
@@ -106,18 +106,19 @@ You can now continue with [running locally](#running-locally).
 If you bought the PRO version, you've received a zip archive with the following contents:
 
 ~~~
-├── hydejack-docs-7.0.1.pdf
 ├── install
 ├── upgrade
-├── favicons.psd
-└── sidebar-bg.psd
+├── CHANGELOG _ Hydejack.pdf
+├── Documentation _ Hydejack.pdf
+├── NOTICE _ Hydejack.pdf
+├── PRO License _ Hydejack.pdf
+├── PRO–hy-drawer License _ Hydejack.pdf
+├── PRO–hy-push-state License _ Hydejack.pdf
+├── icon.psd
+├── sidebar-bg.psd
+├── *-to-v7.1.0.diff
+└── .ssh
 ~~~
-
-The following list describes what each of those are
-
-
-`hydejack-docs-7.0.1.pdf`
-: This documentation in PDF form.
 
 `install`
 : Contains all files and folders needed to create a new blog.
@@ -126,27 +127,53 @@ The following list describes what each of those are
 : Contains only the files and folders needed for upgrading form an earlier version of Hydejack (6.0.0 or above).
   See the [Upgrade]{:.heading.flip-title} for more.
 
-`favicon.psd`
+`CHANGELOG _ Hydejack.pdf`
+: The [changelog](../../CHANGELOG.md) in PDF form.
+
+`Documentation _ Hydejack.pdf`
+: This documentation in PDF form.
+
+`NOTICE _ Hydejack.pdf`
+: The [notice](../../NOTICE.md) in PDF form.
+
+`PRO License _ Hydejack.pdf`
+: The license for use of Hydejack PRO in PDF form.
+
+`PRO–hy-drawer License _ Hydejack.pdf`
+: A license for use of [hy-drawer](https://qwtel.com/hy-drawer/) as part of Hydejack PRO.
+
+`PRO–hy-push-state License _ Hydejack.pdf`
+: A license for use of [hy-push-state](https://qwtel.com/hy-push-state/) as part of Hydejack PRO.
+
+`icon.psd`
 : A Photoshop template to help with generating the favicon, apple touch icon, etc.
 
 `sidebar-bg.psd`
 : A Photoshop template for blurred sidebar backgrounds.
 
-`*.patch`
-: These are git patches that you can apply to your repository via [git-apply](https://git-scm.com/docs/git-apply).
-  Use these if you are using git and you are worried about overwriting changes. This is for advanced users.
+`*-to-v7.1.0.diff`
+: There will be multiple fo these files, where `*` is a previous version.
+  They are git patches that you can apply to your repository via [git-apply](https://git-scm.com/docs/git-apply).
+  Use these if you are using git and you are worried about accidentally overwriting changes you've made to Hydejack PRO.
+  This is for advanced users.
+
+`.ssh`
+: A hidden folder containing a SSH key for read-only access to the Hydejack PRO GitHub repository.
+  You can use this to install Hydejack PRO as gem-based theme.
+  See the [installation instructions](#pro-via-github-advanced) below.
+  This is for advanced users.
 
 For new installations only the `install` folder is interesting.
 Unzip the archive somewhere on your machine, then `cd` *into* the `install` folder, e.g.
 
 ~~~bash
-$ cd ~/Downloads/hydejack-pro-7.0.1/install/
+$ cd ~/Downloads/hydejack-pro-7.1.0/install/
 ~~~
 
 You can now continue with [Running locally](#running-locally).
 
 ### PRO via GitHub (advanced)
-If you know how to handle SSH keys, you can also install the PRO version via GitHub.
+If you know how to handle SSH keys, you can also install the PRO version as a gem-based theme via GitHub.
 The advantage of this method is that you avoid cluttering your Jekyll repository with Hydejack's source files.
 
 The downloaded zip contains a read-only key for a private GitHub repository.
@@ -154,7 +181,7 @@ It is located at `<dowloaded zip>/.ssh/hydejack_pro_customers`.
 You have to copy the key file to `~/.ssh` (or wherever your SSH keys are located), e.g.:
 
 ~~~bash
-$ cp ~/Downloads/hydejack-pro-v7.0.1/.ssh/hydejack_pro_customers ~/.ssh/
+$ cp ~/Downloads/hydejack-pro-v7.1.0/.ssh/hydejack_pro_customers ~/.ssh/
 ~~~
 
 It is required that your private key files are NOT accessible by others, e.g.:

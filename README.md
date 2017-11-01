@@ -22,26 +22,26 @@ Both versions include *all* of these features:
 * Full in-app page loading, powered by [hy-push-state]
 * A customizable sidebar that turns into a drawer menu on mobile, powered by [hy-drawer]
 * Advanced FLIP animations, inspired by Material Design
-* Good [Google PageSpeed Score][gpss][^2]
-* High *perceived speed* thanks to pre-fetching
+* Good [Google PageSpeed Score][gpss][^1]
+* Higher *perceived speed* thanks to content pre-fetching
+* [Syntax highlighting](#syntax-highlighting), powered by [Rouge]
+* [LaTeX math blocks](#latex-math-blocks), powered by [KaTeX]
+* Change the wording of built-in strings and possibly translate in other languages
 * Support for categories and tags
 * Built-in icons for many social networks
 * Simple and semantic HTML — can be viewed even with text-based browsers
-* Author section below each article and multiple authors
+* Author section below each article and support for multiple authors
 * Progressive enhancement — sacrifice features, not content
 * Google Analytics and Google Fonts support
-* Blog layout with pagination
-* Syntax highlighting
-* Math formulas via LaTeX
 * Disqus comments
-* Print layout. See the [PDF documentation][pdf] for an example.
-* Github avatars via `jekyll-avatar` (optional).
-* Gist support via `jekyll-gist` (optional).
-* Blog layout with pagination via `jekyll-paginate` (optional)
+* Print layout. Used to render Hydejack's [PDF documentation][pdf]
+* Github avatars via `jekyll-avatar` (optional)
+* Gist support via `jekyll-gist` (optional)
+* Blog Pagination via `jekyll-paginate` (optional)
 * SEO meta tags via `jekyll-seo-tag` (optional)
 
 ## Documentation
-Hydejack is well documented. You can read it [on the Jekyll site][docs], or [on GitHub][wiki], or [download the PDF][pdf].
+Hydejack is well documented. You can read the docs [on the Jekyll site][docs], or [on GitHub][wiki], or [download the PDF][pdf].
 
 ## Download
 There are two versions of **Hydejack**: The *free version* includes basic blogging functionality,
@@ -54,20 +54,19 @@ This table details what is and isn't included in each respective version.
 |                                     | Free               | PRO                |
 |:------------------------------------|:------------------:|:------------------:|
 | Blog                                | &#x2714;           | &#x2714;           |
-| Features (see below)                | &#x2714;           | &#x2714;           |
+| [Features](#features)               | &#x2714;           | &#x2714;           |
 | [Portfolio] Layout                  |                    | &#x2714;           |
 | [Resume] Layout                     |                    | &#x2714;           |
 | [Welcome] Layout                    |                    | &#x2714;           |
-| Newsletter Subscription Box         |                    | &#x2714;           |
-| Form Element Styles                 |                    | &#x2714;           |
+| [Newsletter Box][nsb]               |                    | &#x2714;           |
+| [Custom Forms][forms]               |                    | &#x2714;           |
 | License                             | [GPL-3.0][license] | [PRO]              |
-| Price                               | Free               | $39                |
-|| [Download on GitHub][github]<br/> – or – <br/>[Use the RubyGem][gem] | [Buy Now – $39][buy] [^3] |
+| Price                               | Free               | $29                |
+|| [Download on GitHub][github]<br/> – or – <br/>[Use the RubyGem][gem] | [Buy Now – $29][buy]{:.btn.btn-primary} [^2] |
 
 
-[^1]: Applies after the initial page load.  
-[^2]: Actual page load speed depends on your hosting provider, resolution of embedded images and usage of 3rd party plugins.  
-[^3]: Transactions secured by [Stripe](https://stripe.com). Downloads handled by [Simple Goods](https://simplegoods.co/).  
+[^1]: Actual page load speed depends on your hosting provider, resolution of embedded images and usage of 3rd party plugins.  
+[^2]: Transactions secured by [Stripe](https://stripe.com). Downloads handled by [Simple Goods](https://simplegoods.co/).  
 
 ~~~
  __  __                __                                     __
@@ -89,15 +88,23 @@ This table details what is and isn't included in each respective version.
 
 [license]: LICENSE.md
 [pro]: licenses/PRO.md
-[docs]: docs/7.0.1/index.md
+[docs]: docs/7.1.0/index.md
 
 [github]: https://github.com/qwtel/hydejack/releases
 [gem]: https://rubygems.org/gems/jekyll-theme-hydejack
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 
 [gpss]: https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fqwtel.com%2Fhydejack%2F
-[wiki]: https://github.com/qwtel/hydejack/blob/master/docs/7.0.1/index.md
-[pdf]: https://github.com/qwtel/hydejack/releases/download/v7.0.1/Documentation._.Hydejack.pdf
+[wiki]: https://github.com/qwtel/hydejack/blob/master/docs/7.1.0/index.md
+[pdf]: https://github.com/qwtel/hydejack/releases/download/v7.1.0/Documentation._.Hydejack.pdf
+
+[nsb]: https://qwtel.com/hydejack/#newsletter-subscription-box
+[forms]: https://qwtel.com/hydejack/docs/7.1.0/forms-by-example.md
 
 [hy-push-state]: https://qwtel.com/hy-push-state/
 [hy-drawer]: https://qwtel.com/hy-drawer/
+[rouge]: http://rouge.jneen.net
+[katex]: https://khan.github.io/KaTeX/
+[tinyletter]: https://tinyletter.com/
+
+*[FLIP]: First-Last-Invert-Play. A coding technique to achieve performant page transition animations.

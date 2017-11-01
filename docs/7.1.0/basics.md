@@ -11,12 +11,79 @@ description: >
 0. this unordered seed list will be replaced by toc as unordered list
 {:toc}
 
+## Adding a page
+You can add generic pages that support markdown content but aren't blog posts.
+For example, this documentation is written in markdown, consisting of several generic pages.
+
+To add a page, create a new markdown file and put `layout: page` in a front matter
+
+~~~yml
+---
+layout: page
+title:  Documentation
+---
+~~~
+
+Now you can add content as you would in a blog post.
+
+## Adding an entry to the sidebar
+Hydejack's sidebar can add links to any page within the site. In order for a page to appear in the sidebar, it needs to have a truthy `menu` value defined in its front matter. The page also needs to have a `title`, otherwise the entry in the sidebar will be blank.
+
+If you want the link to appear at a particular position, you can set a numeric value to the `order` key.
+However, the page is not guaranteed to appear in the 5th position when you set a value of `5`,
+since it will only use that number to sort the pages.
+The position of a page also depends on the `order` of all other pages in the sidebar.
+
+If you don't want to spread the sidebar definitions across multiple markdown files,
+you can manage them centrally in your config file using front matter defaults, e.g.:
+
+```yml
+# file: _config.yml
+defaults:
+  - scope:
+      path: blog.md
+    values:
+      menu: true
+      order: 1
+  - scope:
+      path: projects.md
+    values:
+      menu: true
+      order: 2
+  - scope:
+      path: resume.md
+    values:
+      menu: true
+      order: 3
+  - scope:
+      path: about.md
+    values:
+      menu: true
+      order: 4
+```
+
+### Adding a link to an external page to the sidebar
+You can add links to external pages to the sidebar by creating a new markdown file for each entry and adding to the front matter:
+
+```yml
+---
+title: External
+redirect_to: https://example.com/
+menu: true
+order: 5
+---
+```
+
+You may combine this with the [`jekyll-redirect-from`](https://github.com/jekyll/jekyll-redirect-from) plugin
+to generate a redirect page at the `permalink` of the file, but this is optional.
+
 ## Adding a category or tag
 Hydejack allows you to use the `list` layout to show all posts of a particular tag or category.
 
 Before you start, make sure your config files contains the `featured_tags` and `features_categories` collections:
 
 ~~~yml
+# file: _config.yml
 collections:
   featured_categories:
     permalink:         /category/:name/
@@ -50,6 +117,8 @@ Posts can also be assigned to a category based on their position within the fold
 would place "Welcome to Jekyll" in the categories `jekyll` and `update`.
 Whether you use this method or not, categories will always be part of a posts URL, while tags will not.
 
+Type       | URL
+-----------|----
 Categories | `/jekyll/update/2017/04/07/welcome-to-jekyll/`
 Tags       | `/2017/04/07/welcome-to-jekyll/`
 {:.scroll-table-small}
@@ -59,12 +128,14 @@ As far as Jekyll is concerned, these are the only differences.
 ### Tags and categories in Hydejack
 Categories and tags are displayed by Hydejack below the title, after the date. Categories are displayed with the preposition "in", while tags are displayed with the preposition "on", e.g.
 
+Type       | Title
+-----------|------
 Categories | Welcome to Jekyll¬ 07 Apr 2017 **in** Jekyll / Update
 Tags       | Welcome to Jekyll¬ 07 Apr 2017 **on** Jekyll, Update
 Both       | Welcome to Jekyll¬ 07 Apr 2017 **in** Jekyll / Update **on** Jekyll, Update
 {:.scroll-table-small}
 
-### Adding a new category or tag
+### Creating a new category or tag
 Be default, categories and tags are rendered as plain text. Further steps are necessary if you want them to link to a page that contains a list of all posts that belong to that category or tag.
 
 For each "featured" category or tag, a file called `<categoryname>.md` or `<tagname>.md` has to be created in `_featured_tags` or `_featured_categories`, respectively.
@@ -73,6 +144,7 @@ Each file in these folders is part of a [Jekyll Collection](https://jekyllrb.com
 The the data of a category or tag is set in the files front matter, e.g.
 
 ~~~yml
+# file: _featured_tags/hyde.md
 ---
 layout: list
 title:  Hyde
@@ -110,26 +182,6 @@ description: >
 
 Once the file is created, the page can be found at `/category/<categoryname>/` or `/tag/<tagname>/`.
 
-## Adding a page
-You can add generic pages that support markdown content but aren't blog posts.
-For example, this documentation is written in markdown, consisting of several generic pages.
-
-To add a page, create a new markdown file and put `layout: page` in a front matter
-
-~~~yml
----
-layout: page
-title:  Documentation
----
-~~~
-
-Now you can add content as you would in a blog post.
-
-## Adding an entry to the sidebar
-Hydejack's sidebar can add links to any page within the site. In order for a page to appear in the sidebar, it needs to have a truthy `menu` value defined in its front matter. The page also needs to have a `title`, otherwise the entry in the sidebar will be blank.
-
-If you want the link to appear at a particular position, you can set a numeric value to the `order` key. However, the page is not guaranteed to appear in the 5th position when you set a value of `5`, since it will only use that number to sort the pages, i.e. the position of a page also depends on the `order` of all other pages in the sidebar.
-
 ## Adding an about page
 About pages are a frequent use case, so Hydejack has a special layout for it, which is a slight modification of the `page` layout.
 [Demo][about].
@@ -138,6 +190,7 @@ The main difference is that it will display an author's `about` text and `pictur
 To create an about page, make sure `layout` is set to `about`, and that the `author` key is set to an author defined in `_data/authors.yml`. For more on authors, see [Adding an author](config.md#adding-an-author).
 
 ~~~yml
+# file: about.md
 ---
 layout: about
 title:  About
@@ -162,6 +215,7 @@ For reference, the layout/order of content on the welcome page looks like:
 You can create a welcome page by creating a new markdown file and setting the layout to `welcome` in the front matter.
 
 ~~~yml
+# file: index.md
 ---
 layout: welcome
 title:  Welcome
@@ -173,6 +227,7 @@ Without further configuration, the welcome page will show the two most recent pr
 However, the welcome layout supports selecting specific projects and posts, by adding to the front matter, e.g.:
 
 ~~~yml
+# file: index.md
 ---
 layout:            welcome
 title:             Welcome
@@ -185,7 +240,7 @@ selected_posts:
 more_projects:     projects.md
 more_posts:        posts.md
 big_project:       false
-content_separator: <!-- more -->
+content_separator: <!--more-->
 ---
 ~~~
 
@@ -225,6 +280,7 @@ The projects page will show all projects in a particular collection.
 First, you need to make sure that you have the `projects` collection defined in `_config.yml`:
 
 ~~~yml
+# file: _config.yml
 collections:
   projects:
     permalink: /projects/:path/
@@ -237,6 +293,7 @@ This file has the `projects` layout (mind the "s" at the end) and should have a 
 with the name of the collection as a value, e.g.:
 
 ~~~yml
+# file: projects.md
 ---
 layout:          projects
 title:           Projects*
@@ -265,19 +322,21 @@ Projects are organized using [Jekyll Collections](https://jekyllrb.com/docs/coll
 Each project generates an entry on the projects layout ([Demo][projects]) as well as its own detail page ([Demo][project]).
 
 Each project is defined by a file in the `_projects` directory.
-The project's meta information is defined in the file's front matter. You can also add markdown content. A project's front matter may look like:
+The project's meta information is defined in the file's front matter. You can also add markdown content.
+A project's front matter may look like:
 
 ~~~yml
+# file: _projects/hyde-v2.md
 ---
 layout:      project
 title:       Hyde v2*
 date:        2 Jan 2014
 screenshot:
-  src:       /hydejack/assets/img/projects/hyde-v2@0,25x.jpg
+  src:       /assets/img/projects/hyde-v2@0,25x.jpg
   srcset:
-    1920w:   /hydejack/assets/img/projects/hyde-v2.jpg
-    960w:    /hydejack/assets/img/projects/hyde-v2@0,5x.jpg
-    480w:    /hydejack/assets/img/projects/hyde-v2@0,25x.jpg
+    1920w:   /assets/img/projects/hyde-v2.jpg
+    960w:    /assets/img/projects/hyde-v2@0,5x.jpg
+    480w:    /assets/img/projects/hyde-v2@0,25x.jpg
 caption:     Hyde is a brazen two-column Jekyll theme.
 description: >
   Hyde is a brazen two-column [Jekyll](http://jekyllrb.com) theme that pairs a prominent sidebar with uncomplicated content.
@@ -312,7 +371,7 @@ For more information on `srcset`, see the [documentation at MDN](https://develop
 : A list of `title`-`url` pairs that link to external resources related to this project.
 
 `author`
-: Shown below the project, similar to posts.
+: Optional. Shown below the project, similar to posts.
 
 `big_project`
 : Optional. When `true`, the project preview will span the full content width. You can use this for projects that you want to direct additional attention to. You can set/override this for an entire page, by setting `big_project` in the front matter (applies to the `projects` and `welcome` layout).
@@ -325,19 +384,22 @@ It generates the resume page from a valid [JSON Resume](https://jsonresume.org/)
 
 * You can use the visual [JSON Resume Editor](http://registry.jsonresume.org/).
 * If you have a LinkedIn profile, you can try [LinkedIn to Json Résumé](https://jmperezperez.com/linkedin-to-json-resume/).
-* You can edit the [example `resume.json`](https://github.com/qwtel/hydejack/blob/v6/_data/resume.json) in the `_data` directly. It contains example entries for each type of entry.
+* You can edit the [example `resume.json`](https://github.com/qwtel/hydejack/blob/master/_data/resume.json) in the `_data` directly. It contains example entries for each type of entry.
 
 Once you have a JSON Resume, place it into `_data`.
 
-If you prefer editing YAML files, there is an [example `_resume.yml`](https://github.com/qwtel/hydejack/blob/v6/_data/_resume.yml) file in `_data`.
+If you prefer editing YAML files, there is an [example `_resume.yml`](https://github.com/qwtel/hydejack/blob/master/_data/_resume.yml) file in `_data`.
 In order to use it, rename it to `resume.yml` and delete `resume.json`.
 
 To render the resume page, create a new markdown file and set the layout to `resume` in the front matter:
 
 ~~~yml
+# file: resume.md
 ---
 layout: resume
 title:  Resume
+description: >
+  A short description of the page for search engines (~150 characters long).
 ---
 ~~~
 
