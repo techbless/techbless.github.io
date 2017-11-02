@@ -4,18 +4,23 @@ title: CHANGELOG
 ---
 
 ## v7.1.0
-Nov 1 2017
+Nov 2 2017
 {:.heading.post-date}
 
 ### Changed
+* Renamed `no_description` to `hide_description`.
+  Since this feature isn't yet documented outside of the change log, the old name *will not* continue to work. 
 * When providing images to `image`, `image.path`, `image.src`, `image.srcset` and `accent_image `,
   it is no longer necessary to prepend the url with the `baseurl` of the site,
   e.g. values like `accent_image: /assets/img/sidebar-bg.jpg` are now valid.
+* Limited scope of `a` and `img` styles to content areas.
 * Upgraded KaTeX to v0.8.3
 * Upgraded `jekyll-relative-links` to v5.0.1
 
 ### Fixes
+* `font` and `font_heading` are now properly set when using the `no_inline_css` option [#47](https://github.com/qwtel/hydejack/issues/47).
 * Fixed default values for `image` and `logo` that were referring to non-existing images.
+* Added missing JS dev dependencies.
 
 ### Content
 * Updated documentation
@@ -232,7 +237,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Added an error page that is shown when client-side network errors occur. It contains a link to retry loading the page.
   Previously, the browser's default error page would have been shown.
 
-* Added `no_description` option to pages to prevent the content of `description` fields to show up in the output.
+* Added `hide_description` option to pages to prevent the content of `description` fields to show up in the output.
   This allows you to use the `description` field in the front matter to set descriptions for search engines and sharing on social media,
   without having to worry about the output.
 
@@ -243,7 +248,7 @@ That being said, you should be aware of these (small) breaking changes:
     - scope:
         path: ''
       values:
-        no_description: true
+        hide_description: true
   ```
 
 * Added a new option called `no_inline_css`.
