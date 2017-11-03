@@ -3,13 +3,20 @@ layout: page
 title: CHANGELOG
 ---
 
+## v7.1.1
+Nov 2 2017
+{:.heading.post-date}
+
+### Fixes
+* Fix IE11 feature detection
+
 ## v7.1.0
 Nov 2 2017
 {:.heading.post-date}
 
 ### Changed
 * Renamed `no_description` to `hide_description`.
-  Since this feature isn't yet documented outside of the change log, the old name *will not* continue to work. 
+  Since this feature isn't yet documented outside of the change log, the old name *will not* continue to work.
 * When providing images to `image`, `image.path`, `image.src`, `image.srcset` and `accent_image `,
   it is no longer necessary to prepend the url with the `baseurl` of the site,
   e.g. values like `accent_image: /assets/img/sidebar-bg.jpg` are now valid.
@@ -84,7 +91,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Event names described in the scripting chapter have changed from `y-push-state-*` to `hy-push-state-*`,
   except `y-push-state-animationend`, which has been removed. See the [docs][pstate] for more.
 
-[pstate]: docs/7.1.0/scripts.md#registering-push-state-event-listeners
+[pstate]: docs/7.1.1/scripts.md#registering-push-state-event-listeners
 
 ### Changes
 * `image` has been renamed to `accent_image`, but `image` continues to work unless you add the `jekyll-seo-tag` plugin.
@@ -283,7 +290,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Reduced building time during development.
   Roughly 50% of the time was spent rebuilding the inline CSS, which is now built once and included via `link` tag.
   Production builds still inlines CSS, so the building speed remains unchanged.
-  For more on how to improve building speeds, [see here](docs/7.1.0/writing.md#a-word-on-building-speeds).
+  For more on how to improve building speeds, [see here](docs/7.1.1/writing.md#a-word-on-building-speeds).
 
 ### Design
 * The default background image is no longer anti-selling the theme...
@@ -721,9 +728,9 @@ Oct 15 2013
 {:.heading.post-date}
 
 [tag]: http://www.minddust.com/post/tags-and-categories-on-github-pages/
-[migration]: docs/7.1.0/migration.md
-[writing]: docs/7.1.0/writing.md
-[scripts]: docs/7.1.0/scripts.md
+[migration]: docs/7.1.1/migration.md
+[writing]: docs/7.1.1/writing.md
+[scripts]: docs/7.1.1/scripts.md
 
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 [PRO-license]: licenses/PRO.md
