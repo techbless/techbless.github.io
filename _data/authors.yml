@@ -29,7 +29,7 @@ author1:
     twitter:         <username>
     github:          <username>
     email:           mailto:<mail@domain.tld>
-    rss:             https://<url>/feed.xml
+    # rss:             https://<url>/feed.xml
     # facebook:        <username>
     # google:          <number>
     # vk:              <username>
@@ -64,9 +64,6 @@ author1:
     # stumbleupon:     <username>
     # paypal:          <username>
     # download:        https://github.com/qwtel/hydejack/archive/v6.6.1.zip
-
-  # Used by `jekyll-seo-tag`:
-  twitter:           <username>
 
 # Another author
 author2:

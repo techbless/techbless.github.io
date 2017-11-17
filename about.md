@@ -9,9 +9,9 @@ menu: true
 order: 4
 ---
 
-**Hydejack** aims to be the complete package for professionals on the web.
+**Hydejack** is the complete package for professionals on the web.
 It features a blog suitable for both prose and technical documentation,
-a showcase for your projects, and a resume that fits with the rest of the design.
+a showcase for your projects, and a resume that is well-integrated with the design.
 
 > Your presence on the web --- A [blog], a [portfolio] and a [resume].
 {:.lead}
@@ -165,7 +165,7 @@ built-in support for [Tinyletter], and from element styles so you can build arbi
 [resume]: https://qwtel.com/hydejack/resume/
 [download]: https://qwtel.com/download/
 [welcome]: https://qwtel.com/hydejack/
-[forms]: https://qwtel.com/hydejack/docs/7.2.0/forms-by-example/
+[forms]: https://qwtel.com/hydejack/docs/7.3.0/forms-by-example/
 
 [feat]: https://qwtel.com/hydejack/#features
 [news]: https://qwtel.com/hydejack/#newsletter-subscription-box
@@ -174,15 +174,15 @@ built-in support for [Tinyletter], and from element styles so you can build arbi
 
 [license]: LICENSE.md
 [pro]: licenses/PRO.md
-[docs]: docs/7.2.0/index.md
+[docs]: docs/7.3.0/index.md
 
 [github]: https://github.com/qwtel/hydejack/releases
 [gem]: https://rubygems.org/gems/jekyll-theme-hydejack
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 
 [gpss]: https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fqwtel.com%2Fhydejack%2F
-[wiki]: https://github.com/qwtel/hydejack/blob/master/docs/7.2.0/index.md
-[pdf]: https://github.com/qwtel/hydejack/releases/download/v7.2.0/Documentation._.Hydejack.pdf
+[wiki]: https://github.com/qwtel/hydejack/blob/master/docs/7.3.0/index.md
+[pdf]: https://github.com/qwtel/hydejack/releases/download/v7.3.0/Documentation._.Hydejack.pdf
 [hy-push-state]: https://qwtel.com/hy-push-state/
 [hy-drawer]: https://qwtel.com/hy-drawer/
 [rouge]: http://rouge.jneen.net
