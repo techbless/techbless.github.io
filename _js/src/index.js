@@ -18,7 +18,9 @@ import 'web-animations-js';
 
 import '../lib/modernizr-custom';
 import '../lib/version';
+import '../lib/template-polyfill';
 
+import './cookies-banner';
 import './katex';
 import './drawer';
 import './push-state';

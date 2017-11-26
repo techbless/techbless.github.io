@@ -51,18 +51,19 @@ A [portfolio], a [resume] layout and a [welcome] page to feature your favorite p
 
 This table details what is and isn't included in each respective version.
 
-|                                     | Free               | PRO                |
-|:------------------------------------|:------------------:|:------------------:|
-| Blog                                | &#x2714;           | &#x2714;           |
-| [Features][feat]                    | &#x2714;           | &#x2714;           |
-| [Portfolio] Layout                  |                    | &#x2714;           |
-| [Resume] Layout                     |                    | &#x2714;           |
-| [Welcome] Layout                    |                    | &#x2714;           |
-| [Newsletter Box][news]              |                    | &#x2714;           |
-| [Custom Forms][forms]               |                    | &#x2714;           |
-| License                             | [GPL-3.0][license] | [PRO]              |
-| Price                               | Free               | $29                |
-|| [Download on GitHub][github]<br/> – or – <br/>[Use the RubyGem][gem] | [Buy Now][buy] [^2] |
+|                                     | Free                                   | PRO                                    |
+|:------------------------------------|:--------------------------------------:|:--------------------------------------:|
+| Blog                                | &#x2714;                               | &#x2714;                               |
+| [Features][feat]                    | &#x2714;                               | &#x2714;                               |
+| [Portfolio] Layout                  |                                        | &#x2714;                               |
+| [Resume] Layout                     |                                        | &#x2714;                               |
+| [Welcome] Layout                    |                                        | &#x2714;                               |
+| [Newsletter Box][news]              |                                        | &#x2714;                               |
+| [Custom Forms][forms]               |                                        | &#x2714;                               |
+| No Hydejack Branding                |                                        | &#x2714;                               |
+| License                             | [GPL-3.0][license]                     | [PRO]                                  |
+| Price                               | Free                                   | $29                                    |
+|                                     | [**Download**][kit] or [**Fork**][git] | [**Buy Now**][buy] [^2]                |
 
 
 [^1]: Actual page load speed depends on your hosting provider, resolution of embedded images and usage of 3rd party plugins.  
@@ -85,7 +86,7 @@ This table details what is and isn't included in each respective version.
 [resume]: https://qwtel.com/hydejack/resume/
 [download]: https://qwtel.com/download/
 [welcome]: https://qwtel.com/hydejack/
-[forms]: https://qwtel.com/hydejack/docs/7.3.0/forms-by-example/
+[forms]: https://qwtel.com/hydejack/docs/7.4.0/forms-by-example/
 
 [feat]: https://qwtel.com/hydejack/#features
 [news]: https://qwtel.com/hydejack/#newsletter-subscription-box
@@ -94,15 +95,15 @@ This table details what is and isn't included in each respective version.
 
 [license]: LICENSE.md
 [pro]: licenses/PRO.md
-[docs]: docs/7.3.0/index.md
+[docs]: docs/7.4.0/index.md
 
-[github]: https://github.com/qwtel/hydejack/releases
+[kit]: https://github.com/qwtel/hydejack-starter-kit/archive/master.zip
 [gem]: https://rubygems.org/gems/jekyll-theme-hydejack
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 
 [gpss]: https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fqwtel.com%2Fhydejack%2F
-[wiki]: https://github.com/qwtel/hydejack/blob/master/docs/7.3.0/index.md
-[pdf]: https://github.com/qwtel/hydejack/releases/download/v7.3.0/Documentation._.Hydejack.pdf
+[wiki]: https://github.com/qwtel/hydejack/blob/master/docs/7.4.0/index.md
+[pdf]: https://github.com/qwtel/hydejack/releases/download/v7.4.0/Documentation._.Hydejack.pdf
 [hy-push-state]: https://qwtel.com/hy-push-state/
 [hy-drawer]: https://qwtel.com/hy-drawer/
 [rouge]: http://rouge.jneen.net

@@ -3,6 +3,49 @@ layout: page
 title: CHANGELOG
 ---
 
+## v7.4.0
+Nov 25 2017
+{:.heading.post-date}
+
+### Added
+* Allow markdown in copyright string
+* Added `theme_color` front-matter property to micro-manage the value of the the `theme-color` meta tag.
+  When not set, will use `accent_color`.
+* Added `theme_color` site setting, to set the value of `themeColor` in the app manifest.
+  When not set, will use `accent_color`.
+* Added `cookies_banner` setting:
+
+  ~~~yml
+  # file: _config.yml
+  hydejack:
+    cookies_banner: true
+  ~~~
+
+  Enabling this setting will show a notice at the top of the page to new visitors.
+  You can change the wording of the notice in `_data/strings.yml`
+  with the `cookies_banner.text` and `cookies_banner.okay` keys:
+
+  ~~~yml
+  # file: _data/strings.yml
+  cookies_banner:
+    text: This site uses cookies.
+    okay: Okay
+  ~~~
+
+### Fixed
+* Drawer no longer resizes/repaints in iOS Safari (iPhone) and Chrome for Android when the address bar autohides.
+* Fixed a bug that caused the drawer flicker/open unexpectedly when scrolling in mobile browsers.
+* Fixed how `image` works when using the `jekyll-seo-tag` plugin.
+
+### Design
+* Changed how line breaks work in resume layout
+* Changed margins of horizontals lines
+
+### Other
+* Updated docs
+* Updated posts
+
+
 ## v7.3.0
 Nov 17 2017
 {:.heading.post-date}
@@ -127,7 +170,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Event names described in the scripting chapter have changed from `y-push-state-*` to `hy-push-state-*`,
   except `y-push-state-animationend`, which has been removed. See the [docs][pstate] for more.
 
-[pstate]: docs/7.3.0/scripts.md#registering-push-state-event-listeners
+[pstate]: docs/7.4.0/scripts.md#registering-push-state-event-listeners
 
 ### Changes
 * `image` has been renamed to `accent_image`, but `image` continues to work unless you add the `jekyll-seo-tag` plugin.
@@ -326,7 +369,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Reduced building time during development.
   Roughly 50% of the time was spent rebuilding the inline CSS, which is now built once and included via `link` tag.
   Production builds still inlines CSS, so the building speed remains unchanged.
-  For more on how to improve building speeds, [see here](docs/7.3.0/writing.md#a-word-on-building-speeds).
+  For more on how to improve building speeds, [see here](docs/7.4.0/writing.md#a-word-on-building-speeds).
 
 ### Design
 * The default background image is no longer anti-selling the theme...
@@ -764,9 +807,9 @@ Oct 15 2013
 {:.heading.post-date}
 
 [tag]: http://www.minddust.com/post/tags-and-categories-on-github-pages/
-[migration]: docs/7.3.0/migration.md
-[writing]: docs/7.3.0/writing.md
-[scripts]: docs/7.3.0/scripts.md
+[migration]: docs/7.4.0/migration.md
+[writing]: docs/7.4.0/writing.md
+[scripts]: docs/7.4.0/scripts.md
 
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 [PRO-license]: licenses/PRO.md

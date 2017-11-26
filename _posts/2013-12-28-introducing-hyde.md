@@ -5,6 +5,7 @@ description: >
   Hyde is a brazen two-column [Jekyll](http://jekyllrb.com) theme that pairs a prominent sidebar with uncomplicated content.
 tags: [hyde]
 author: author2
+canonical_url: http://hyde.getpoole.com/2013/12/28/introducing-hyde/
 ---
 
 Hyde is a brazen two-column [Jekyll](http://jekyllrb.com) theme that pairs a prominent sidebar with uncomplicated content. It's based on [Poole](http://getpoole.com), the Jekyll butler.
@@ -44,4 +45,4 @@ Hyde is developed on and hosted with GitHub. Head to the [GitHub repository](htt
 
 Thanks!
 
-[docs]: ../docs/7.3.0/index.md
+[docs]: ../docs/7.4.0/index.md

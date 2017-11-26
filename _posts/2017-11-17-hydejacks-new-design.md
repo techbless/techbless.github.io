@@ -2,10 +2,11 @@
 layout: post
 title: Hydejack's New Design
 description: >
-  This post introduces Hydejack's now background image, color palette and logo. Then there's a few jokes I wrote about it [sic].
+  This post introduces Hydejack's now background image, color palette and logo.
 image: /assets/img/caleb-george.jpg
 hide_image: true
 tags: [hydejack]
+redirect_from: /2017/11/17/whats-new-in-v7/
 ---
 
 While v7 brings an [insane amount of new stuff]({{ site.baseurl }}/CHANGELOG/#v700), the most notable change is the new background image.
@@ -33,7 +34,7 @@ For comparison, here is the non-euclidean mess the [original photo](https://unsp
 ## New color palette
 I've extracted the major colors from the background image, which now form Hydejack's color palette:
 
-![Hydejacks's color palette]({{ site.baseurl }}/assets/img/COLOURlovers.com-Hydejack.png){:.lead style="border: 1px solid #ddd"}
+![Hydejacks's color palette]({{ site.baseurl }}/assets/img/COLOURlovers.com-Hydejack.png){:style="border: 1px solid #ddd"}
 
 ## New logo
 Hydejack also has a new logo, which is based on the new color palette.
@@ -41,23 +42,6 @@ It also features the best font on Google Fonts, and probably the world: [Roboto 
 (which is to say, I like it a lot).
 
 ![Hydejack's logo]({{ site.baseurl }}/assets/icons/icon.png)
-
-## Introducing the new default theme...
-
-Hydejack's new default theme is so hip and young, *it's like overpriced apple cider for the web*.
-
-Hydejack's new default theme is so hip and young, *its relationship with flat design is "complicated"*.
-
-Hydejack's new default theme is so hip and young, *every screenshot of it disappears after 24 hours*.
-
-Hydejack's new default theme is so hip and young, *it's embarrassed by its font-family*.
-
-Hydejack's new default theme is so hip and young, *it lets you swipe right without regrets*.
-
-Hydejack's new default theme is so hip and young, *all images of animals have been replaced with images of plants*.
-
-Hydejack's new default theme is so hip and young, *it has been accused of "white-spacing"*.
-
 
 
 [^1]: I should mention that these are only default values. Hydejack let's you choose your own. For inspiration, I've recently added [a gallery]({{ site.baseurl }}/projects/) to the site that shows a few variations of the theme.

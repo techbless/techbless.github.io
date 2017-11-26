@@ -1,3 +1,4 @@
+// # src / cookies-banner.js
 // Copyright (c) 2017 Florian Klampfer <https://qwtel.com/>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -13,28 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// <<< link
-@media screen {
-  a[href*="//"]:not(.no-mark-external), , a.external:not(.no-mark-external), a.no-push-state:not(.no-mark-external) {
-    &::after {
-      content: "\00A0\ea7e";
-      font-family: 'icomoon'!important;
-      speak: none;
-      font-style: normal;
-      font-weight: normal;
-      font-variant: normal;
-      text-transform: none;
-      line-height: 1;
-      font-size: smaller;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      opacity: 0.33;
-      transition: opacity 500ms;
-    }
-    &:hover::after, &:focus::after {
-      opacity: 1;
-      transition: opacity 100ms;
-    }
+if (!navigator.CookiesOK && !(localStorage && localStorage.getItem('cookies-ok'))) {
+  const template = document.getElementById('_cookies-banner-template');
+  if (template) {
+    document.getElementsByTagName('hy-push-state')[0]
+      .appendChild(document.importNode(template.content, true));
+
+    document.getElementById('_cookies-ok').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (localStorage) localStorage.setItem('cookies-ok', true);
+      const cookiesBanner = document.getElementById('_cookies-banner');
+      cookiesBanner.parentNode.removeChild(cookiesBanner);
+    }, { once: true });
   }
 }
-// >>

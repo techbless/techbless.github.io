@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// ## Overview
-// TODO
-
 // ## Includes
 // First, we patch the environment with some ES6+ functions we intend to use.
 import 'core-js/fn/function/bind';
@@ -30,7 +27,6 @@ import { HTMLDrawerElement } from 'hy-drawer/src/webcomponent';
 
 // Next, we include `Observable` and the RxJS functions we inted to use on it.
 import { Observable } from 'rxjs/Observable';
-import { debounceTime } from 'rxjs/operator/debounceTime';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 
 // And some of our own helper functions/constants.
@@ -149,6 +145,5 @@ if (!window._noDrawer && hasFeatures(REQUIREMENTS) && !isUCBrowser) {
 
   // Adding the resize callback to the resize event, but with a small delay.
   Observable::fromEvent(window, 'resize', { passive: true })
-    ::debounceTime(100)
     .subscribe(resizeCallback);
 }

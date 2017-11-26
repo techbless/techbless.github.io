@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 
 {% unless page.redirect %}
@@ -24,7 +24,7 @@
 <meta name="msapplication-config" content="{{ '/assets/ieconfig.xml' | relative_url }}">
 
 {% unless site.hydejack.no_theme_color %}
-<meta name="theme-color" content="{{ color | default:'#4fb1ba' }}">
+<meta name="theme-color" content="{{ page.theme_color | default:color | default:'#4fb1ba' }}">
 {% endunless %}
 
-<meta name="generator" content="Hydejack v7.3.0" />
+<meta name="generator" content="Hydejack v7.4.0" />
