@@ -3,6 +3,60 @@ layout: page
 title: CHANGELOG
 ---
 
+## v7.5.0
+Dec 18 2017
+{:.heading.post-date}
+
+### Added
+* Added secondary `legal` nav in footer:
+
+  ```yml
+  # file: _config.yml
+  legal:
+    - title: Cookies Policy
+      href:  /cookies-policy/
+    - title: Foobar
+      href:  https://foobar.com/
+  ```
+
+* The "heading permalink" can now be configured via `strings.yml`:
+
+  ```yml
+  # file: _data/strings.yml
+  permalink:      Permalink
+  permalink_icon: icon-link
+  ```
+
+* Sections on resume layout can now be rearranged, e.g.:
+
+  ```yml
+  # file: resume.md
+  left_column:
+    - work
+    - volunteer
+    - education
+    - awards
+    - publications
+    - references
+  right_column:
+    - languages
+    - skills
+    - interests
+  ```
+
+
+### Fixed
+* Fixed a bug that caused `<sup>` tags to render as regular text ([#52](https://github.com/qwtel/hydejack/pull/52))
+* Fixed a bug that caused Disqus to load the same thread on all pages ([#53](https://github.com/qwtel/hydejack/pull/52))
+* Fixed a bug that prevented Disqus comments to be loaded on sites that didn't cause scroll events
+* Fixed a bug that caused Disqus to be loaded over HTTP instead of HTTPS.
+* Fixed a bug that caused an extra space in URLs ([#55](https://github.com/qwtel/hydejack/pull/55)).
+* Comments no longer show up in the print version of the page.
+
+### Other
+* Set base font to `11pt` in print layout.
+* Set resume print layout to use 2 columns (A4 sheet)
+
 ## v7.4.2
 Dec 1 2017
 {:.heading.post-date}
@@ -194,7 +248,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Event names described in the scripting chapter have changed from `y-push-state-*` to `hy-push-state-*`,
   except `y-push-state-animationend`, which has been removed. See the [docs][pstate] for more.
 
-[pstate]: docs/7.4.2/scripts.md#registering-push-state-event-listeners
+[pstate]: docs/7.5.0/scripts.md#registering-push-state-event-listeners
 
 ### Changes
 * `image` has been renamed to `accent_image`, but `image` continues to work unless you add the `jekyll-seo-tag` plugin.
@@ -393,7 +447,7 @@ That being said, you should be aware of these (small) breaking changes:
 * Reduced building time during development.
   Roughly 50% of the time was spent rebuilding the inline CSS, which is now built once and included via `link` tag.
   Production builds still inlines CSS, so the building speed remains unchanged.
-  For more on how to improve building speeds, [see here](docs/7.4.2/writing.md#a-word-on-building-speeds).
+  For more on how to improve building speeds, [see here](docs/7.5.0/writing.md#a-word-on-building-speeds).
 
 ### Design
 * The default background image is no longer anti-selling the theme...
@@ -831,9 +885,9 @@ Oct 15 2013
 {:.heading.post-date}
 
 [tag]: http://www.minddust.com/post/tags-and-categories-on-github-pages/
-[migration]: docs/7.4.2/migration.md
-[writing]: docs/7.4.2/writing.md
-[scripts]: docs/7.4.2/scripts.md
+[migration]: docs/7.5.0/migration.md
+[writing]: docs/7.5.0/writing.md
+[scripts]: docs/7.5.0/scripts.md
 
 [buy]: https://app.simplegoods.co/i/AQTTVBOE
 [PRO-license]: licenses/PRO.md

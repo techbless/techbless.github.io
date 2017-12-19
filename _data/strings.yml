@@ -25,6 +25,8 @@ pagination:            Pagination
 newer:                 Newer
 older:                 Older
 back:                  Back
+permalink:             Permalink
+permalink_icon:        icon-link
 templates:             Templates (for web app)
 
 loading:               Loading…
