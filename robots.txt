@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://techbless.github.io/sitemap.xml
