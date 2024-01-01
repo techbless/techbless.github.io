@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="TypeScript, Node.js, 알고리즘, 자료구조, 데이터베이스, 개발 팁, 각종 문제 해결 방법 등을 공유합니다.">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="비쥬얼 스튜디오 코드를 브라우저에서 이용하고 code-server 도커에서 기본포트 변경 하는 방법"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="TypeScript, Node.js, 알고리즘, 자료구조, 데이터베이스, 개발 팁, 각종 문제 해결 방법 등을 공유합니다." />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그."/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>비쥬얼 스튜디오 코드를 브라우저에서 이용하고 code-server 도커에서 기본포트 변경 하는 방법 - 뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그.</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2020/07/03/비쥬얼-스튜디오-코드를-브라우저에서-이용하고-code-server-도커에서-기본포트-변경-하는-방법/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/rss2.xml" title="뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그." type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pv3 pt-50">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그.">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그.">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/categories"
+                    title="Categories">
+                    Categories
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="f1-l f2-m tc tc-m tl-ns title-font">비쥬얼 스튜디오 코드를 브라우저에서 이용하고 code-server 도커에서 기본포트 변경 하는 방법</h1>
+            <p class="f4 f3-ns fw6 tc tc-m tl-ns">2020-07-03</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-file-code-o"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/개발환경/">#개발환경</a> <a class="fw5 ph1 dib" href="/tags/Docker/">#Docker</a> <a class="fw5 ph1 dib" href="/tags/Raspberry-Pi/">#Raspberry Pi</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="code-server란-무엇인가"><a href="#code-server란-무엇인가" class="headerlink" title="code-server란 무엇인가"></a>code-server란 무엇인가</h1><p><code>vscode</code>(비쥬얼 스튜디오 코드)는 <code>TypeScript</code>와 <code>electron</code>을 이용해 개발되었고, <code>electron</code>은 <code>chromium</code>기반이기 때문에 포팅을 통해 웹에서 동작하도록 구현 한 것입니다. 그렇기때문에 웹의 장점을 살려, 웹 브라우저를 사용할 수 있는 스마트폰, 테블릿PC, 데스크탑 등 모든 기기에서 <code>vscode</code>를 이용할 수 있습니다.</p>
+<p><img src="/img/%EB%B9%84%EC%A5%AC%EC%96%BC-%EC%8A%A4%ED%8A%9C%EB%94%94%EC%98%A4-%EC%BD%94%EB%93%9C%EB%A5%BC-%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%97%90%EC%84%9C-%EC%9D%B4%EC%9A%A9%ED%95%98%EA%B3%A0-code-server-%EB%8F%84%EC%BB%A4%EC%97%90%EC%84%9C-%EA%B8%B0%EB%B3%B8%ED%8F%AC%ED%8A%B8-%EB%B3%80%EA%B2%BD-%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95/code-server.png" alt="Code-Server"></p>
+<h1 id="Docker-로-code-server-시작하기"><a href="#Docker-로-code-server-시작하기" class="headerlink" title="Docker 로 code-server 시작하기"></a>Docker 로 code-server 시작하기</h1><p>아래의 명령어로 바로 <code>code-server</code>를 시작할 수 있습니다.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -p 127.0.0.1:8080:8080 \</span><br><span class="line">  -v <span class="string">&quot;<span class="variable">$PWD</span>:/home/coder/project&quot;</span> \</span><br><span class="line">  -u <span class="string">&quot;<span class="subst">$(id -u)</span>:<span class="subst">$(id -g)</span>&quot;</span> \</span><br><span class="line">  codercom/code-server:latest</span><br></pre></td></tr></table></figure>
+
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h1 id="만약-8080-포트를-이미-점유중이라면-어떨까요"><a href="#만약-8080-포트를-이미-점유중이라면-어떨까요" class="headerlink" title="만약 8080 포트를 이미 점유중이라면 어떨까요?"></a>만약 8080 포트를 이미 점유중이라면 어떨까요?</h1><p><code>code-server</code>의 기본 포트는 8080번 으로 되어있습니다. 하지만 만약에 본인의 서버에서 다른 서비스가 8080을 사용하고 있다면 어떻게 할까요?</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -it \</span><br><span class="line">-p 4107:4107 \</span><br><span class="line">-v <span class="string">&quot;<span class="variable">$&#123;PWD&#125;</span>/yunbin:/home/coder/&quot;</span> \</span><br><span class="line">codercom/code-server:latest --bind-addr=0.0.0.0:4107</span><br></pre></td></tr></table></figure>
+
+<p>위와 같이 <code>--bind-addr</code> 옵션을 통해 사용할 포트를 지정해줄 수 있습니다. 위에 예시에서는 4107 포트를 이용하였는데, 이부분을 원하는 포트로 바꿔주시면 됩니다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/개발환경/">#개발환경</a> <a class="fw5 ph1 dib" href="/tags/Docker/">#Docker</a> <a class="fw5 ph1 dib" href="/tags/Raspberry-Pi/">#Raspberry Pi</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                    <!-- Prev & Next Button -->
+                    <div>
+                        <div class="tl f4-l">
+                            
+                                
+                                <a
+                                    href="/2020/06/09/ES7-%EC%9D%B4%EC%83%81%EC%9D%98-TypeScript%EC%99%80-JavaScript%EC%97%90%EC%84%9C-Singleton-%ED%8C%A8%ED%84%B4%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%93%B8%EA%B9%8C/"
+                                    data-tooltip="ES7 이상의 TypeScript와 JavaScript에서 Singleton 패턴은 어떻게 쓸까?"
+                                    aria-label="pagination.next: ES7 이상의 TypeScript와 JavaScript에서 Singleton 패턴은 어떻게 쓸까?"
+                                >👈🏻 ES7 이상의 TypeScript와 JavaScript에서 Singleton 패턴은 어떻게 쓸까?
+                            
+                            </a>                            
+                        </div>
+
+                        <div class="tr mt3 f4-l">
+                            
+                                
+                                <a
+                                    href="/2020/08/07/node-cron%20%EB%AA%A8%EB%93%88%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%B4-%EC%8A%A4%EC%BC%80%EC%A5%B4%EB%A7%81%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95/"
+                                    data-tooltip="node-cron 모듈을 이용해 스케쥴링하는 방법"
+                                    aria-label="pagination.previous: node-cron 모듈을 이용해 스케쥴링하는 방법"
+                                >node-cron 모듈을 이용해 스케쥴링하는 방법 👉🏻
+                            
+                            </a>
+                        </div>
+                        
+                        <br>
+
+                    </div>
+
+                    <br>
+
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 23년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Docker/">Docker</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2023/12/08/style-gan/">[논문 리뷰] A Style-Based Generator Architecture for G...</a>
+        </p>
+    
+        <p>
+            <a href="/2023/11/19/progressive-growing-of-gans-%EC%9A%94%EC%95%BD/">[논문 리뷰] Progressive Growing of GANs for Improved Q...</a>
+        </p>
+    
+        <p>
+            <a href="/2023/10/29/attention-is-all-you-need/">[논문 리뷰] Attention Is All You Need</a>
+        </p>
+    
+        <p>
+            <a href="/2023/05/09/%EA%B5%AD%EA%B0%80%EC%9A%B0%EC%88%98%EC%9E%A5%ED%95%99%EC%83%9D-%ED%95%A9%EA%B2%A9-%ED%9B%84%EA%B8%B0/">국가 우수 장학금(이공계) 선발 후기</a>
+        </p>
+    
+        <p>
+            <a href="/2023/04/08/sequelize-modelctor/">[ModelCtor] Sequelize Model의 Generic 타입 정의 방법</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>
