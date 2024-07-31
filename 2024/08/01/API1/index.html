@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="TypeScript, Node.js, 알고리즘, 자료구조, 데이터베이스, 개발 팁, 각종 문제 해결 방법 등을 공유합니다.">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="API-01"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="TypeScript, Node.js, 알고리즘, 자료구조, 데이터베이스, 개발 팁, 각종 문제 해결 방법 등을 공유합니다." />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그."/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>API-01 - 뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그.</title><meta name="robots" content="noindex">
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2024/08/01/api1/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그." type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pv3 pt-50">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그.">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="뚝딱수달 - 수달의 뚝딱뚝딱 개발 블로그.">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/categories"
+                    title="Categories">
+                    Categories
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="f1-l f2-m tc tc-m tl-ns title-font">API-01</h1>
+            <p class="f4 f3-ns fw6 tc tc-m tl-ns">2024-08-01</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-database"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/NodeJs/">#NodeJs</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="API란-무엇인가"><a href="#API란-무엇인가" class="headerlink" title="API란 무엇인가"></a>API란 무엇인가</h1><p>API(Application Programming Interface)는 소프트웨어 애플리케이션 간의 상호 작용을 가능하게 하는 매개체이다. API는 특정 기능을 수행하거나 데이터를 교환할 수 있도록 정의된 규칙과 방법을 제공한다. 이를 통해 개발자는 복잡한 기능을 직접 구현하지 않고도 다양한 서비스를 통합하고 확장할 수 있다. 예를 들어, 지우가 만들었던 혼잡도 어플리케이션. 혼잡도를 구하는 로직을 직접 만들필요 없이 혼잡도 기능을 제공하는 API를 통합하여 어플리케이션을 구현할 수 있다.</p>
+<p><img src="/img/API1/api1.png"></p>
+<h1 id="REST-API란"><a href="#REST-API란" class="headerlink" title="REST API란"></a>REST API란</h1><p>REST(Representational State Transfer) API는 HTTP 프로토콜을 기반으로 하는 API이다. REST는 웹 표준에 기반한 구조적 스타일로, 클라이언트와 서버 간의 상호 작용을 단순화하고 효율적으로 만든다. REST API는 자원을 표현하고 조작하는 데 있어 일관된 인터페이스를 제공하여, 다양한 클라이언트가 서버와 원활하게 통신할 수 있게 한다.</p>
+<h1 id="REST-API-규칙"><a href="#REST-API-규칙" class="headerlink" title="REST API 규칙"></a>REST API 규칙</h1><p>REST API는 다음과 같은 기본 규칙을 따른다:</p>
+<ol>
+<li><strong>자원(Resource) 기반</strong>: 모든 데이터는 고유한 URI(Uniform Resource Identifier)를 통해 접근한다. 자원은 서버에서 관리되는 데이터나 서비스를 의미하며, 각각의 자원은 고유한 URI를 갖는다. 예를 들어, <code>https://api.example.com/users</code>는 사용자 자원을 나타내며, 특정 사용자 자원(유저 번호 123)은 <code>https://api.example.com/users/123</code>와 같은 URI를 통해 접근할 수 있다. 다른 예로는 <code>https://api.example.com/products</code>는 상품 자원을, <code>https://api.example.com/orders</code>는 주문 자원을 나타낸다.</li>
+<li><strong>HTTP 메서드</strong>: 자원에 대한 작업은 HTTP 메서드를 통해 정의된다.<ul>
+<li><code>GET</code>: 자원의 조회</li>
+<li><code>POST</code>: 자원의 생성</li>
+<li><code>PUT</code>: 자원의 전체 수정</li>
+<li><code>PATCH</code>: 자원의 부분 수정</li>
+<li><code>DELETE</code>: 자원의 삭제</li>
+</ul>
+</li>
+</ol>
+<p>위의 자원 기반 규칙과 HTTP 메서드를 조합하여 아래와 같은 예시를과 같이 API요청이 표현될 수 있다.<br>상품 추가는 POST: /products,<br>특정 게시판(3번 게시판)에 게시글 추가는 POST: /boards/3/articles<br>특정 댓글 게시글(17번 게시글) 삭제는 DELETE: /articles/17</p>
+<ol start="3">
+<li><strong>무상태성(Stateless)</strong>: 각 요청은 독립적이며, 서버는 요청 간의 상태를 저장하지 않는다. 클라이언트는 필요한 모든 정보를 요청에 포함해야 한다. (다음에 설명해줄게)</li>
+<li><strong>표준화된 응답 구조</strong>: 응답은 일관된 포맷(JSON, XML 등)으로 제공되어야 하며, 상태 코드를 통해 요청의 결과를 명확히 전달해야 한다.<ul>
+<li><code>200 OK</code>: 성공</li>
+<li><code>201 Created</code>: 자원 생성 성공</li>
+<li><code>400 Bad Request</code>: 잘못된 요청</li>
+<li><code>401 Unauthorized</code>: 인증 필요 (로그인이 안된 경우)</li>
+<li><code>401 Forbidden</code>: 권한 없음 (로그인은 되어있으나, 특정 작업을 수행하기 위한 ‘권한’이 없는 경우)</li>
+<li><code>404 Not Found</code>: 자원 없음</li>
+<li><code>500 Internal Server Error</code>: 서버 오류</li>
+</ul>
+</li>
+</ol>
+<p>훨씬 많지만 크게 중요한건 요거, 요거는 외우면 좋아요.</p>
+<h1 id="Controller-Service-Repository"><a href="#Controller-Service-Repository" class="headerlink" title="Controller, Service, Repository"></a>Controller, Service, Repository</h1><p>소프트웨어 아키텍처에서 Controller, Service, Repository 패턴은 코드의 역할을 분리하여 관리성과 확장성을 높이는 데 사용한다.</p>
+<p><img src="/img/API1/api2.png"></p>
+<p>API 서버의 전체적인 흐름은 위의 그림과 같다. 이 구조는 특정 언어나 프레임워크의 종속적이지 않으며, 일반적인 구조이다.</p>
+<h2 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h2><p>Controller는 사용자 입력을 받아서 처리하고, 적절한 서비스 메서드를 호출한다. 주로 HTTP 요청을 받아서 응답을 반환하는 역할을 한다. 예를 들어, 웹 애플리케이션에서 사용자 로그인 요청을 처리하는 Controller는 사용자가 입력한 자격 증명을 받아서 서비스 계층에 전달하고, 그 결과를 바탕으로 응답을 반환한다.</p>
+<p><img src="/img/API1/api3.png"></p>
+<p>입력에 대한 처리는 예를들어, 아까 설명했던 것처럼 게시글 작성할때 작성자를 현재 로그인된 유저로 설정해준다던지 등등이 있을 수 있다. 상황에 따라 다양한데 하다보면 무슨 말인지 알게 될거야</p>
+<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><p>Service 계층은 비즈니스 로직을 처리하는 곳이다. 여러 Repository를 조합하여 데이터를 처리하고, 필요한 비즈니스 규칙을 적용한다. 예를 들어, 주문 처리 서비스는 상품 재고를 확인하고, 결제를 처리하며, 주문을 데이터베이스에 저장하는 등 다양한 비즈니스 로직을 수행한다.</p>
+<p><img src="/img/API1/api4.png"></p>
+<p>이게 일반적으로 <code>비지니스 로직</code>이라는 terminology를 사용하는데, 나도 이게 왜그런지는 모르겠고 비지니스 로직은 그냥 사용자의 요구사항을 처리하는 로직 정도로 생각하면 될 것 같아.</p>
+<p>DB의 데이터가 필요하거나 엑세스(CRUD)가 필요한 경우, Repository에게 요청한다. 프로젝트의 규모가 커질 수록 서비스 레이어의 내용이 가장 비대해 질 것이다.</p>
+<h2 id="Repository"><a href="#Repository" class="headerlink" title="Repository"></a>Repository</h2><p>Repository는 데이터 액세스를 담당하는 계층이다. 데이터베이스와의 상호 작용을 관리하며, 데이터를 조회, 저장, 삭제하는 메서드를 제공한다. 예를 들어, 사용자 정보를 저장하고 조회하는 Repository는 데이터베이스에서 사용자 데이터를 관리하는 모든 작업을 수행한다.</p>
+<p>실제로 SQL쿼리를 작성하고 이 SQL쿼리를 실행시켜 데이터베이스의 연산을 수행한다.</p>
+<p><img src="/img/API1/api5.png"></p>
+<h1 id="ORM-Object-Relational-Mapping"><a href="#ORM-Object-Relational-Mapping" class="headerlink" title="ORM (Object-Relational Mapping)"></a>ORM (Object-Relational Mapping)</h1><p>ORM은 객체 지향 프로그래밍 언어를 사용하여 관계형 데이터베이스를 조작할 수 있게 하는 기술이다. ORM은 데이터베이스 테이블을 클래스와 객체로 매핑하여, SQL 쿼리를 작성하지 않고도 데이터베이스 작업을 수행할 수 있게 한다.<br>그래서 우리는 Sequelize라는 ORM을 사용해서 직접 SQL을 작성하지 않고 객체지향 코드를 작성하듯이 간단하게 데이터베이스에 접근할 수 있다. </p>
+<h1 id="Repository-계층을-ORM으로-대체하기"><a href="#Repository-계층을-ORM으로-대체하기" class="headerlink" title="Repository 계층을 ORM으로 대체하기"></a>Repository 계층을 ORM으로 대체하기</h1><p>우리처럼 일부 프로젝트에서는 Repository 계층을 ORM으로 대체할 수 있다. 예를 들어, Sequelize와 같은 ORM을 사용하면 데이터베이스 작업을 쉽게 처리할 수 있다. ORM을 사용하면 데이터베이스와의 직접적인 상호 작용을 줄이고, 코드의 일관성을 유지할 수 있다.</p>
+<p>예를들어,</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Article.create(articleInfo);</span><br><span class="line">User.create(userInfo);</span><br></pre></td></tr></table></figure>
+
+<p>이 메서드들은 sequlize 메서드 내부에서 sql 쿼리를 적절하게 작성해서 실행시켜준다.</p>
+<h2 id="장점"><a href="#장점" class="headerlink" title="장점"></a>장점</h2><ul>
+<li><strong>빠른 개발</strong>: 기본적인 CRUD 작업을 빠르게 구현할 수 있다.</li>
+<li><strong>모듈화</strong>: 데이터베이스 모델을 모듈화하여 재사용할 수 있다.</li>
+<li><strong>생산성 향상</strong>: 반복적인 SQL 쿼리 작성 작업을 줄여 개발 속도를 높인다.</li>
+<li><strong>유지 보수 용이</strong>: 코드의 가독성과 유지 보수성을 높인다. 데이터베이스 스키마와 코드 간의 일관성을 유지할 수 있다.</li>
+<li><strong>데이터베이스 독립성</strong>: 특정 데이터베이스에 종속되지 않고, 다양한 DBMS를 사용할 수 있게 한다.</li>
+</ul>
+<h2 id="단점"><a href="#단점" class="headerlink" title="단점"></a>단점</h2><ul>
+<li><strong>복잡성</strong>: 단순한 쿼리에 비해 성능이 떨어질 수 있으며, 복잡한 쿼리 작성이 어려울 수 있다.</li>
+<li><strong>추상화 비용</strong>: ORM이 제공하는 추상화 레이어로 인해 직접 SQL을 사용할 때보다 성능이 저하될 수 있다.</li>
+<li><strong>제한적인 쿼리</strong>: 복잡한 쿼리 작성 시 ORM의 기능적 한계가 있을 수 있다.</li>
+</ul>
+<p>진짜 복잡한 쿼리는 직접 작성해줘야함!!!!! 하지만 이럴일은 크게 생기지 않을거지만 그래도 대비는 하면 좋음</p>
+<p>이러한 구조적 패턴과 도구를 사용하면 소프트웨어 개발 과정에서 더 나은 코드 관리와 확장성을 얻을 수 있다. REST API와 함께 Controller, Service, Repository 패턴을 적절히 활용하고, ORM을 통해 데이터베이스 작업을 효율적으로 처리하면, 유지 보수성과 확장성이 높은 애플리케이션을 개발할 수 있다.</p>
+<!-- flag of hidden posts -->
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/NodeJs/">#NodeJs</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                    <!-- Prev & Next Button -->
+                    <div>
+                        <div class="tl f4-l">
+                            
+                                <a>👈🏻 이전 게시글이 존재하지 않습니다.
+                            
+                            </a>                            
+                        </div>
+
+                        <div class="tr mt3 f4-l">
+                            
+                                <a> 다음 게시글이 존재하지 않습니다. 👉🏻
+                            
+                            </a>
+                        </div>
+                        
+                        <br>
+
+                    </div>
+
+                    <br>
+
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 23년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/NodeJs/">NodeJs</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2023/12/08/style-gan/">[논문 리뷰] A Style-Based Generator Architecture for G...</a>
+        </p>
+    
+        <p>
+            <a href="/2023/11/19/progressive-growing-of-gans-%EC%9A%94%EC%95%BD/">[논문 리뷰] Progressive Growing of GANs for Improved Q...</a>
+        </p>
+    
+        <p>
+            <a href="/2023/10/29/attention-is-all-you-need/">[논문 리뷰] Attention Is All You Need</a>
+        </p>
+    
+        <p>
+            <a href="/2023/05/09/%EA%B5%AD%EA%B0%80%EC%9A%B0%EC%88%98%EC%9E%A5%ED%95%99%EC%83%9D-%ED%95%A9%EA%B2%A9-%ED%9B%84%EA%B8%B0/">국가 우수 장학금(이공계) 선발 후기</a>
+        </p>
+    
+        <p>
+            <a href="/2023/04/08/sequelize-modelctor/">[ModelCtor] Sequelize Model의 Generic 타입 정의 방법</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>
