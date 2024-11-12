@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /about-me
+Disallow: /about-me/
+Disallow: /archives/
+Disallow: /categories/
+Disallow: /tags/
+Allow: /
+Sitemap: https://techbless.github.io/sitemap.xml
