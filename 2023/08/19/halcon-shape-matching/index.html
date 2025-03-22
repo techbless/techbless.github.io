@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Halcon -  Shape Matching Recap"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Halcon -  Shape Matching Recap - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2023/08/19/halcon-shape-matching/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pv3 pt-50">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="f1-l f2-m tc tc-m tl-ns title-font">Halcon -  Shape Matching Recap</h1>
+            <p class="f4 f3-ns fw6 tc tc-m tl-ns">2023-08-19</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-connectdevelop"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="Halcon-Shape-Matching-모델"><a href="#Halcon-Shape-Matching-모델" class="headerlink" title="Halcon Shape Matching 모델"></a>Halcon Shape Matching 모델</h1><p>Shape Matching은 할콘에서 객체를 이미지 내에서 찾아내는 핵심 기술입니다. 이 방식은 <strong>머신 비전</strong>(machine vision) 애플리케이션에서 매우 유용합니다. 객체를 명시적으로 분할할 필요 없이, <strong>참조 이미지</strong>(reference image)에서 모델을 생성하고, 이를 검색 이미지에서 찾아내는 방식으로 동작합니다.</p>
+<p>이 기술은 <strong>템플릿(모델)</strong>(template)을 생성하고 이를 검색 이미지에서 찾아내는 과정을 통해, 객체를 <strong>위치</strong>(position)와 <strong>방향</strong>(orientation)을 식별하는 데 사용됩니다. Halcon에서는 이미지 구조(예: <strong>contours</strong>, <strong>gray-level relationships</strong>)를 기반으로 다양한 방식으로 매칭을 수행합니다.</p>
+<h2 id="Halcon의-매칭-방식"><a href="#Halcon의-매칭-방식" class="headerlink" title="Halcon의 매칭 방식"></a>Halcon의 매칭 방식</h2><p>할콘에서는 여러 가지 매칭 방법을 제공하며, 각 방법은 특정 애플리케이션에 적합합니다:</p>
+<ol>
+<li><strong>Correlation-based Matching</strong>(상관 관계 기반 매칭) - 픽셀 강도 관계를 이용하여 <strong>texture-rich</strong>(텍스처가 풍부한) 객체를 매칭하는 데 적합합니다.</li>
+<li><strong>Shape-based Matching</strong>(형태 기반 매칭) - 객체의 형태를 기반으로 매칭을 수행하며, <strong>contours</strong>(윤곽선)가 뚜렷한 객체에 유리합니다.</li>
+<li><strong>Local Deformable Matching</strong>(지역 변형 가능 매칭) - 객체가 <strong>local deformations</strong>(국소적 변형)을 겪을 때 유용하며, 변형된 표면을 다룰 때 사용됩니다.</li>
+<li><strong>Perspective Deformable Matching</strong>(원근 변형 가능 매칭) - <strong>2D와 3D</strong>의 <strong>pose</strong>(자세) 정보를 제공하며, <strong>perspective</strong>(원근)에 의한 변형을 처리할 수 있습니다.</li>
+<li><strong>Descriptor-based Matching</strong>(디스크립터 기반 매칭) - 특징 점이나 <strong>descriptor</strong>(디스크립터)를 기반으로 매칭하는 방법으로, <strong>dynamic environments</strong>(동적 환경)에서 유용합니다.</li>
+</ol>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="성공적인-매칭을-위한-핵심-개념"><a href="#성공적인-매칭을-위한-핵심-개념" class="headerlink" title="성공적인 매칭을 위한 핵심 개념"></a>성공적인 매칭을 위한 핵심 개념</h2><ol>
+<li><p><strong>모델 생성</strong>(Model Creation):<br>모델은 보통 <strong>참조 이미지</strong>(reference image)에서 관심 있는 객체만을 <strong>ROI</strong>(Region of Interest)로 추출하여 생성됩니다. 이렇게 생성된 이미지를 바탕으로 모델을 만듭니다.</p>
+</li>
+<li><p><strong>객체 위치 추정</strong>(Object Localization):<br>모델이 생성되면, 매칭 프로세스는 다른 이미지에서 해당 객체를 찾아 <strong>위치</strong>(position), <strong>방향</strong>(orientation), 때로는 <strong>크기</strong>(scale)까지 파악합니다.</p>
+</li>
+<li><p><strong>변환</strong>(Transformation):<br>매칭된 객체에 대해 <strong>translation</strong>(이동), <strong>rotation</strong>(회전), <strong>scaling</strong>(크기 변경) 등의 변환을 적용하여 객체를 정확히 정렬할 수 있습니다.</p>
+</li>
+</ol>
+<h2 id="Shape-기반-매칭-vs-Correlation-기반-매칭"><a href="#Shape-기반-매칭-vs-Correlation-기반-매칭" class="headerlink" title="Shape 기반 매칭 vs Correlation 기반 매칭"></a>Shape 기반 매칭 vs Correlation 기반 매칭</h2><p><strong>Shape-based Matching</strong>(형태 기반 매칭)과 <strong>Correlation-based Matching</strong>(상관 관계 기반 매칭)의 차이를 이해하려면:</p>
+<ul>
+<li><strong>Shape-based Matching</strong>(형태 기반 매칭)은 <strong>contours</strong>(윤곽선)가 뚜렷한 객체에 유리하며, <strong>partially occluded</strong>(부분적으로 가려진) 객체나 <strong>deformed</strong>(변형된) 객체를 처리할 수 있습니다.</li>
+<li><strong>Correlation-based Matching</strong>(상관 관계 기반 매칭)은 <strong>texture changes</strong>(텍스처 변화)가 큰 객체에 유리하고, <strong>scaling</strong>(스케일)이 필요 없는 경우 빠르고 효율적입니다.</li>
+</ul>
+<h2 id="성능-최적화를-위한-전략"><a href="#성능-최적화를-위한-전략" class="headerlink" title="성능 최적화를 위한 전략"></a>성능 최적화를 위한 전략</h2><p><strong>성능 최적화</strong>(Performance Optimization)를 위해 사용할 수 있는 몇 가지 방법은:</p>
+<ol>
+<li><strong>검색 공간 제한</strong>(Restricting Search Space): 모델이 검색될 영역을 제한하여 매칭 속도를 크게 향상시킬 수 있습니다.</li>
+<li><strong>이미지 피라미드</strong>(Image Pyramid): 이미지를 여러 크기로 축소하여, 작은 해상도의 이미지에서 먼저 검색을 시작하고, 점차 높은 해상도로 검색을 진행하는 방식입니다.</li>
+<li><strong>탐욕적 검색(Greedy Search)</strong>: 불필요한 후보를 빠르게 제거하여 검색 시간을 줄일 수 있습니다.</li>
+</ol>
+<h2 id="예시-커패시터-콘덴서-탐지"><a href="#예시-커패시터-콘덴서-탐지" class="headerlink" title="예시: 커패시터(콘덴서) 탐지"></a>예시: 커패시터(콘덴서) 탐지</h2><p>할콘의 <strong>Shape-based Matching</strong>(형태 기반 매칭)을 사용하여 <strong>커패시터</strong>(capacitor)를 탐지하는 예시:</p>
+<ol>
+<li><strong>템플릿 생성</strong>(Template Creation): 커패시터의 <strong>참고 이미지</strong>(reference image)를 사용하여 모델을 생성합니다. 만약 실제 이미지가 부족하다면, <strong>합성된 템플릿</strong>(synthetic template)을 사용할 수도 있습니다.</li>
+<li><strong>매칭 및 위치 추정</strong>(Matching and Localization): 생성된 모델을 바탕으로 다른 이미지에서 커패시터의 <strong>위치</strong>(position)와 <strong>방향</strong>(orientation)을 찾아냅니다.</li>
+</ol>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>할콘의 <strong>Shape Matching</strong>(형태 매칭) 모델은 <strong>객체 위치 추정</strong>(object localization) 및 <strong>식별</strong>(identification)을 위한 강력한 도구입니다. <strong>Shape-based Matching</strong>(형태 기반 매칭)을 사용하면 <strong>contours</strong>(윤곽선)가 중요한 객체를 매우 정밀하게 찾아낼 수 있으며, <strong>Correlation-based Matching</strong>(상관 관계 기반 매칭)은 <strong>texture changes</strong>(텍스처 변화)가 큰 객체를 빠르게 처리하는 데 유용합니다.</p>
+<p>성능 최적화를 위해서는 <strong>검색 공간 제한</strong>, <strong>이미지 피라미드</strong>, <strong>탐욕적 검색</strong> 등의 기법을 활용할 수 있으며, 다양한 매칭 방식은 <strong>복잡한 환경</strong>(complex environments)에서도 뛰어난 성능을 발휘합니다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/영상처리/">영상처리</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 파편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+        <p>
+            <a href="/2024/10/03/bga-example/">Halcon - BGA 비전 검사 코드 예시</a>
+        </p>
+    
+        <p>
+            <a href="/2024/08/02/interlocked-atomic/">하드웨어 친화적 동기화: C# Interlocked의 내부 동작과 원리</a>
+        </p>
+    
+        <p>
+            <a href="/2024/06/23/halcon-2d-metrology/">Halcon - 2D Metrology Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2024/06/22/efficient-ad/">[논문 리뷰] EfficientAD: Accurate Visual Anomaly Detec...</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

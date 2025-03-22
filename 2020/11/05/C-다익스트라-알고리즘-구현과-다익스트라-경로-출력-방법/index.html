@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="C++ 다익스트라 알고리즘 구현과 다익스트라 경로 추적 방법"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>C++ 다익스트라 알고리즘 구현과 다익스트라 경로 추적 방법 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2020/11/05/c-다익스트라-알고리즘-구현과-다익스트라-경로-출력-방법/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pv3 pt-50">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="f1-l f2-m tc tc-m tl-ns title-font">C++ 다익스트라 알고리즘 구현과 다익스트라 경로 추적 방법</h1>
+            <p class="f4 f3-ns fw6 tc tc-m tl-ns">2020-11-05</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-map-o"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/C/">#C++</a> <a class="fw5 ph1 dib" href="/tags/알고리즘/">#알고리즘</a> <a class="fw5 ph1 dib" href="/tags/자료구조/">#자료구조</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="다익스트라-알고리즘"><a href="#다익스트라-알고리즘" class="headerlink" title="다익스트라 알고리즘"></a>다익스트라 알고리즘</h1><p>다익스트라 알고리즘에 대한 개념은 쉽게 많은 정보를 찾을 수 있으니 구현과 최단 거리가 아닌 최단 경로를 구하는 방법에 대해 알아보겠습니다.</p>
+<h2 id="다익스트라-요약"><a href="#다익스트라-요약" class="headerlink" title="다익스트라 요약"></a>다익스트라 요약</h2><p>최단경로를 발견한 정점의 집합을 <code>S</code>라고 할때 다익스트라 알고리즘의 매 단계에서 집합  <code>S</code>에 있지 않은 정점중 가장 <code>distance</code>값이 가장 적은, 즉 가장 가까운 정점을 집합 <code>S</code>에 추가하고 그 다음, 다른 정점들의 <code>distance</code>값을 업데이트 합니다. 새로 가장 까운 정점으로 정점 u가 뽑혔다면 정점 <code>u</code>를 거쳐 다른 정점까지 가는 거리와 기존에 해당 정점까지의 거리를 비교해 거리가 더 가까운 값을 기준으로 업데이트 합니다.</p>
+<p>아래의 식을 보면 더 쉽게 이해할 수 있습니다. 아래의 식은 위에서 설명한 것을 식으로 나타낸 것입니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">distance[w] = min(distance[w], distance[u] + weight[u][w])</span><br></pre></td></tr></table></figure>
+
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="최단경로-추적-구현"><a href="#최단경로-추적-구현" class="headerlink" title="최단경로 추적 구현"></a>최단경로 추적 구현</h2><p>다익스트라 알고리즘을 이용하면 최단 거리는 <code>distance</code> 배열에 저장되어 있어 쉽게 구할 수 있습니다. 하지만 거리가 아니라 최단 경로를 구하려 한다면, 시작 정점에서부터 해당 정점까지 지나온 경로를 기록해두어야 합니다.     </p>
+<p>아래의 <code>C++</code>로 구현한 코드를 보면 최단 경로가 업데이트 될 때마다 <code>from</code> 배열을 업데이트 하는 것을 볼 수 있습니다. <code>from</code> 배열은 해당 정점까지의 최단 거리가 업데이트 될때 해당 정점까지 의 거리를 업데이트시킨 바로 이전에 방문하게 되는 정점을 의미합니다. 예를 들어, <code>from[5]</code>는 정점 5까지의 최단 경로에서 정점 5 바로 이전에 방문하는 정점을 의미합니다.   </p>
+<p> 따라서 도착지에서 출발지까지 역순으로 재귀함수를 이용해 출력하면 쉽게 최단 경로를 구할 수 있습니다. 경로 출력에 관한 함수는 <code>trace_path()</code>와 <code>print_path()</code>입니다.</p>
+<p>쉽게 이해할 수 있도록 최대한 주석을 달아 두었으니 주석을 참고해주세요.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> pii = pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    <span class="comment">// 인접 정점</span></span><br><span class="line">    <span class="comment">// first: 정점, second: 가중치</span></span><br><span class="line">    vector&lt;pii&gt;* adj;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Graph</span>(<span class="type">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;n = n;</span><br><span class="line">        adj = <span class="keyword">new</span> vector&lt;pii&gt;[n];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 간선 추가</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">insertEdge</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v, <span class="type">int</span> w)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;adj[u].<span class="built_in">push_back</span>(<span class="built_in">make_pair</span>(v, w));</span><br><span class="line">        <span class="keyword">this</span>-&gt;adj[v].<span class="built_in">push_back</span>(<span class="built_in">make_pair</span>(u, w));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Compare</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 우선순위 큐를 위한 비교 함수</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">operator</span><span class="params">()</span> <span class="params">(pii a, pii b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a.second &gt; b.second;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt;* <span class="title">dijkstra</span><span class="params">(Graph* g, <span class="type">int</span> start)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 최단 거리가 발견되면 true</span></span><br><span class="line">    <span class="function">vector&lt;<span class="type">bool</span>&gt; <span class="title">found</span><span class="params">(g-&gt;n, <span class="literal">false</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 해당 정점까지의 거리 (default : 무한)</span></span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">distance</span><span class="params">(g-&gt;n, INT_MAX)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 최단거리가 업데이트 될때 바로 이전에 방문하게 되는 정점  </span></span><br><span class="line">    vector&lt;<span class="type">int</span>&gt;* from = <span class="keyword">new</span> <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(g-&gt;n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 가장 가까운 정점을 찾기 위한 우선순위 큐</span></span><br><span class="line">    <span class="comment">// first: 정점 번호, second: 정점까지의 거리</span></span><br><span class="line">    priority_queue&lt;pii, vector&lt;pii&gt;, Compare&gt; pq;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 출발지의 최단거리 발견</span></span><br><span class="line">    found[start] = <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">// 출발지까지 거리 0</span></span><br><span class="line">    distance[start] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 우선순위 큐에 넣는다.</span></span><br><span class="line">    pq.<span class="built_in">push</span>(<span class="built_in">make_pair</span>(start, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//for (int i = 0; i &lt; g-&gt;n; i++) &#123;</span></span><br><span class="line">    <span class="keyword">while</span>(!pq.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        <span class="comment">// 가장 가까운 정점을 우선순위 큐에서 꺼낸다.</span></span><br><span class="line">        <span class="type">int</span> u = pq.<span class="built_in">top</span>().first;</span><br><span class="line">        pq.<span class="built_in">pop</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 최단거리 발견</span></span><br><span class="line">        found[u] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; g-&gt;adj[u].<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">            <span class="comment">// 정점 u의 인접정점의 최단거리 업데이트</span></span><br><span class="line">            pii v = g-&gt;adj[u][j];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!found[v.first]) &#123;</span><br><span class="line">                <span class="keyword">if</span> (distance[u] + v.second &lt; distance[v.first]) &#123;</span><br><span class="line">                    distance[v.first] = distance[u] + v.second;</span><br><span class="line">                    (*from)[v.first] = u;</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 우선순위 큐에 추가</span></span><br><span class="line">                    pq.<span class="built_in">push</span>(<span class="built_in">make_pair</span>(v.first, distance[v.first]));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> from;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// from[n]에서 목적지까지의 정점을 재귀적으로 출력한다.  </span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">trace_path</span><span class="params">(<span class="type">int</span> s, <span class="type">int</span> e, vector&lt;<span class="type">int</span>&gt;* from)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 기저 조건 : 시작점과 목적지가 같은 경우  </span></span><br><span class="line">    <span class="keyword">if</span> ((*from)[e] == s) &#123;</span><br><span class="line">        cout &lt;&lt; s &lt;&lt; <span class="string">&quot; -&gt; &quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 재귀호출을 통해 정점 e전의 정점에 대한 경로를 출력한다..  </span></span><br><span class="line">    <span class="built_in">trace_path</span>(s, (*from)[e], from);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 최단경로에서 정점 e 바로 이전의 정점를 화면에 출력한다.  </span></span><br><span class="line">    cout &lt;&lt; (*from)[e] &lt;&lt; <span class="string">&quot; - &gt; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 마지막 목적지를 간편하게 화면의 출력하기 위해 함수 분리  </span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print_path</span><span class="params">(<span class="type">int</span> s, <span class="type">int</span> e, vector&lt;<span class="type">int</span>&gt;* from)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 위의 trace_path를 호출하여 최단 경로를 출력한후,  </span></span><br><span class="line">    <span class="built_in">trace_path</span>(s, e, from);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 목적지의 정점 번호도 출력한다.  </span></span><br><span class="line">    cout &lt;&lt; e;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    Graph* g = <span class="keyword">new</span> <span class="built_in">Graph</span>(<span class="number">7</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">7</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">1</span>, <span class="number">0</span>, <span class="number">7</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">0</span>, <span class="number">4</span>, <span class="number">3</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">4</span>, <span class="number">0</span>, <span class="number">3</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">0</span>, <span class="number">5</span>, <span class="number">10</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">5</span>, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">5</span>, <span class="number">1</span>, <span class="number">6</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">3</span>, <span class="number">1</span>, <span class="number">10</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">3</span>, <span class="number">2</span>, <span class="number">2</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">4</span>, <span class="number">3</span>, <span class="number">11</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">3</span>, <span class="number">4</span>, <span class="number">11</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">4</span>, <span class="number">6</span>, <span class="number">5</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">6</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">3</span>, <span class="number">6</span>, <span class="number">4</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">3</span>, <span class="number">5</span>, <span class="number">9</span>);</span><br><span class="line">    g-&gt;<span class="built_in">insertEdge</span>(<span class="number">5</span>, <span class="number">3</span>, <span class="number">9</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 최단 경로를 구한다.</span></span><br><span class="line">    <span class="keyword">auto</span> from = <span class="built_in">dijkstra</span>(g, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 0부터 각 정점까지의 경로 출력</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; g-&gt;n; i++) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;0 -&gt; &quot;</span> &lt;&lt; i &lt;&lt; <span class="string">&quot; : &quot;</span>;</span><br><span class="line">        <span class="built_in">print_path</span>(<span class="number">0</span>, i, from);</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="실행-결과"><a href="#실행-결과" class="headerlink" title="실행 결과"></a>실행 결과</h3><p><img src="/img/C-%EB%8B%A4%EC%9D%B5%EC%8A%A4%ED%8A%B8%EB%9D%BC-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EA%B5%AC%ED%98%84%EA%B3%BC-%EB%8B%A4%EC%9D%B5%EC%8A%A4%ED%8A%B8%EB%9D%BC-%EA%B2%BD%EB%A1%9C-%EC%B6%9C%EB%A0%A5-%EB%B0%A9%EB%B2%95/result.png" alt="다익스트라 최단 경로"></p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/C/">#C++</a> <a class="fw5 ph1 dib" href="/tags/알고리즘/">#알고리즘</a> <a class="fw5 ph1 dib" href="/tags/자료구조/">#자료구조</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/자료구조/">자료구조</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 파편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+        <p>
+            <a href="/2024/10/03/bga-example/">Halcon - BGA 비전 검사 코드 예시</a>
+        </p>
+    
+        <p>
+            <a href="/2024/08/02/interlocked-atomic/">하드웨어 친화적 동기화: C# Interlocked의 내부 동작과 원리</a>
+        </p>
+    
+        <p>
+            <a href="/2024/06/23/halcon-2d-metrology/">Halcon - 2D Metrology Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2024/06/22/efficient-ad/">[논문 리뷰] EfficientAD: Accurate Visual Anomaly Detec...</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

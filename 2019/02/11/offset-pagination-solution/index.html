@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Offset Pagination에서 발생하는 Duplicate/Skipped Record 문제의 복합 정렬을 사용한 해결법"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Offset Pagination에서 발생하는 Duplicate/Skipped Record 문제의 복합 정렬을 사용한 해결법 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2019/02/11/offset-pagination-solution/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pv3 pt-50">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="f1-l f2-m tc tc-m tl-ns title-font">Offset Pagination에서 발생하는 Duplicate/Skipped Record 문제의 복합 정렬을 사용한 해결법</h1>
+            <p class="f4 f3-ns fw6 tc tc-m tl-ns">2019-02-11</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-database"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/Mysql/">#Mysql</a> <a class="fw5 ph1 dib" href="/tags/Database/">#Database</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="Offset-Pagination에서-발생하는-Duplicate-Skipped-Record-문제의-복합-정렬을-사용한-해결법"><a href="#Offset-Pagination에서-발생하는-Duplicate-Skipped-Record-문제의-복합-정렬을-사용한-해결법" class="headerlink" title="Offset Pagination에서 발생하는 Duplicate&#x2F;Skipped Record 문제의 복합 정렬을 사용한 해결법"></a>Offset Pagination에서 발생하는 Duplicate&#x2F;Skipped Record 문제의 복합 정렬을 사용한 해결법</h1><p>Offset 기반 페이지네이션은 데이터베이스에서 데이터를 페이지 단위로 나누어 관리할 수 있는 방법이다. 그러나 앞서 알아본 것과 같이, offset 기반 페이지네이션에서 데이터가 삽입되거나 삭제될 경우, <code>중복(duplicate)</code> 및 <code>누락(skipped)</code> 문제가 발생할 수 있는데, 이를 해결하는 방법으로는 복합 정렬(composite sorting)이 있다.</p>
+<hr>
+<h2 id="1-Offset-Pagination-작동-방식과-문제-원인-분석"><a href="#1-Offset-Pagination-작동-방식과-문제-원인-분석" class="headerlink" title="1. Offset Pagination 작동 방식과 문제 원인 분석"></a>1. Offset Pagination 작동 방식과 문제 원인 분석</h2><p><code>Offset pagination</code> 방식은 다음과 같이 데이터를 일정 단위로 나누어 가져온다.</p>
+<ul>
+<li>데이터를 조회할 때 <code>offset</code>이라는 숫자로 조회 시작 위치를 정한다.</li>
+<li>각 요청은 전체 데이터 중 특정 개수를 가져오는데, <code>offset</code> 값만큼 데이터를 건너뛰고(limit 만큼) 데이터를 반환한다.</li>
+</ul>
+<p>예시) 1페이지당 3개 데이터를 가져오는 경우</p>
+<ul>
+<li>페이지 1: OFFSET 0, LIMIT 3 → 1~3번째 데이터</li>
+<li>페이지 2: OFFSET 3, LIMIT 3 → 4~6번째 데이터</li>
+</ul>
+<p>이 방식은 데이터가 고정적일 때는 잘 동작하지만, 중간에 데이터가 삽입되거나 삭제되면 offset 위치가 실제 데이터와 맞지 않아 문제가 발생한다.</p>
+<hr>
+<h2 id="2-데이터-삽입-삭제-시-발생하는-Duplicate-Skipped-문제-사례"><a href="#2-데이터-삽입-삭제-시-발생하는-Duplicate-Skipped-문제-사례" class="headerlink" title="2. 데이터 삽입&#x2F;삭제 시 발생하는 Duplicate&#x2F;Skipped 문제 사례"></a>2. 데이터 삽입&#x2F;삭제 시 발생하는 Duplicate&#x2F;Skipped 문제 사례</h2><p>실제 데이터 삽입이나 삭제 상황에서 offset pagination이 일으키는 문제는 다음과 같다.</p>
+<h3 id="📌-1-데이터-삽입으로-인한-Duplicate-Skipped-문제"><a href="#📌-1-데이터-삽입으로-인한-Duplicate-Skipped-문제" class="headerlink" title="📌 (1) 데이터 삽입으로 인한 Duplicate&#x2F;Skipped 문제"></a>📌 (1) 데이터 삽입으로 인한 Duplicate&#x2F;Skipped 문제</h3><p><strong>초기 데이터 예시</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>D</td>
+</tr>
+</tbody></table>
+<p>첫 번째 페이지(offset&#x3D;0, limit&#x3D;2)를 조회하면 결과는 <code>[A,B]</code>이다.</p>
+<p>이때 새로운 데이터(E)가 최상단(offset&#x3D;0)에 삽입되면, 데이터는 아래와 같이 바뀐다.</p>
+<p><strong>데이터 삽입 후</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>5</td>
+<td>E(NEW)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>B</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>D</td>
+</tr>
+</tbody></table>
+<p>두 번째 페이지(offset&#x3D;2, limit&#x3D;2)를 조회하면 결과는 <code>[B,C]</code>가 되어 이미 본 데이터(B)가 중복되어 나타나고, 새로 추가된 데이터(E)는 누락(skipped)된다.</p>
+<h3 id="📌-2-데이터-삭제로-인한-Duplicate-Skipped-문제"><a href="#📌-2-데이터-삭제로-인한-Duplicate-Skipped-문제" class="headerlink" title="📌 (2) 데이터 삭제로 인한 Duplicate&#x2F;Skipped 문제"></a>📌 (2) 데이터 삭제로 인한 Duplicate&#x2F;Skipped 문제</h3><p><strong>초기 데이터 예시</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>D</td>
+</tr>
+</tbody></table>
+<p>첫 번째 페이지(offset&#x3D;0, limit&#x3D;2)를 조회하면 <code>[A,B]</code>이다.</p>
+<p>이때 데이터 B(ID&#x3D;2)가 삭제되면, 데이터는 다음과 같이 변경된다.</p>
+<p><strong>데이터 삭제 후</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>D</td>
+</tr>
+</tbody></table>
+<p>두 번째 페이지(offset&#x3D;2, limit&#x3D;2)를 조회하면 결과는 <code>[D]</code>가 되어, 데이터 C가 누락(skipped)되는 문제가 발생한다.</p>
+<hr>
+<h2 id="3-문제의-근본-원인"><a href="#3-문제의-근본-원인" class="headerlink" title="3. 문제의 근본 원인"></a>3. 문제의 근본 원인</h2><ul>
+<li>Offset은 데이터를 건너뛰는 고정된 숫자일 뿐, 데이터의 고유 식별자나 정렬 기준과 직접적인 연관이 없다.</li>
+<li>따라서 중간에 데이터가 삽입되거나 삭제되면, offset 값이 실제 데이터의 정확한 위치를 표현하지 못하여 중복 또는 누락이 발생하게 된다.</li>
+</ul>
+<hr>
+<h2 id="4-해결-방법-복합-정렬-Composite-Sorting-적용"><a href="#4-해결-방법-복합-정렬-Composite-Sorting-적용" class="headerlink" title="4. 해결 방법: 복합 정렬(Composite Sorting) 적용"></a>4. 해결 방법: 복합 정렬(Composite Sorting) 적용</h2><p>Offset pagination을 유지하면서 중복이나 누락 문제를 최소화할 수 있는 가장 효과적인 방법은 **복합 정렬(composite sorting)**을 적용하는 것이다.</p>
+<h3 id="✅-복합-정렬-Composite-Sorting-이란"><a href="#✅-복합-정렬-Composite-Sorting-이란" class="headerlink" title="✅ 복합 정렬(Composite Sorting)이란?"></a>✅ 복합 정렬(Composite Sorting)이란?</h3><p>복합 정렬은 데이터 조회 시, 두 개 이상의 정렬 기준을 함께 사용하는 것이다. 일반적으로 첫 번째 기준은 날짜와 같은 기본 정렬 필드를 사용하고, 두 번째 기준은 데이터의 고유 식별자(ID) 등을 추가하여, 데이터가 완전히 고정된 순서를 갖게 만든다.</p>
+<p>예시:</p>
+<p>단일 정렬 기준:</p>
+<ul>
+<li>ORDER BY created_at DESC</li>
+</ul>
+<p>복합 정렬 기준:</p>
+<ul>
+<li>ORDER BY created_at DESC, id DESC</li>
+</ul>
+<p>복합 정렬을 사용할 때, 동일한 값의 데이터를 구별할 수 있는 고유 식별자(id 등)를 추가하여 각 데이터의 위치를 고정함으로써 삽입·삭제로 인한 영향을 최소화할 수 있다.</p>
+<hr>
+<h2 id="5-복합-정렬-Composite-Sorting-적용-예시-코드"><a href="#5-복합-정렬-Composite-Sorting-적용-예시-코드" class="headerlink" title="5. 복합 정렬(Composite Sorting) 적용 예시 코드"></a>5. 복합 정렬(Composite Sorting) 적용 예시 코드</h2><p>아래는 복합 정렬을 사용하여 offset pagination을 수행하는 간단한 예시이다.</p>
+<p>예시 코드(SQL 기준):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">FROM items</span><br><span class="line">ORDER BY created_at DESC, id DESC</span><br><span class="line">LIMIT 3 OFFSET 0;  -- 첫 페이지</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">FROM items</span><br><span class="line">ORDER BY created_at DESC, id DESC</span><br><span class="line">LIMIT 3 OFFSET 3;  -- 두 번째 페이지</span><br></pre></td></tr></table></figure>
+<p>이 방식을 사용하면, 데이터가 중간에 추가되거나 삭제되어도 동일한 <code>created_at</code>을 가진 데이터를 항상 <code>id</code> 순으로 정렬하므로 중복과 누락이 최소화된다.</p>
+<hr>
+<h2 id="6-결론-및-권장사항"><a href="#6-결론-및-권장사항" class="headerlink" title="6. 결론 및 권장사항"></a>6. 결론 및 권장사항</h2><ul>
+<li>Offset pagination에서 데이터 삽입이나 삭제로 인한 데이터 중복과 누락 문제는 피할 수 없는 근본적 한계를 가진다.</li>
+<li>이 문제를 최소화하려면 반드시 복합 정렬(composite sorting)을 적용하여 데이터 순서를 명확히 고정해야 한다.</li>
+<li>일반적으로 복합 정렬은 offset pagination의 한계를 보완하는 가장 실용적인 해결책이다.</li>
+<li>복합 정렬로 순서를 고정해도 완전한 해결책이 아니므로, 아래의 표를 통해 상황을 고려하여 적절한 해결법을 사용해야한다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>상황</th>
+<th>추천 방법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>단순 리스트, 불변 데이터</td>
+<td>Offset + 복합 정렬 가능</td>
+</tr>
+<tr>
+<td>실시간으로 변하는 목록 (SNS 피드 등)</td>
+<td>Cursor 기반 Pagination (Keyset) 추천</td>
+</tr>
+<tr>
+<td>페이지 수 계산이 중요 (ex. 검색결과)</td>
+<td>Offset 기반 필요할 수 있음 (복합 정렬 필수)</td>
+</tr>
+<tr>
+<td>정확성 우선, 동시성 높음</td>
+<td>Cursor 기반 필수</td>
+</tr>
+</tbody></table>
+<hr>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/Mysql/">#Mysql</a> <a class="fw5 ph1 dib" href="/tags/Database/">#Database</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/techbless" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Database/">Database</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 파편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+        <p>
+            <a href="/2024/10/03/bga-example/">Halcon - BGA 비전 검사 코드 예시</a>
+        </p>
+    
+        <p>
+            <a href="/2024/08/02/interlocked-atomic/">하드웨어 친화적 동기화: C# Interlocked의 내부 동작과 원리</a>
+        </p>
+    
+        <p>
+            <a href="/2024/06/23/halcon-2d-metrology/">Halcon - 2D Metrology Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2024/06/22/efficient-ad/">[논문 리뷰] EfficientAD: Accurate Visual Anomaly Detec...</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>
