@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Halcon - 1D Measuring Recap"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Halcon - 1D Measuring Recap - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2024/06/21/halcon-1d-measurment/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">Halcon - 1D Measuring Recap</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2024-06-21</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-area-chart"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="할콘-1D-측정-솔루션-가이드-요약"><a href="#할콘-1D-측정-솔루션-가이드-요약" class="headerlink" title="할콘 1D 측정 솔루션 가이드 요약"></a>할콘 1D 측정 솔루션 가이드 요약</h1><p>1D 측정은 주로 직선이나 호를 따라 물체의 치수나 각도를 측정하는 데 사용됩니다. 할콘은 고속으로 고정밀의 1D 측정을 수행할 수 있는 도구를 제공합니다. 1D 측정은 주로 거리와 각도를 측정하는 데 활용됩니다.</p>
+<h2 id="1D-측정의-기본-흐름"><a href="#1D-측정의-기본-흐름" class="headerlink" title="1D 측정의 기본 흐름"></a>1D 측정의 기본 흐름</h2><p>1D 측정을 위해서는 먼저 <strong>measure object</strong>를 생성해야 합니다. 이 객체는 측정할 영역을 정의하며, 주로 직사각형이나 원호 형태로 정의합니다.</p>
+<h3 id="1D-측정의-기본-단계"><a href="#1D-측정의-기본-단계" class="headerlink" title="1D 측정의 기본 단계"></a>1D 측정의 기본 단계</h3><ol>
+<li><strong>측정 객체 생성</strong>: <code>gen_measure_rectangle2</code> or <code>gen_measure_arc</code>를 사용하여 측정할 영역을 설정합니다.</li>
+<li><strong>측정 실행</strong>: <code>measure_pos</code>,<code>measure_pairs</code> 등 다양한 함수로 물체의 edge나 거리 등을 측정합니다.</li>
+<li><strong>결과 확인</strong>: 측정된 값은 물체의 크기, 위치, edge 간의 거리 등으로 반환됩니다.</li>
+</ol>
+<h2 id="주요-측정-방법"><a href="#주요-측정-방법" class="headerlink" title="주요 측정 방법"></a>주요 측정 방법</h2><h3 id="1-Edge-위치-측정-measure-pos"><a href="#1-Edge-위치-측정-measure-pos" class="headerlink" title="1. Edge 위치 측정 (measure_pos)"></a>1. <strong>Edge 위치 측정</strong> (<code>measure_pos</code>)</h3><ul>
+<li><strong>목적</strong>: 이미지에서 특정 edge의 위치를 찾고, 해당 위치를 정확히 측정합니다.</li>
+<li><strong>사용 예시</strong>: IC의 리드 길이 측정.</li>
+</ul>
+<h3 id="2-Edge-쌍의-거리-측정-measure-pairs"><a href="#2-Edge-쌍의-거리-측정-measure-pairs" class="headerlink" title="2. Edge 쌍의 거리 측정 (measure_pairs)"></a>2. <strong>Edge 쌍의 거리 측정</strong> (<code>measure_pairs</code>)</h3><ul>
+<li><strong>목적</strong>: 두 개의 edges를 찾고, 그들 사이의 거리를 측정합니다.</li>
+<li><strong>사용 예시</strong>: 스위치 핀의 너비 및 핀 간 거리 측정.</li>
+</ul>
+<h3 id="3-특정-그레이-값에-해당하는-점-측정-measure-thresh"><a href="#3-특정-그레이-값에-해당하는-점-측정-measure-thresh" class="headerlink" title="3. 특정 그레이 값에 해당하는 점 측정 (measure_thresh)"></a>3. <strong>특정 그레이 값에 해당하는 점 측정</strong> (<code>measure_thresh</code>)</h3><ul>
+<li><strong>목적</strong>: 특정 그레이 값에 해당하는 점의 위치를 찾습니다.</li>
+<li><strong>사용 예시</strong>: 균일한 조명에서 특정 밝기의 물체의 가장자리 측정.</li>
+</ul>
+<h2 id="측정-객체-생성"><a href="#측정-객체-생성" class="headerlink" title="측정 객체 생성"></a>측정 객체 생성</h2><p>측정 객체는 <strong>직사각형</strong> 또는 <strong>원호</strong> 형태로 생성할 수 있습니다.</p>
+<h3 id="직사각형-ROI-생성"><a href="#직사각형-ROI-생성" class="headerlink" title="직사각형 ROI 생성"></a>직사각형 ROI 생성</h3><p><img src="/img/1d-measuring/rect.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gen_measure_rectangle2 (Row, Column, Phi, Length1, Length2, Width, Height, Interpolation, MeasureHandle)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Row</code>, <code>Column</code>: ROI의 중심 좌표</li>
+<li><code>Phi</code>: 회전 각도</li>
+<li><code>Length1</code>, <code>Length2</code>: 두 축의 길이</li>
+<li><code>Width</code>, <code>Height</code>: 측정할 이미지 크기</li>
+</ul>
+<h3 id="원호-ROI-생성"><a href="#원호-ROI-생성" class="headerlink" title="원호 ROI 생성"></a>원호 ROI 생성</h3><p><img src="/img/1d-measuring/arc.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gen_measure_arc (CenterRow, CenterCol, Radius, AngleStart, AngleExtent, AnnulusRadius, Width, Height, Interpolation, MeasureHandle)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>CenterRow</code>, <code>CenterCol</code>: 원호의 중심</li>
+<li><code>Radius</code>: 원호의 반지름</li>
+<li><code>AngleStart</code>, <code>AngleExtent</code>: 원호의 시작 각도와 각도 범위.</li>
+</ul>
+<h2 id="1D-Edge-추출-과정-상세-설명"><a href="#1D-Edge-추출-과정-상세-설명" class="headerlink" title="1D Edge 추출 과정 상세 설명"></a>1D Edge 추출 과정 상세 설명</h2><h3 id="1D-edge-추출-과정-흐름도"><a href="#1D-edge-추출-과정-흐름도" class="headerlink" title="1D edge 추출 과정 흐름도"></a>1D edge 추출 과정 흐름도</h3><ol>
+<li><strong>프로파일 라인 생성</strong>: ROI에 따라 수평 또는 수직 방향으로 프로파일 라인을 생성합니다.</li>
+<li><strong>그레이 값 프로파일 계산</strong>: 각 프로파일 라인에서 평균 그레이 값 계산.</li>
+<li><strong>프로파일 미분 계산</strong>: 프로파일의 첫 번째 미분을 계산하여 edge 후보를 찾습니다.</li>
+<li><strong>임계값 처리</strong>: 미분 값이 임계값을 초과하는 경우에만 edge로 확정합니다.</li>
+<li><strong>서브픽셀 정확도 계산</strong>: edge 위치를 서브픽셀 정확도로 결정합니다.</li>
+</ol>
+<p>할콘의 1D 측정 기능에서 가장 중요한 부분 중 하나는 <strong>Edge Extraction</strong> 입니다. 이 과정은 HALCON이 이미지에서 원하는 대상의 경계를 정확하게 찾을 수 있도록 해주며, 정확한 측정을 위한 기초 작업이 됩니다.</p>
+<h3 id="1D-edge-추출의-주요-개념"><a href="#1D-edge-추출의-주요-개념" class="headerlink" title="1D edge 추출의 주요 개념"></a>1D edge 추출의 주요 개념</h3><p>1D edge 추출은 기본적으로 이미지의 <strong>프로파일</strong> 을 사용하여 edge를 찾는 방식입니다. 이 프로파일은 선택된 측정 영역(ROI)에서 수평 또는 수직 방향으로 추출된 평균 밝기 값들의 집합입니다. HALCON은 이 프로파일을 통해 edge를 정확히 찾습니다.</p>
+<h3 id="1-프로파일-라인-생성"><a href="#1-프로파일-라인-생성" class="headerlink" title="1. 프로파일 라인 생성"></a>1. <strong>프로파일 라인 생성</strong></h3><p>1D edge 추출의 첫 번째 단계는 <strong>profile line</strong> 을 생성하는 것입니다. 프로파일 라인은 측정하려는 대상의 edge를 따라 일정 간격으로 수직 또는 수평으로 투영된 여러 선들로 구성됩니다. 이 투영선들은 측정하려는 ROI의 너비만큼 펼쳐지며, 그 너비는 추후 edge 추출의 정확도에 영향을 미칩니다.</p>
+<p><img src="/img/1d-measuring/profile_line.png"></p>
+<ul>
+<li><strong>사각형 ROI</strong>: 수평 또는 수직 방향으로 투영선을 배치합니다.</li>
+<li><strong>원형 ROI</strong>: 원호를 따라 투영선을 배치합니다.</li>
+</ul>
+<h3 id="2-그레이-값-profile-계산"><a href="#2-그레이-값-profile-계산" class="headerlink" title="2. 그레이 값 profile 계산"></a>2. <strong>그레이 값 profile 계산</strong></h3><p>프로파일 라인을 생성한 후, HALCON은 각 프로파일 라인에서 <strong>그레이 값의 평균값을 계산</strong> 합니다. 이 평균값은 해당 프로파일 라인을 따라 얻을 수 있는 픽셀의 그레이 값 평균을 의미합니다. </p>
+<p><img src="/img/1d-measuring/gray_value.png"></p>
+<p>이 평균값을 통해 생성된 프로파일은 그래픽적으로 한 줄로 표현됩니다. 프로파일은 측정 대상의 밝기 변화를 기반으로 하므로, 물체의 가장자리에서 급격한 변화가 발생하는 위치를 찾을 수 있습니다.</p>
+<h3 id="3-그레이-값-프로파일의-미분-계산"><a href="#3-그레이-값-프로파일의-미분-계산" class="headerlink" title="3. 그레이 값 프로파일의 미분 계산"></a>3. <strong>그레이 값 프로파일의 미분 계산</strong></h3><p><img src="/img/1d-measuring/candidate.png"><br>프로파일의 첫 번째 미분을 계산하여 <strong>edge 후보를 찾습니다</strong>. 첫 번째 미분은 프로파일에서 밝기 변화가 급격하게 일어나는 위치를 나타냅니다. 이러한 위치는 이미지에서 물체의 경계가 되는 곳입니다. 미분의 크기가 클수록, 해당 위치는 강한 edge로 간주됩니다.</p>
+<ul>
+<li><strong>스무딩(Smoothing)</strong>: 프로파일의 미분을 계산하기 전에, <strong>가우시안 필터</strong> 등을 사용하여 프로파일을 부드럽게 할 수 있습니다. 이렇게 하면 잡음을 줄이고, 더 정확한 edge 추출이 가능합니다.</li>
+</ul>
+<h3 id="4-edge-후보-선택"><a href="#4-edge-후보-선택" class="headerlink" title="4. edge 후보 선택"></a>4. <strong>edge 후보 선택</strong></h3><p>첫 번째 미분을 통해 얻은 <strong>edge 후보들</strong> 은 실제 edge로 확정되기 위해 추가적인 처리를 거칩니다. 이때 후보의 미분 값이 <strong>Threshold</strong> 보다 클 경우에만 edge로 선택됩니다. 즉, 임계값은 실제 edge를 선택하는 기준이 됩니다.</p>
+<ul>
+<li><strong>Threshold</strong>: 미분 값이 특정 값보다 커야만 edge로 간주됩니다. 이 임계값을 설정함으로써 불필요한 잡음을 제거하고, 실제 edge만을 정확하게 선택할 수 있습니다.</li>
+</ul>
+<h3 id="5-edge의-Subpixel-Accuracy"><a href="#5-edge의-Subpixel-Accuracy" class="headerlink" title="5. edge의 Subpixel Accuracy"></a>5. <strong>edge의 Subpixel Accuracy</strong></h3><p>edge의 위치는 <strong>subpixel 정확도</strong> 로 결정됩니다. HALCON은 <strong>서브픽셀 수준의 edge 위치를 계산</strong> 하기 위해 미분 값을 기반으로 edge 후보의 정확한 위치를 계산합니다. 이는 픽셀 단위보다 더 세밀한 위치를 얻을 수 있도록 해줍니다.</p>
+<h2 id="1D-edge-추출의-중요성"><a href="#1D-edge-추출의-중요성" class="headerlink" title="1D edge 추출의 중요성"></a>1D edge 추출의 중요성</h2><p>1D edge 추출은 HALCON에서 <strong>정확한 측정을 위한 기초 작업</strong> 입니다. 이 과정이 정확하게 이루어져야만, 이후 <strong>거리, 각도, 너비 등</strong> 을 정확하게 측정할 수 있습니다. 또한, <strong>스무딩</strong> 과 <strong>임계값 설정</strong> 을 적절하게 조정하면 다양한 환경에서도 안정적인 측정을 할 수 있습니다.</p>
+<h2 id="1D-edge-추출을-활용한-예시"><a href="#1D-edge-추출을-활용한-예시" class="headerlink" title="1D edge 추출을 활용한 예시"></a>1D edge 추출을 활용한 예시</h2><h3 id="예시-1-스위치-핀-측정"><a href="#예시-1-스위치-핀-측정" class="headerlink" title="예시 1: 스위치 핀 측정"></a>예시 1: 스위치 핀 측정</h3><p>스위치의 핀 간 간격과 핀의 너비를 측정하는 작업에서는 1D edge 추출을 사용하여 핀의 경계를 정확히 찾아냅니다. 이때, 측정 객체는 직사각형 ROI로 설정되고, 각 핀의 경계는 첫 번째 미분을 통해 찾아집니다. 이 과정에서 임계값과 서브픽셀 정확도를 활용하여 더욱 정밀한 측정을 수행합니다.</p>
+<h3 id="예시-2-IC-리드-길이-측정"><a href="#예시-2-IC-리드-길이-측정" class="headerlink" title="예시 2: IC 리드 길이 측정"></a>예시 2: IC 리드 길이 측정</h3><p>IC의 리드 길이를 측정할 때는 리드가 위치한 ROI를 직사각형 형태로 설정하고, 해당 영역에서 edge를 추출하여 리드의 길이를 계산합니다. 이때도 1D edge 추출 과정이 중요한 역할을 합니다.</p>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>HALCON에서 제공하는 1D edge 추출 과정은 매우 정밀하며, 다양한 측정 작업을 수행할 때 핵심적인 역할을 합니다. 이 과정은 프로파일을 계산하고, 미분을 통해 edge를 찾으며, 서브픽셀 정확도로 edge 위치를 결정하는 방법을 사용하여 고정밀 측정을 가능하게 만듭니다. 적절한 임계값 설정과 스무딩 기법을 활용하면, 다양한 환경에서도 정확한 측정 결과를 얻을 수 있습니다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/영상처리/">영상처리</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

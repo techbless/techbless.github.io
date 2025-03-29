@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="LiveLock이란 무엇인가? - Deadlock과의 차이 및 발생 원인, 예방 방법 정리"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>LiveLock이란 무엇인가? - Deadlock과의 차이 및 발생 원인, 예방 방법 정리 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2021/01/17/livelock/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">LiveLock이란 무엇인가? - Deadlock과의 차이 및 발생 원인, 예방 방법 정리</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2021-01-17</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-lock"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="LiveLock이란-무엇인가-Deadlock과의-차이-및-발생-원인-예방-방법-정리"><a href="#LiveLock이란-무엇인가-Deadlock과의-차이-및-발생-원인-예방-방법-정리" class="headerlink" title="LiveLock이란 무엇인가? - Deadlock과의 차이 및 발생 원인, 예방 방법 정리"></a>LiveLock이란 무엇인가? - Deadlock과의 차이 및 발생 원인, 예방 방법 정리</h1><p>운영체제나 병렬 프로그래밍에서 자주 발생하는 동기화 문제로 <code>Deadlock</code>은 널리 알려져 있지만, 이와 유사한 개념인 <code>LiveLock</code>은 상대적으로 덜 알려져 있다. 이번  글에서는 LiveLock의 개념, 발생 원인, Deadlock과의 명확한 차이점 및 예방 전략까지 깊이 있게 다뤄본다.</p>
+<hr>
+<h2 id="LiveLock이란"><a href="#LiveLock이란" class="headerlink" title="LiveLock이란?"></a>LiveLock이란?</h2><p><code>LiveLock</code>은 두 개 이상의 Process(혹은 Thread)가 상호작용하며 계속 상태 변화를 시도하지만, 실제로는 어떤 작업도 진행되지 않는 상태를 의미한다. Deadlock과 달리 프로세스들이 “정지된 상태”가 아니라 끊임없이 상태를 변경하며, 형식상 CPU를 계속 소비하는 특징이 있다.</p>
+<p>즉, Deadlock은 프로세스들이 서로 자원을 기다리며 정지 상태로 멈춰있는 반면, LiveLock은 Process들이 바쁘게 움직이고 있지만 결과적으로는 전혀 진전이 없다.</p>
+<hr>
+<h2 id="Deadlock과의-구체적-차이점"><a href="#Deadlock과의-구체적-차이점" class="headerlink" title="Deadlock과의 구체적 차이점"></a>Deadlock과의 구체적 차이점</h2><p>Deadlock과 LiveLock의 근본적인 차이는 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th>특징</th>
+<th>Deadlock</th>
+<th>LiveLock</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>상태</td>
+<td>대기(waiting) 상태로 정지</td>
+<td>지속적(active) 상태 변화</td>
+</tr>
+<tr>
+<td>CPU 점유 여부</td>
+<td>CPU 사용 거의 없음</td>
+<td>CPU 지속 사용</td>
+</tr>
+<tr>
+<td>상태 변화 여부</td>
+<td>변화 없음 (정체 상태)</td>
+<td>지속적 변화 (진행 없는 무한반복)</td>
+</tr>
+<tr>
+<td>진전 가능성</td>
+<td>없음</td>
+<td>표면상 존재하지만 실제 없음</td>
+</tr>
+</tbody></table>
+<p>Deadlock은 정적이고 명확한 대기 상태지만, LiveLock은 동적으로 움직이면서도 진행되지 않는다는 점에서 더욱 탐지 및 디버깅이 까다롭다.</p>
+<hr>
+<h2 id="LiveLock의-구체적-발생-원인과-실제-사례"><a href="#LiveLock의-구체적-발생-원인과-실제-사례" class="headerlink" title="LiveLock의 구체적 발생 원인과 실제 사례"></a>LiveLock의 구체적 발생 원인과 실제 사례</h2><p>LiveLock의 대표적인 발생 원인은 다음과 같다.</p>
+<ul>
+<li><p><strong>동시에 동일한 전략으로 충돌 해결 시도</strong><br>두 스레드가 충돌을 인지하고 동시에 후퇴(back-off)하거나 재시도(retry)를 반복하면, 무한히 같은 행동을 반복하여 서로 간섭한다.</p>
+</li>
+<li><p><strong>지속적인 rollback과 retry</strong><br>트랜잭션 시스템에서 여러 트랜잭션이 충돌시 rollback하고 다시 실행을 반복하면서 아무것도 완료하지 못하는 상황이다.</p>
+</li>
+</ul>
+<hr>
+<h2 id="LiveLock을-재현한-실제-코드-예시-C"><a href="#LiveLock을-재현한-실제-코드-예시-C" class="headerlink" title="LiveLock을 재현한 실제 코드 예시 (C#)"></a>LiveLock을 재현한 실제 코드 예시 (C#)</h2><p>다음 예제는 두 스레드가 서로의 충돌을 인지하고 동일한 후퇴(back-off) 전략을 반복적으로 사용하여 LiveLock을 발생시키는 간략한 예시이다.</p>
+<p>예시 코드:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Threading;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">object</span> resourceA = <span class="keyword">new</span> <span class="built_in">object</span>();</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">object</span> resourceB = <span class="keyword">new</span> <span class="built_in">object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span></span><br><span class="line">    {</span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> Thread(() =&gt;</span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">if</span> (Monitor.TryEnter(resourceA))</span><br><span class="line">                {</span><br><span class="line">                    Thread.Sleep(<span class="number">50</span>);</span><br><span class="line">                    <span class="keyword">if</span> (Monitor.TryEnter(resourceB))</span><br><span class="line">                    {</span><br><span class="line">                        Console.WriteLine(<span class="string">"Thread1 작업 완료"</span>);</span><br><span class="line">                        Monitor.Exit(resourceB);</span><br><span class="line">                        Monitor.Exit(resourceA);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                    {</span><br><span class="line">                        Console.WriteLine(<span class="string">"Thread1: resourceB 접근 실패, 후퇴"</span>);</span><br><span class="line">                        Monitor.Exit(resourceA);</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">                Thread.Sleep(<span class="number">10</span>);</span><br><span class="line">            }</span><br><span class="line">        });</span><br><span class="line"></span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> Thread(() =&gt;</span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">if</span> (Monitor.TryEnter(resourceB))</span><br><span class="line">                {</span><br><span class="line">                    Thread.Sleep(<span class="number">50</span>);</span><br><span class="line">                    <span class="keyword">if</span> (Monitor.TryEnter(resourceA))</span><br><span class="line">                    {</span><br><span class="line">                        Console.WriteLine(<span class="string">"Thread2 작업 완료"</span>);</span><br><span class="line">                        Monitor.Exit(resourceA);</span><br><span class="line">                        Monitor.Exit(resourceB);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                    {</span><br><span class="line">                        Console.WriteLine(<span class="string">"Thread2: resourceA 접근 실패, 후퇴"</span>);</span><br><span class="line">                        Monitor.Exit(resourceB);</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">                Thread.Sleep(<span class="number">10</span>);</span><br><span class="line">            }</span><br><span class="line">        });</span><br><span class="line"></span><br><span class="line">        thread1.Start();</span><br><span class="line">        thread2.Start();</span><br><span class="line">        thread1.Join();</span><br><span class="line">        thread2.Join();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>위 코드에서 두 스레드는 각각 하나의 자원을 점유한 상태에서 상대 자원을 얻지 못하면 점유한 자원을 반환하고 다시 시도한다. 이 과정이 정확히 교차하면 무한 반복이 발생하여 LiveLock 상태에 빠질 수 있다.</p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="LiveLock-예방-전략"><a href="#LiveLock-예방-전략" class="headerlink" title="LiveLock 예방 전략"></a>LiveLock 예방 전략</h2><p>LiveLock 예방을 위한 일반적인 방법은 다음과 같다.</p>
+<h3 id="1-무작위-지연-전략-randomized-back-off"><a href="#1-무작위-지연-전략-randomized-back-off" class="headerlink" title="1. 무작위 지연 전략(randomized back-off)"></a>1. 무작위 지연 전략(randomized back-off)</h3><p>충돌이 발생했을 때, 동일한 간격으로 재시도하지 않고 랜덤한 시간만큼 기다린 뒤 재시도하여 충돌 가능성을 낮춘다.</p>
+<h3 id="2-우선순위-부여"><a href="#2-우선순위-부여" class="headerlink" title="2. 우선순위 부여"></a>2. 우선순위 부여</h3><p>충돌 발생 시 일정한 우선순위를 부여해 우선순위가 낮은 스레드가 먼저 양보하도록 강제한다.</p>
+<h3 id="3-Exponential-Back-off-지수적-증가-후퇴-전략"><a href="#3-Exponential-Back-off-지수적-증가-후퇴-전략" class="headerlink" title="3. Exponential Back-off (지수적 증가 후퇴 전략)"></a>3. Exponential Back-off (지수적 증가 후퇴 전략)</h3><p>재시도 간격을 충돌 발생 횟수에 따라 지수적으로 증가시켜 충돌 확률을 현저히 줄인다.</p>
+<hr>
+<h2 id="요약-및-결론"><a href="#요약-및-결론" class="headerlink" title="요약 및 결론"></a>요약 및 결론</h2><ul>
+<li><strong>LiveLock</strong>은 Process가 지속적으로 상태를 변화시키지만 실제로는 작업이 전혀 진행되지 않는 병렬 프로그래밍의 동기화 문제다.</li>
+<li>Deadlock은 정지 상태를 유지하며, LiveLock은 지속적으로 CPU 자원을 소모하는 차이가 있다.</li>
+<li>LiveLock은 동일한 충돌 회피 전략의 반복, 지속적인 retry가 주원인이며, 무작위적 또는 지수적으로 증가하는 back-off, 우선순위 전략으로 예방 가능하다.</li>
+</ul>
+<p>LiveLock은 Deadlock만큼 자주 언급되진 않지만, 실제 운영환경에서 발생하면 탐지와 해결이 어려워 큰 성능 문제를 일으킬 수 있다. 따라서 병렬 프로그래밍을 수행할 때는 Deadlock 뿐만 아니라 LiveLock 역시 주의하여 설계할 필요가 있다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Operating-System/">Operating System</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

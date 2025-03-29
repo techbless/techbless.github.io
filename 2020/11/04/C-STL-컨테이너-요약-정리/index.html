@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="[C++] STL 컨테이너 요약 정리"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>[C++] STL 컨테이너 요약 정리 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2020/11/04/c-stl-컨테이너-요약-정리/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">[C++] STL 컨테이너 요약 정리</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2020-11-04</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-th-large"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/C/">#C++</a> <a class="fw5 ph1 dib" href="/tags/알고리즘/">#알고리즘</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="STL-컨테이너"><a href="#STL-컨테이너" class="headerlink" title="STL 컨테이너"></a>STL 컨테이너</h1><p>STL은 <code>Standard Template Library</code>의 약자로 <code>C++</code> 에서 자료구조와 알고리즘의 <code>Generic Programming</code> (일반화 프로그래밍) 개념을 구현하기 위해 개발 된 <code>C++</code> 라이브러리입니다.  이러한 <code>STL</code> 라이브러리의 종류와 컨데이너의 특성 및 사용법등을 정리해두려 합니다.</p>
+<p>​    </p>
+<h2 id="구성요소"><a href="#구성요소" class="headerlink" title="구성요소"></a>구성요소</h2><ul>
+<li>반복자 : STL 컨테이너의 원소들을 가리키는 포인터</li>
+<li>컨테이너: 데이터를 저장 및 관리를하는 클래스</li>
+<li>알고리즘 : STL에서 제공하는 함수</li>
+</ul>
+<p>​    </p>
+<h2 id="STL-컨테이너-종류"><a href="#STL-컨테이너-종류" class="headerlink" title="STL 컨테이너 종류"></a>STL 컨테이너 종류</h2><ol>
+<li>시퀀스 컨테이너<ol>
+<li>데이터를 선형적으로 저장합니다.</li>
+<li>vector, list, dequeue …</li>
+</ol>
+</li>
+<li>연관 컨테이너<ol>
+<li>일정 규칙에 따라 조직화된 컨테이너입니다.</li>
+<li>set, multiset, map …</li>
+</ol>
+</li>
+<li>어뎁터 컨테이너<ol>
+<li>시퀀스나 연관 컨테이너를 변형하여 정해진 방식으로 관리합니다.</li>
+<li>stack, queue …</li>
+</ol>
+</li>
+</ol>
+<p>​    </p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h3 id="시퀀스-컨테이너"><a href="#시퀀스-컨테이너" class="headerlink" title="시퀀스 컨테이너"></a>시퀀스 컨테이너</h3><p>시퀀스 컨테이너는 데이터를 선형적으로 저장하고 삽입된 요소의 순서가 그대로 유지됩니다.</p>
+<p>​    </p>
+<h4 id="벡터-vector"><a href="#벡터-vector" class="headerlink" title="벡터 (vector)"></a>벡터 (vector)</h4><p>일반적인 배열은 배열의 길이가 정적인 특징의 단점을 극복하기 위한 컨테이너로 요소가 추가되거나 삭제될때 자동으로 메모리를 재할당 하고 크기를 동적으로 바꿉니다.   </p>
+<h5 id="문법"><a href="#문법" class="headerlink" title="문법"></a>문법</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="function">vector&lt;Type&gt; <span class="title">name</span><span class="params">(초기크기)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>vector</code>의 초기 크기를 지정하지 않으면 빈 백터를 생성합니다.</p>
+<h5 id="함수"><a href="#함수" class="headerlink" title="함수"></a>함수</h5><ol>
+<li>size() : 컨테이너에 저장된 요소의 개수를 반환</li>
+<li>push_front() : 맨 처음에 원소를 추가</li>
+<li>push_back() : 맨 끝에 원소를 추가</li>
+<li>pop_front() : 첫번째 원소를 제거</li>
+<li>pop_back() : 마지막 원소를 제거</li>
+<li>begin() : 컨테이너의 첫 요소를 가리키는 반복자를 반환</li>
+<li>end() : 컨테이너의 마지막 요소 바로 다음을 가리키는 반복자를 반환</li>
+<li>empty() : 컨테이너가 비었는지 확인</li>
+</ol>
+<p>​    </p>
+<h4 id="데크-deque"><a href="#데크-deque" class="headerlink" title="데크(deque)"></a>데크(deque)</h4><p><code>dequeue</code>는 양방향 큐를 의미하며, 양쪽에 끝이 있는 큐입니다. 이 컨테이너를 이용하면 양끝에서 삽입과 삭제를 빠르게 할 수 있습니다. <code>vector</code>와 마찬가지로 동적길이를 갖습니다.</p>
+<h5 id="문법-1"><a href="#문법-1" class="headerlink" title="문법"></a>문법</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="function">deque&lt;Type&gt; <span class="title">name</span><span class="params">(초기크기)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="함수-1"><a href="#함수-1" class="headerlink" title="함수"></a>함수</h5><ol>
+<li>size() : 컨테이너에 저장된 요소의 개수를 반환</li>
+<li>front() : 첫번째 원소에 접근</li>
+<li>back() : 마지막 원소에 접근</li>
+<li>push_front() : 맨 처음에 원소를 추가</li>
+<li>push_back() : 맨 끝에 원소를 추가</li>
+<li>pop_front() : 첫번째 원소를 제거</li>
+<li>pop_back() : 마지막 원소를 제거</li>
+<li>begin() : 컨테이너의 첫 요소를 가리키는 반복자를 반환</li>
+<li>end() : 컨테이너의 마지막 요소 바로 다음을 가리키는 반복자를 반환</li>
+<li>empty() : 컨테이너가 비었는지 확인</li>
+</ol>
+<p>​      </p>
+<h4 id="리스트-list"><a href="#리스트-list" class="headerlink" title="리스트(list)"></a>리스트(list)</h4><p>리스트 컨테이너는 이중연결 리스트를 구현한 클래스 입니다. </p>
+<h5 id="문법-2"><a href="#문법-2" class="headerlink" title="문법"></a>문법</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;list&gt;</span></span></span><br><span class="line">list&lt;Type&gt; name;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="함수-2"><a href="#함수-2" class="headerlink" title="함수"></a>함수</h5><ol>
+<li>size() : 컨테이너에 저장된 요소의 개수를 반환</li>
+<li>front() : 첫번째 원소에 접근</li>
+<li>back() : 마지막 원소에 접근</li>
+<li>push_front() : 맨 처음에 원소를 추가</li>
+<li>push_back() : 맨 끝에 원소를 추가</li>
+<li>pop_front() : 첫번째 원소를 제거</li>
+<li>pop_back() : 마지막 원소를 제거</li>
+<li>begin() : 컨테이너의 첫 요소를 가리키는 반복자를 반환</li>
+<li>end() : 컨테이너의 마지막 요소 바로 다음을 가리키는 반복자를 반환</li>
+<li>empty() : 컨테이너가 비었는지 확인</li>
+</ol>
+<p>​    </p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h3 id="연관-컨테이너"><a href="#연관-컨테이너" class="headerlink" title="연관 컨테이너"></a>연관 컨테이너</h3><p>연관 컨테이너는 Key, Value 와 같이 관련있는 데이터를 하나의 쌍으로 저장하는 컨테이너 입니다. 연관 컨테이너는 보통 균형 이진 트리나 해시 테이블을 사용하여 구현됩니다. 아래의 컨테이너들은 균형 이진 트리중 하나인 레드블랙 트리를 이용합니다.</p>
+<p>​     </p>
+<h4 id="집합-set-멀티-집합-multiset"><a href="#집합-set-멀티-집합-multiset" class="headerlink" title="집합(set) &#x2F; 멀티 집합(multiset)"></a>집합(set) &#x2F; 멀티 집합(multiset)</h4><p>집합 컨테이너는 저장하는 데이터 그 자체를 키로 사용하는 연관 컨테이너 입니다. 내부적으로 정렬되어 있어 빠른 검색속도를 가집니다. </p>
+<p><code>set</code>은 중복을 허용하지 않지만, <code>multiset</code>은 중복을 허용합니다.</p>
+<h5 id="문법-3"><a href="#문법-3" class="headerlink" title="문법"></a>문법</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;set&gt;</span></span></span><br><span class="line">set&lt;Type&gt; name;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="함수-3"><a href="#함수-3" class="headerlink" title="함수"></a>함수</h5><ol>
+<li>find() : 해당 요소를 가리키는 반복자를 반환</li>
+<li>size() : 컨테이너에 저장된 요소의 개수를 반환</li>
+<li>insert() : 요소를 컨테이너에 추가</li>
+<li>erase() : 요소를 컨테이너에서 제거</li>
+<li>begin() : 컨테이너의 첫 요소를 가리키는 반복자를 반환</li>
+<li>end() : 컨테이너의 마지막 요소 바로 다음을 가리키는 반복자를 반환</li>
+<li>empty() : 컨테이너가 비었는지 확인</li>
+</ol>
+<p>​     </p>
+<h4 id="맵-map-멀티맵-multimap"><a href="#맵-map-멀티맵-multimap" class="headerlink" title="맵(map) &#x2F; 멀티맵(multimap)"></a>맵(map) &#x2F; 멀티맵(multimap)</h4><p>맵 컨테이너는 Key와 Value의 쌍으로 데이터를 관리하는 연관 컨테이너 입니다. 맵 컨테이너도 빠른 검색 속도를 가집니다. <code>map</code>은 중복을 허용하지 않지만, <code>multimap</code>은 중복을 허용합니다.</p>
+<h5 id="문법-4"><a href="#문법-4" class="headerlink" title="문법"></a>문법</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;map&gt;</span></span></span><br><span class="line">map&lt;KType, VType&gt; name;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="함수-4"><a href="#함수-4" class="headerlink" title="함수"></a>함수</h5><ol>
+<li>find() : 해당 요소를 가리키는 반복자를 반환</li>
+<li>size() : 컨테이너에 저장된 요소의 개수를 반환</li>
+<li>insert() : 요소를 컨테이너에 추가</li>
+<li>erase() : 요소를 컨테이너에서 제거</li>
+<li>begin() : 컨테이너의 첫 요소를 가리키는 반복자를 반환</li>
+<li>end() : 컨테이너의 마지막 요소 바로 다음을 가리키는 반복자를 반환</li>
+<li>empty() : 컨테이너가 비었는지 확인</li>
+</ol>
+<p>​    </p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h3 id="어댑터-컨테이너"><a href="#어댑터-컨테이너" class="headerlink" title="어댑터 컨테이너"></a>어댑터 컨테이너</h3><p>어댑터 컨테이너는 기존 컨테이너의 인터페이스를 제한하거나 변형하여 만든 컨테이너 입니다. 하지만 반복자를 지원하지 않아 STL 알고리즘을 이용할 수 없습니다.</p>
+<p>​     </p>
+<h4 id="스택-stack"><a href="#스택-stack" class="headerlink" title="스택(stack)"></a>스택(stack)</h4><p><code>vector</code>클래스의 인터페이스를 제한해 구현한 스택 구조를 가지는 클래스 입니다.</p>
+<h5 id="문법-5"><a href="#문법-5" class="headerlink" title="문법"></a>문법</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line">stack&lt;Type&gt; name;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="함수-5"><a href="#함수-5" class="headerlink" title="함수"></a>함수</h5><ol>
+<li>size() : 컨테이너에 저장된 요소의 개수를 반환</li>
+<li>top() : 스택의 최 상단의 요소의 참조를 반환</li>
+<li>push() : 스택 최상단에 요소 추가</li>
+<li>pop() : 스택 최상단에서 요소를 제거</li>
+<li>empty() : 컨테이너가 비었는지 확인</li>
+</ol>
+<p>​     </p>
+<h4 id="큐-queue"><a href="#큐-queue" class="headerlink" title="큐(queue)"></a>큐(queue)</h4><p>큐는 <code>deque</code>클래스를 이용하여 큐를 구현한 클래스 입니다.</p>
+<h5 id="문법-6"><a href="#문법-6" class="headerlink" title="문법"></a>문법</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line">queue&lt;Type&gt; name;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="함수-6"><a href="#함수-6" class="headerlink" title="함수"></a>함수</h5><ol>
+<li>size() : 컨테이너에 저장된 요소의 개수를 반환</li>
+<li>front() : 첫번째 원소에 접근</li>
+<li>back() : 마지막 원소에 접근</li>
+<li>push() : 큐에 맨 마지막에 요소를 추가</li>
+<li>pop() : 큐의 맨 앞의 요소를 제거</li>
+<li>empty() : 컨테이너가 비었는지 확인</li>
+</ol>
+<p>​     </p>
+<h4 id="우선순위-큐-priority-queue"><a href="#우선순위-큐-priority-queue" class="headerlink" title="우선순위 큐(priority_queue)"></a>우선순위 큐(priority_queue)</h4><p>우선순위 큐는 <code>vector</code>클래스를 이용하여 힙을 구현해 우선순위큐를 구현한 클래스 입니다.</p>
+<h5 id="문법-7"><a href="#문법-7" class="headerlink" title="문법"></a>문법</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line">priority_queue&lt;Type&gt; name;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="함수-7"><a href="#함수-7" class="headerlink" title="함수"></a>함수</h5><ol>
+<li>size() : 컨테이너에 저장된 요소의 개수를 반환</li>
+<li>push() : 우선순위 큐에 요소를 추가</li>
+<li>top() : 우선순위 큐에서 맨위의 요소에 접근</li>
+<li>pop() : 우선순위 큐에서 맨위의 요소 제거</li>
+<li>empty() : 컨테이너가 비었는지 확인</li>
+</ol>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/C/">#C++</a> <a class="fw5 ph1 dib" href="/tags/알고리즘/">#알고리즘</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/C/">C++</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

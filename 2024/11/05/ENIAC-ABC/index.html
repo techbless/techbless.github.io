@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가? - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2024/11/05/eniac-abc/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2024-11-05</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-plane"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/History/">#History</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/일상/">#일상</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><p>이번에 아시아나와 대한항공의 합병을 앞두고 남은 아시아나 마일리지를 소진할 겸 잠시 샌프란시스코 베이 지역으로 혼자 여행을 다녀왔다. 여행 중 들르게 된 곳은 마운틴 뷰(Mountain View)에 위치한 컴퓨터 <strong>역사 박물관(Computer History Museum)</strong> 이었다. 이 박물관은 기술의 발전사를 포괄적으로 보여주는 희귀하고 중요한 소장품들을 보유하고 있어, 평소 IT와 기술 역사에 관심이 많은 나에게 큰 흥미를 끌었다. 개인적으로 마운틴뷰와 이 근처 동네는 너무 깨끗하고 조용한 동네라서 너무 마음에 든다. 만약에 San Francisco 주변에서 출발하고 운전을 좋아한다면, US101 타고 바로 오는것 보다는 SR 1 국도를 타고 84번 국도(La Honda Rd)를 타고 넘어오면 낭만 있는 경치와 와인딩을 즐길 수 있다.</p>
+<p><img src="/img/ABC_ENIAC/chm.jpg" alt="ABC"></p>
+<p>사실 그동안 박물관을 3시간 넘게 정독하며 둘러본 적이 없었는데, 이번엔 정말 처음부터 끝까지 꼼꼼히 살펴볼 만큼 흥미로웠다. 귀국 후 이 내용에 대해 더 조사하였고,이곳에서 알게 된, 잘 알려지지 않은 ‘최초의 컴퓨터’에 대한 흥미로운 이야기를 공유하고자 한다.</p>
+<h2 id="2-진정한-최초의-컴퓨터는-ABC와-ENIAC의-이야기"><a href="#2-진정한-최초의-컴퓨터는-ABC와-ENIAC의-이야기" class="headerlink" title="2. 진정한 최초의 컴퓨터는? ABC와 ENIAC의 이야기"></a>2. 진정한 최초의 컴퓨터는? ABC와 ENIAC의 이야기</h2><p><img src="/img/ABC_ENIAC/abc2.jpg" alt="ABC"></p>
+<p>많은 사람들이 “최초의 컴퓨터”라 하면 <strong>ENIAC(Electronic Numerical Integrator and Computer)</strong> 을 떠올린다. 1940년대에 개발된 ENIAC은 방 하나를 가득 채울 만큼 거대한 크기와 엄청난 전력 소비량으로 유명하다. 하지만 ENIAC이 아닌, 잘 알려지지 않은 다른 컴퓨터가 최초의 컴퓨터 타이틀을 주장하고 있다. 그 이름은 <strong>아타나소프-베리 컴퓨터(Atanasoff–Berry Computer, ABC)</strong> 이다. ABC가 최초의 컴퓨터로 인정받는 과정은 과학적 성과뿐만 아니라 법적 분쟁과 특허, 그리고 기업의 영향력에 의해 역사적 서사가 어떻게 형성되는지를 보여준다.</p>
+<h3 id="아타나소프-베리-컴퓨터의-탄생"><a href="#아타나소프-베리-컴퓨터의-탄생" class="headerlink" title="아타나소프-베리 컴퓨터의 탄생"></a>아타나소프-베리 컴퓨터의 탄생</h3><p>1930년대 후반, 존 빈센트 아타나소프라는 수학자이자 물리학자는 아이오와 주립대에서 복잡한 수학 계산을 자동으로 처리할 방법을 찾고 있었다. 그는 1937년 어느 날, 머리를 식히기 위해 들른 도로변 카페에서 컴퓨팅 장치의 기본 아이디어를 냅킨에 간단히 메모하기 시작했다. 이때의 메모는 전자식 계산 장치의 핵심 요소를 담고 있었고, 이후 컴퓨터 과학의 큰 진보로 이어졌다.</p>
+<p><img src="/img/ABC_ENIAC/abc.jpg" alt="ABC"></p>
+<p>아타나소프는 그의 대학원생 클리포드 베리와 함께 ABC를 개발했고, 이 장치는 동시에 여러 개의 연립방정식을 풀 수 있는 능력을 갖추고 있었다. ABC는 데이터를 2진법으로 표현하고 진공관을 사용한 전자 스위칭을 구현했는데, 이는 이후 컴퓨터들의 기초가 되는 중요한 개념이다. 다만 ABC는 완전한 프로그래밍이 가능한 기계는 아니었고, 특정 계산에 특화된 계산기로 제한적인 기능만 수행할 수 있었다. 하지만 당시로서는 매우 혁신적인 발명이었다.</p>
+<p><a href="https://www.computerhistory.org/revolution/birth-of-the-computer/4/99" rel="external nofollow noreferrer">Atanasoff-Berry Computer (Computer History Museum)</a></p>
+<h3 id="ENIAC과-“최초”-타이틀을-둘러싼-법적-논쟁"><a href="#ENIAC과-“최초”-타이틀을-둘러싼-법적-논쟁" class="headerlink" title="ENIAC과 “최초” 타이틀을 둘러싼 법적 논쟁"></a>ENIAC과 “최초” 타이틀을 둘러싼 법적 논쟁</h3><p>ENIAC은 그보다 약간 뒤인 1940년대에 펜실베이니아 대학교에서 존 모클리와 프레스퍼 에커트에 의해 개발되었다. ENIAC은 ABC와 달리 다양한 문제를 해결할 수 있는 범용 프로그래밍이 가능한 컴퓨터로, 전자식 대형 컴퓨터로서 그 위용을 자랑하며 군사와 원자 연구 등 여러 분야에 큰 영향을 미쳤다.</p>
+<p><img src="/img/ABC_ENIAC/patent.jpg" alt="ABC"></p>
+<p>ENIAC 발명자들은 1947년에 특허를 신청하여 독점적인 권리를 확보하려 했고, 이후 스페리 랜드(Sperry Rand)라는 회사가 ENIAC의 특허를 통해 다른 기업들에게 라이선스 비용을 요구하기 시작했다. 그러나 허니웰과 <strong>컨트롤 데이터 코퍼레이션(CDC)</strong> 이 ENIAC의 특허가 무효임을 주장하며 이의를 제기했다. 그 이유는 ENIAC의 공동 발명자인 존 모클리가 1941년에 아타나소프의 실험실을 방문해 ABC를 직접 보고 여러 개념을 논의했기 때문입니다. ENIAC이 ABC의 중요한 아이디어를 빌려왔다고 주장한 것이다.</p>
+<p><a href="https://www.computerhistory.org/revolution/birth-of-the-computer/4/99" rel="external nofollow noreferrer">ENIAC: The First Electronic Computer. Until it Wasn’t. (Computer History Museum)</a></p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h3 id="법원-판결-아타나소프-베리-컴퓨터의-공로-인정"><a href="#법원-판결-아타나소프-베리-컴퓨터의-공로-인정" class="headerlink" title="법원 판결: 아타나소프-베리 컴퓨터의 공로 인정"></a>법원 판결: 아타나소프-베리 컴퓨터의 공로 인정</h3><p><img src="/img/ABC_ENIAC/eniac.jpg" alt="ABC"></p>
+<p>1973년, 이 복잡한 법적 분쟁은 “honeywell, Inc. v. Sperry Rand Corp” 소송으로 법원에 다다랐다. 법원은 허니웰 측의 손을 들어주며, ENIAC이 아타나소프와 베리가 개발한 ABC의 아이디어에 기반하고 있음을 인정했다. 결과적으로 ENIAC의 특허는 무효화됐고, ABC가 전자식 컴퓨터의 진정한 시작점으로 인정받게 됐다. 이 판결은 20세기의 중요한 발명 중 하나가 특정 기업의 소유가 아닌 “아무도 소유하지 않은” 것으로 남게 되었다는 점에서 큰 의미가 있다.</p>
+<p><a href="https://www.nytimes.com/1973/04/13/archives/a-basic-computer-patent-at-sperry-rand-annulledd-reason-for-ruling.html?searchResultPosition=47" rel="external nofollow noreferrer">(1973 Newyork Times Archives) A Basic Computer Patent At Sperry Rand Annulled</a></p>
+<h3 id="아타나소프-베리-컴퓨터가-덜-알려진-이유"><a href="#아타나소프-베리-컴퓨터가-덜-알려진-이유" class="headerlink" title="아타나소프-베리 컴퓨터가 덜 알려진 이유"></a>아타나소프-베리 컴퓨터가 덜 알려진 이유</h3><p>법원의 판결에도 불구하고, 여전히 많은 사람들이 ENIAC을 최초의 컴퓨터로 기억하는 데는 몇 가지 이유가 있다.</p>
+<ol>
+<li>규모와 대중성: ENIAC은 ABC에 비해 훨씬 크고 범용성이 뛰어났으며, 대중의 상상력을 자극하며 많은 언론의 주목을 받았다.</li>
+<li>프로그래밍 기능: ENIAC은 범용 프로그래밍이 가능한 컴퓨터였고, ABC는 특정 연산에 특화된 계산기여서 오늘날 우리가 아는 컴퓨터에 더 가까웠다.</li>
+<li>기업의 영향력: 스페리 랜드는 ENIAC의 성과를 알리고 특허를 방어하는 데 막대한 자원을 투입하며 ENIAC의 인지도를 높였다.</li>
+<li>물리적 유산: ENIAC은 현재까지 보존 및 전시된 반면, ABC는 대부분 해체되어 잊혀졌고, 이후에야 원본을 기반으로 한 복제본이 제작되었다.</li>
+</ol>
+<p>ABC가 진정한 최초의 전자 컴퓨터로 인정받게 된 것은 단순한 발명이나 특허 이상의 의미를 담고 있다. 아타나소프와 베리가 도입한 2진법 계산과 전자 처리 방식은 이후 모든 컴퓨터의 기초가 되었으며, 그들의 아이디어는 오늘날의 스마트폰에 이르기까지 모든 컴퓨팅 장치에 큰 영향을 미쳤다. 비록 ABC는 ENIAC만큼 큰 주목을 받지 못했지만, 컴퓨터 과학의 기초를 다진 이들의 노력은 혁신의 중요성을 상기시켜준다. 이 외에도 Computer History Museum에는 컴퓨터를 좋아하는 사람이라면 좋아 할만한 다양한 소장품이 많으니 한번 쯤 가보는 것을 추천한다.</p>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d93033.35617481785!2d-122.11131548445108!3d37.37978605370617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb7569249b39b%3A0xea8071641d7ef4f2!2z7Lu07ZOo7YSwIO2eiOyKpO2GoOumrCDrrqTsp4Dsl4Q!5e0!3m2!1sko!2skr!4v1731395757913!5m2!1sko!2skr" height="300" style="border:0; width: 100%" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/History/">#History</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/일상/">#일상</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/General/">General</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

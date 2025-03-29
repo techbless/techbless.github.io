@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /about-me
+Disallow: /about-me/
+Allow: /
+Sitemap: https://techbless.github.io/post-sitemap.xml

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (Blocking vs. Awaiting)"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (Blocking vs. Awaiting) - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2025/03/25/channel-blocking-collection/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">C#에서 Channel<T>와 BlockingCollection<T> 대기 방식 비교 (Blocking vs. Awaiting)</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2025-03-25</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-lock"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="C-에서-Channel와-BlockingCollection-비교"><a href="#C-에서-Channel와-BlockingCollection-비교" class="headerlink" title="C#에서 Channel<T>와 BlockingCollection<T> 비교"></a>C#에서 <code>Channel&lt;T&gt;</code>와 <code>BlockingCollection&lt;T&gt;</code> 비교</h1><p>동시성 프로그래밍에서 생산자-소비자 패턴은 매우 일반적인 구조이며, C#에서는 이를 구현하기 위한 여러 추상화가 존재한다. 특히 <code>BlockingCollection&lt;T&gt;</code>와 <code>Channel&lt;T&gt;</code>는 대표적인 메시지 큐이며, 유사한 목적을 가지지만 구조, 성능, 사용성 면에서 뚜렷한 차이를 지닌다. 두 구조의 가장 본질적인 공통점은 <strong>“생산자 또는 소비자가 준비되지 않았을 때 대기(BLOCKING 또는 AWAITING) 를 통해 동기화된다”는</strong> 점입니다.<br>즉, <strong>생산자-소비자 간 속도 차이를 자동으로 조율해주는</strong> 구조라는 점이 가장 중요한 공통점이며, 이게 일반 Queue<t>나 ConcurrentQueue<t>와 구분되는 지점이기도 합니다.</t></t></p>
+<ol>
+<li><p><strong>자동 대기(Blocking 또는 Awaiting) 기반 흐름 제어</strong><br>소비자가 큐에서 데이터를 꺼내려 할 때 데이터가 없다면, 소비자는 <strong>자동으로 대기</strong>하며, 데이터가 추가되면 즉시 깨어난다.<br>반대로, 큐가 가득 찼을 경우 생산자도 <strong>차단(block)</strong> 또는 <strong>비동기 대기(await)</strong> 를 통해 흐름을 제어한다.</p>
+</li>
+<li><p><strong>생산자-소비자의 느슨한 결합 구조 지원</strong><br><strong>생산 속도와 소비 속도가 달라도 버퍼와 대기 메커니즘을 통해 균형 있게</strong> 처리되므로, 비동기적 흐름 제어가 용이하다.</p>
+</li>
+<li><p><strong>스레드 안전성 보장</strong><br>동시 접근 시 내부적으로 적절한 동기화를 수행하여, 생산자와 소비자가 다중 스레드 환경에서도 안전하게 데이터를 주고받을 수 있다.</p>
+</li>
+</ol>
+<p>이번 글에서는 이 두 컬렉션의 차이점을 명확히 짚고, 언제 어떤 것을 선택해야 하는지 기준을 제시합니다.</p>
+<h2 id="요약"><a href="#요약" class="headerlink" title="요약"></a>요약</h2><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>BlockingCollection<t></t></th>
+<th>Channel<t></t></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>기본 구현체</td>
+<td><code>ConcurrentQueue&lt;T&gt;</code> 등 래핑</td>
+<td>커스텀 구현 (<code>Channel&lt;T&gt;</code>)</td>
+</tr>
+<tr>
+<td>생산자/소비자 모델</td>
+<td>단순 모델</td>
+<td>다중 생산자/다중 소비자까지 유연</td>
+</tr>
+<tr>
+<td>완료 신호</td>
+<td><code>CompleteAdding()</code></td>
+<td><code>channel.Writer.Complete()</code></td>
+</tr>
+<tr>
+<td>대기 방법</td>
+<td><strong>차단(block)</strong></td>
+<td><strong>비동기 대기(await)</strong></td>
+</tr>
+<tr>
+<td>비동기 지원</td>
+<td>불완전 (<code>GetConsumingEnumerable</code>)</td>
+<td>완전한 <code>async</code>/<code>await</code> 지원</td>
+</tr>
+<tr>
+<td>용도</td>
+<td>간단한 동기 큐</td>
+<td>고성능 비동기 스트리밍 파이프</td>
+</tr>
+</tbody></table>
+<h2 id="내부-구조-비교"><a href="#내부-구조-비교" class="headerlink" title="내부 구조 비교"></a>내부 구조 비교</h2><h3 id="BlockingCollection"><a href="#BlockingCollection" class="headerlink" title="BlockingCollection"></a>BlockingCollection<t></t></h3><ul>
+<li>내부적으로 <code>IProducerConsumerCollection&lt;T&gt;</code> 구현체를 감싼 래퍼이다.</li>
+<li><code>Add()</code>, <code>Take()</code> 같은 메서드를 제공하며, <code>CompleteAdding()</code> 호출로 생산 완료를 명시할 수 있다.</li>
+<li>Blocking의 구현은 <code>Monitor.Wait</code> 또는 <code>SemaphoreSlim</code> 기반이다.</li>
+</ul>
+<h3 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel<t></t></h3><ul>
+<li><code>System.Threading.Channels</code> 네임스페이스에 있으며, .NET Core/Standard 이후 등장.</li>
+<li>비동기 처리를 기본으로 설계되어 있고, <code>ChannelWriter&lt;T&gt;</code>, <code>ChannelReader&lt;T&gt;</code>로 역할이 명확히 분리된다.</li>
+<li>내부적으로는 RingBuffer 기반의 Lock-Free Queue를 활용하며, 동시성 처리에 강력하다.</li>
+</ul>
+<p>다음은 두 구조를 비교한 시각적 다이어그램이다:</p>
+<pre class="mermaid">graph TD
+  subgraph BlockingCollection
+    A[Producer Thread] --&gt; |Add| B[BlockingCollection]
+    B --&gt; |Take| C[Consumer Thread]
+  end
+
+  subgraph Channel
+    D[Producer Thread] --&gt;|WriteAsync| E[Channel.Writer]
+    E --&gt; F[Internal Buffer]
+    F --&gt; |ReadAsync| G[Channel.Reader]
+    G --&gt; H[Consumer Thread]
+  end</pre>
+
+<h2 id="API-사용-예시"><a href="#API-사용-예시" class="headerlink" title="API 사용 예시"></a>API 사용 예시</h2><h3 id="BlockingCollection-1"><a href="#BlockingCollection-1" class="headerlink" title="BlockingCollection"></a>BlockingCollection<t></t></h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> collection = <span class="keyword">new</span> BlockingCollection&lt;<span class="built_in">int</span>&gt;(boundedCapacity: <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">Task producer = Task.Run(() =&gt;</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++)</span><br><span class="line">        collection.Add(i); <span class="comment">// 큐가 가득 차면 BLOCK</span></span><br><span class="line">    collection.CompleteAdding();</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">Task consumer = Task.Run(() =&gt;</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">while</span> (!collection.IsCompleted)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        {</span><br><span class="line">            <span class="built_in">int</span> item = collection.Take(); <span class="comment">// 큐가 비어 있으면 BLOCK</span></span><br><span class="line">            Console.WriteLine(item);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">catch</span> (InvalidOperationException)</span><br><span class="line">        {</span><br><span class="line">            <span class="comment">// CompleteAdding 이후 Take 시 발생 가능</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Channel-1"><a href="#Channel-1" class="headerlink" title="Channel"></a>Channel<t></t></h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> channel = Channel.CreateBounded&lt;<span class="built_in">int</span>&gt;(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">Task producer = Task.Run(<span class="keyword">async</span> () =&gt;</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++)</span><br><span class="line">        <span class="keyword">await</span> channel.Writer.WriteAsync(i); <span class="comment">// 큐가 가득 차면 await으로 대기</span></span><br><span class="line">    channel.Writer.Complete();</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">Task consumer = Task.Run(<span class="keyword">async</span> () =&gt;</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">await</span> channel.Reader.WaitToReadAsync())</span><br><span class="line">    {</span><br><span class="line">        <span class="comment">// 버퍼에 남아있는 모든 아이템을 즉시 꺼냄</span></span><br><span class="line">        <span class="keyword">while</span> (channel.Reader.TryRead(<span class="keyword">out</span> <span class="built_in">int</span> item))</span><br><span class="line">        {</span><br><span class="line">            Console.WriteLine(item); <span class="comment">// 항목 하나씩 처리</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line"><span class="comment">// 혹은 아래의 consumer (위: 한번에 다꺼냄, 아래: 한번에 하나씩 꺼냄)</span></span><br><span class="line">Task consumer = Task.Run(<span class="keyword">async</span> () =&gt; {</span><br><span class="line"><span class="keyword">while</span> (!channel.Reader.Completion.IsCompleted)</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    {</span><br><span class="line">        <span class="built_in">int</span> item = <span class="keyword">await</span> channel.Reader.ReadAsync(); <span class="comment">// 하나씩 읽어옴</span></span><br><span class="line">        Console.WriteLine(item);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">catch</span> (ChannelClosedException)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">break</span>; <span class="comment">// 채널이 닫혔으면 반복 종료</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line">});</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="BlockingCollection-vs-Channel"><a href="#BlockingCollection-vs-Channel" class="headerlink" title="BlockingCollection vs. Channel"></a>BlockingCollection<t> vs. Channel<t></t></t></h3><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>BlockingCollection</th>
+<th>Channel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>생산</td>
+<td><code>Add()</code></td>
+<td><code>WriteAsync()</code></td>
+</tr>
+<tr>
+<td>소비</td>
+<td><code>Take()</code></td>
+<td><code>TryRead()</code> + <code>WaitToReadAsync()</code></td>
+</tr>
+<tr>
+<td>완료 신호</td>
+<td><code>CompleteAdding()</code></td>
+<td><code>Writer.Complete()</code></td>
+</tr>
+</tbody></table>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="성능과-선택-기준"><a href="#성능과-선택-기준" class="headerlink" title="성능과 선택 기준"></a>성능과 선택 기준</h2><ul>
+<li><p><code>BlockingCollection&lt;T&gt;</code>는 단순한 시나리오에 적합: 스레드 기반 동기 소비자가 주를 이루는 경우 빠르게 구현할 수 있다.</p>
+</li>
+<li><p><code>Channel&lt;T&gt;</code>는 고성능 비동기 스트림 처리에 유리: 성능 측면에서 <code>Channel&lt;T&gt;</code>가 대부분 이점이 있으며, 다수의 생산자-소비자, 비동기 await 흐름이 필요한 현대적인 아키텍처에 적합하다.</p>
+</li>
+</ul>
+<hr>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p><code>BlockingCollection&lt;T&gt;</code>는 레거시 환경이나 단순한 생산자-소비자 구조에 여전히 유효하다. 그러나 새로운 비동기 기반 아키텍처나 고성능 시스템에서는 <code>Channel&lt;T&gt;</code>가 더 적절한 선택이며, 설계 관점에서도 명확한 역할 분리와 비동기 친화적 인터페이스를 제공한다.</p>
+<p>실제 시스템의 요구사항에 따라 적절한 도구를 선택하는 것이 중요하고, 최근에는 비동기 파이프라인 아키텍처가 점점 주목 받고 있다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Operating-System/">Operating System</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

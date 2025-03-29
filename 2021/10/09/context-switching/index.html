@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="컨텍스트 스위칭(Context Switching): Process Control Block(PCB), 스케줄링 알고리즘"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>컨텍스트 스위칭(Context Switching): Process Control Block(PCB), 스케줄링 알고리즘 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2021/10/09/context-switching/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">컨텍스트 스위칭(Context Switching): Process Control Block(PCB), 스케줄링 알고리즘</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2021-10-09</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-lock"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/Computer-Architecture/">#Computer Architecture</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="Context-Switching-PCB-스케줄링-알고리즘"><a href="#Context-Switching-PCB-스케줄링-알고리즘" class="headerlink" title="Context Switching: PCB, 스케줄링 알고리즘"></a>Context Switching: PCB, 스케줄링 알고리즘</h1><p>이번 글에서는 <strong>Context Switching</strong> 과 <strong>Process Control Block</strong> 그리고 <strong>스케줄링 알고리즘</strong> 에 대해 전체적으로 알아보도록 하겠습니다.</p>
+<h2 id="1-Context-Switching의-개념"><a href="#1-Context-Switching의-개념" class="headerlink" title="1. Context Switching의 개념"></a>1. Context Switching의 개념</h2><p><strong>Context Switching</strong> 은 운영체제에서 <strong>Process</strong> 간에 CPU 자원을 전환하는 과정입니다. 즉, 한 프로세스에서 다른 프로세스로 CPU를 할당하기 위해, 현재 실행 중인 프로세스의 상태를 저장하고, 새로운 process의 상태를 복원하는 과정입니다. 이 과정은 멀티태스킹 환경에서 필수적인 요소로, 여러 프로세스가 CPU를 공유하도록 합니다.</p>
+<p>Context Switching은 기본적으로 두 가지 단계로 이루어집니다:</p>
+<pre class="mermaid">gantt
+    title Context Switching 과정
+    dateFormat  HH:mm
+
+    
+    section P1
+    P1 실행 :active, 00:00, 2h
+    상태 저장 (P1) :active, 02:00, 15m
+    
+    section Scheduler
+    프로세스 선택 :active, 02:15, 10m
+
+    section P2
+    상태 복원 (P2) :active, 02:25, 15m
+    P2 실행 :active, 02:40, 3h</pre>
+
+<ol>
+<li><strong>현재 프로세스의 상태 저장</strong>: CPU에서 실행 중인 프로세스의 <strong>레지스터 상태</strong>, <strong>프로그램 카운터(PC)</strong>, 그리고 <strong>스택 정보</strong> 등을 저장합니다.</li>
+<li><strong>새로운 프로세스의 상태 복원</strong>: 새로 CPU를 할당받은 process의 상태를 복원하여 실행을 시작합니다.</li>
+</ol>
+<p>이 과정은 운영체제의 <strong>스케줄러</strong>가 관리하며, CPU 자원의 효율적인 배분을 위해 중요합니다.</p>
+<h2 id="2-Process-Control-Block-PCB"><a href="#2-Process-Control-Block-PCB" class="headerlink" title="2. Process Control Block(PCB)"></a>2. Process Control Block(PCB)</h2><blockquote>
+<p>여러 프로세스가 동시에 실행되는 멀티태스킹 환경에서, 각 프로세스는 다른 프로세스의 상태에 영향을 미치지 않도록 독립성을 유지해야 합니다. PCB는 각 프로세스가 독립적으로 실행될 수 있도록 필요한 모든 상태 정보를 저장하여, 다른 프로세스의 실행에 방해받지 않도록 합니다. 이는 프로세스 간에 상호 간섭을 방지하고, 안정적인 시스템 운영을 보장하빈다.</p>
+</blockquote>
+<p><strong>PCB</strong> 는 운영체제에서 각 프로세스를 추적하고 관리하기 위해 사용하는 데이터 구조입니다. PCB는 프로세스에 대한 모든 상태 정보를 포함하고 있으며, Context Switching 시 핵심적인 역할을 합니다.</p>
+<p>프로세스가 실행 중일 때, 운영체제는 각 프로세스의 상태를 관리해야 합니다. CPU에서 하나의 프로세스가 실행되는 동안 다른 프로세스로 전환되면, 현재 프로세스의 상태(레지스터 값, 프로그램 카운터 등)를 저장하고, 새로운 프로세스의 상태를 복원해야 합니다. 이를 위해 PCB에 프로세스의 상태 정보가 저장됩니다. 만약 PCB가 없다면, 이 상태 정보를 어디에 저장할지 모호해지며, Context Switching이 불가능하게 됩니다.</p>
+<p> PCB에 저장되는 정보는 다음과 같습니다:</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>프로세스 ID (PID)</strong></td>
+<td>프로세스를 고유하게 식별하는 값</td>
+</tr>
+<tr>
+<td><strong>프로세스 상태</strong></td>
+<td>프로세스가 현재 어떤 상태에 있는지 (예: 실행, 대기, 종료 등)</td>
+</tr>
+<tr>
+<td><strong>프로그램 카운터(PC)</strong></td>
+<td>다음에 실행될 명령어의 주소</td>
+</tr>
+<tr>
+<td><strong>CPU 레지스터</strong></td>
+<td>CPU에서 프로세스를 실행하는 데 필요한 레지스터의 상태</td>
+</tr>
+<tr>
+<td><strong>메모리 관리 정보</strong></td>
+<td>프로세스에 할당된 메모리 영역, 페이지 테이블 등</td>
+</tr>
+<tr>
+<td><strong>I/O 상태 정보</strong></td>
+<td>프로세스가 사용하는 I/O 장치 정보</td>
+</tr>
+<tr>
+<td><strong>우선순위</strong></td>
+<td>프로세스의 우선순위 정보</td>
+</tr>
+<tr>
+<td><strong>스케줄링 정보</strong></td>
+<td>스케줄링 큐에서의 위치나 대기 시간 등</td>
+</tr>
+</tbody></table>
+<p>PCB는 프로세스가 실행되는 동안 언제든지 변경될 수 있는 상태 정보를 포함하고 있으며, Context Switching 시 이 정보가 <strong>커널 공간에 저장</strong> 되어 새로운 프로세스가 실행될 수 있도록 합니다.</p>
+<p>운영체제는 여러 프로세스를 효율적으로 실행하기 위해 스케줄링 알고리즘을 사용합니다. 각 프로세스의 우선순위, 대기 시간, 실행 상태 등은 모두 PCB에 기록되어 있습니다. 이 정보는 프로세스를 관리하고, 어떤 프로세스를 언제 실행할지 결정하는 데 필수적인 역할을 합니다.</p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="3-스케줄링-알고리즘"><a href="#3-스케줄링-알고리즘" class="headerlink" title="3. 스케줄링 알고리즘"></a>3. 스케줄링 알고리즘</h2><p>운영체제는 여러 프로세스 간의 CPU 자원을 관리하기 위해 다양한 <strong>스케줄링 알고리즘</strong> 을 사용합니다. 각 알고리즘은 프로세스의 <strong>우선순위</strong>, <strong>대기 시간</strong>, <strong>처리량</strong> 등을 고려하여 CPU를 효율적으로 분배합니다. 주요 스케줄링 알고리즘에는 다음과 같은 것들이 있습니다:</p>
+<h3 id="3-1-FIFO-First-In-First-Out"><a href="#3-1-FIFO-First-In-First-Out" class="headerlink" title="3.1 FIFO (First In, First Out)"></a>3.1 FIFO (First In, First Out)</h3><p>FIFO는 가장 먼저 도착한 프로세스를 먼저 실행하는 방식입니다. 큐에서 프로세스를 순차적으로 처리하므로, <strong>간단하고 직관적</strong> 입니다. 그러나 <strong>병목 현상</strong> 이 발생할 수 있으며, <strong>긴 프로세스가 대기 시간이 길어지는 문제</strong> 가 발생할 수 있습니다.</p>
+<pre class="mermaid">gantt
+    title FIFO 스케줄링 예시
+    dateFormat  HH:mm
+    section 프로세스
+    P3 :active, 00:00, 6h
+    P2 :active, 06:00, 2h
+    P1 :active, 08:00, 4h
+    P4 :active, 12:00, 3h</pre>
+
+<ul>
+<li>위 그림에서는 P3, P2, P1, P4 순으로 도착했다고 가정합니다.</li>
+</ul>
+<h3 id="3-2-Round-Robin-RR"><a href="#3-2-Round-Robin-RR" class="headerlink" title="3.2 Round Robin (RR)"></a>3.2 Round Robin (RR)</h3><p>Round Robin은 <strong>타임 슬라이스</strong> 또는 <strong>퀀텀</strong> 이라고 불리는 일정 시간만큼 프로세스를 실행한 후, 다른 프로세스에게 CPU를 양도하는 방식입니다. <strong>시간이 중요한</strong> 시스템에서 유용하며, <strong>공평한 자원 분배</strong> 가 가능합니다. 그러나 <strong>컨텍스트 스위칭 비용</strong> 이 상대적으로 높을 수 있습니다.</p>
+<pre class="mermaid">gantt
+    title Round Robin 스케줄링 예시
+    dateFormat  HH:mm
+    section 프로세스
+    P1 :active, 00:00, 2h
+    P2 :active, 02:00, 2h
+    P3 :active, 04:00, 2h
+    P4 :active, 06:00, 2h
+    P1 : 08:00, 2h
+    P2 : 10:00, 2h
+    P3 : 12:00, 2h
+    P4 : 14:00, 2h</pre>
+
+<p>이 다이어그램은 각 프로세스가 순차적으로 CPU를 할당받는 모습을 시각적으로 나타냅니다. P1, P2, P3, P4는 각각 동일한 시간을 할당받고, 타임 슬라이스가 끝날 때마다 Context Switching이 일어납니다.</p>
+<h3 id="3-3-SJF-Shortest-Job-First"><a href="#3-3-SJF-Shortest-Job-First" class="headerlink" title="3.3 SJF (Shortest Job First)"></a>3.3 SJF (Shortest Job First)</h3><p>SJF는 실행 시간이 가장 짧은 프로세스를 먼저 실행하는 알고리즘입니다. 이 알고리즘은 <strong>최소 대기 시간을</strong> 보장하지만, <strong>긴 프로세스가 계속 대기</strong> 하게 되는 <strong>기아 현상</strong> 을 초래할 수 있습니다.</p>
+<pre class="mermaid">gantt
+    title SJF 스케줄링 예시
+    dateFormat  HH:mm
+    section 프로세스
+    P2 :active, 00:00, 1h
+    P1 :active, 01:00, 2h
+    P3 :active, 03:00, 4h
+    P4 :active, 07:00, 6h</pre>
+
+<h3 id="3-4-Priority-Scheduling"><a href="#3-4-Priority-Scheduling" class="headerlink" title="3.4 Priority Scheduling"></a>3.4 Priority Scheduling</h3><p>Priority Scheduling은 각 프로세스에 우선순위를 부여하고, 우선순위가 높은 프로세스를 먼저 실행하는 방식입니다. 그러나 이 방식도 <strong>기아 현상</strong> 을 발생시킬 수 있습니다. <strong>다양한 우선순위 기반</strong> 정책을 사용할 수 있습니다.</p>
+<pre class="mermaid">gantt
+    title Priority Scheduling 예시
+    dateFormat  HH:mm
+    section 프로세스
+    P2 :active, 00:00, 3h
+    P1 :active, 03:00, 5h
+    P3 :active, 08:00, 4h
+    P4 :active, 12:00, 6h</pre>
+
+<ul>
+<li>위 그림에서, 프로세스의 우선순위는 P2 &gt; P1 &gt; P3 &gt; P4라고 가정합니다.</li>
+</ul>
+<h3 id="3-5-멀티레벨-큐-스케줄링"><a href="#3-5-멀티레벨-큐-스케줄링" class="headerlink" title="3.5 멀티레벨 큐 스케줄링"></a>3.5 멀티레벨 큐 스케줄링</h3><p>이 방식은 여러 개의 큐를 사용하여, 각 큐가 다른 스케줄링 알고리즘을 따르는 방식입니다. <strong>프로세스의 특성에 맞게</strong> 적절한 큐로 분류하여 효율적으로 스케줄링할 수 있습니다.</p>
+<pre class="mermaid">gantt
+    title Multilevel Queue Scheduling 예시
+    dateFormat  HH:mm
+    section High Priority
+    P1 :active, 00:00, 3h
+    P2 :active, 03:00, 3h
+    section Low Priority
+    P3 :active, 06:00, 5h
+    P4 :active, 11:00, 6h</pre>
+
+<h3 id="4-선점형-vs-비선점형-스케줄링"><a href="#4-선점형-vs-비선점형-스케줄링" class="headerlink" title="4. 선점형 vs 비선점형 스케줄링"></a>4. 선점형 vs 비선점형 스케줄링</h3><p>운영체제에서 스케줄링은 크게 <strong>선점형(Preemptive)</strong> 과 <strong>비선점형(Non-Preemptive)</strong> 방식으로 나눌 수 있습니다. 이 두 가지 방식은 프로세스가 CPU를 할당받고 사용하는 방식에 따라 다릅니다.</p>
+<h4 id="4-1-선점형-스케줄링"><a href="#4-1-선점형-스케줄링" class="headerlink" title="4.1 선점형 스케줄링"></a>4.1 선점형 스케줄링</h4><p>선점형 스케줄링에서는 CPU를 사용 중인 프로세스를 강제로 중단시키고, 다른 프로세스에게 CPU를 할당할 수 있습니다. 타임 슬라이스 또는 우선순위 등의 기준에 따라 프로세스가 강제로 중단되며, 다른 프로세스가 실행됩니다.</p>
+<ul>
+<li>예시: Round Robin, Priority Scheduling(우선순위가 높을 때 선점 가능)</li>
+</ul>
+<h4 id="4-2-비선점형-스케줄링"><a href="#4-2-비선점형-스케줄링" class="headerlink" title="4.2 비선점형 스케줄링"></a>4.2 비선점형 스케줄링</h4><p>비선점형 스케줄링에서는 한 프로세스가 CPU를 할당받으면, 해당 프로세스가 실행을 완료할 때까지 CPU를 계속 사용할 수 있습니다. 프로세스가 종료되거나 I/O 작업을 요청할 때까지 다른 프로세스는 CPU를 사용할 수 없습니다.</p>
+<ul>
+<li>예시: FIFO, SJF</li>
+</ul>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h3 id="Comparison"><a href="#Comparison" class="headerlink" title="Comparison"></a>Comparison</h3><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>선점형 스케줄링</th>
+<th>비선점형 스케줄링</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>응답 시간</strong></td>
+<td>응답 시간이 더 빠르다. 타임 슬라이스가 지나면 다른 프로세스가 실행된다.</td>
+<td>응답 시간이 늦을 수 있다. 실행이 끝날 때까지 다른 프로세스가 대기해야 한다.</td>
+</tr>
+<tr>
+<td><strong>공정성</strong></td>
+<td>공정하다. 각 프로세스가 일정 시간 동안 CPU를 할당받을 기회를 가진다.</td>
+<td>공정성 부족. 긴 프로세스가 실행을 끝낼 때까지 다른 프로세스가 기다려야 한다.</td>
+</tr>
+<tr>
+<td><strong>시스템 효율성</strong></td>
+<td>높은 시스템 효율성. CPU 자원을 더 잘 활용할 수 있다.</td>
+<td>낮은 시스템 효율성. CPU가 유휴 상태로 남을 수 있다.</td>
+</tr>
+<tr>
+<td><strong>기아 문제</strong></td>
+<td>낮다. 프로세스가 타임 슬라이스에 의해 자주 실행된다.</td>
+<td>높다. 긴 프로세스가 우선 실행되면 다른 프로세스가 대기하게 된다.</td>
+</tr>
+<tr>
+<td><strong>실행 관리 복잡성</strong></td>
+<td>더 복잡하다. 프로세스 상태를 자주 저장하고 복원해야 하므로 오버헤드가 발생한다.</td>
+<td>비교적 단순하다. 프로세스의 상태를 저장하는 일이 적다.</td>
+</tr>
+<tr>
+<td><strong>적합한 환경</strong></td>
+<td>멀티태스킹 환경에서 적합하며, <strong>타임 공유 시스템</strong>에서 주로 사용된다.</td>
+<td>프로세스가 종료될 때까지 기다릴 수 있는 환경에서 적합하며, <strong>배치 처리 시스템</strong>에서 주로 사용된다.</td>
+</tr>
+</tbody></table>
+<h2 id="5-Context-Switching의-비용"><a href="#5-Context-Switching의-비용" class="headerlink" title="5. Context Switching의 비용"></a>5. Context Switching의 비용</h2><p>Context Switching은 시스템의 성능에 <strong>비용</strong> 을 초래합니다. 이 비용은 두 가지 주요 요소로 나눌 수 있습니다:</p>
+<ol>
+<li><strong>CPU 오버헤드</strong>: 프로세스 상태를 저장하고 복원하는 데 드는 시간이 CPU 오버헤드로 발생합니다.</li>
+<li><strong>메모리 오버헤드</strong>: Context Switching 중에 메모리 상에서 프로세스의 상태를 저장하고, 복원하는 데 시간이 소모됩니다.</li>
+</ol>
+<h3 id="최적화-방법"><a href="#최적화-방법" class="headerlink" title="최적화 방법"></a>최적화 방법</h3><ul>
+<li><strong>우선순위 조정</strong>: 프로세스 간의 우선순위를 효율적으로 관리하여, 불필요한 Context Switching을 최소화할 수 있습니다.</li>
+<li><strong>타임 슬라이스 조정</strong>: 적절한 타임 슬라이스를 설정하여, 너무 짧은 시간으로 반복되는 Context Switching을 방지할 수 있습니다.</li>
+</ul>
+<h2 id="6-결론"><a href="#6-결론" class="headerlink" title="6. 결론"></a>6. 결론</h2><p>Context Switching은 멀티태스킹 운영체제에서 필수적인 기능이며, 이를 통해 여러 프로세스가 CPU를 효율적으로 공유할 수 있습니다. 하지만 이 과정은 비용이 발생하며, 최적화가 필요합니다. PCB는 각 프로세스의 상태 정보를 관리하는 중요한 데이터 구조로, Context Switching 과정에서 핵심적인 역할을 합니다. 또한, 스케줄링 알고리즘은 프로세스들 간의 CPU 자원 배분을 효율적으로 관리하는 중요한 도구입니다.</p>
+<hr>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/Computer-Architecture/">#Computer Architecture</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Operating-System/">Operating System</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="프로세서 아키텍처와 메모리 모델: C#에서의 효율적인 캐시 활용 전략"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>프로세서 아키텍처와 메모리 모델: C#에서의 효율적인 캐시 활용 전략 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2024/04/11/cache-strategy/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">프로세서 아키텍처와 메모리 모델: C#에서의 효율적인 캐시 활용 전략</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2024-04-11</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-free-code-camp"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a> <a class="fw5 ph1 dib" href="/tags/Computer-Architecture/">#Computer Architecture</a> <a class="fw5 ph1 dib" href="/tags/dotnet/">#dotnet</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="프로세서-아키텍처와-메모리-모델-C-에서의-효율적인-캐시-활용-전략"><a href="#프로세서-아키텍처와-메모리-모델-C-에서의-효율적인-캐시-활용-전략" class="headerlink" title="프로세서 아키텍처와 메모리 모델: C#에서의 효율적인 캐시 활용 전략"></a>프로세서 아키텍처와 메모리 모델: C#에서의 효율적인 캐시 활용 전략</h1><p>프로세서 아키텍처와 메모리 모델은 현대 컴퓨터 시스템에서 성능을 좌우하는 중요한 요소입니다. 특히 멀티코어 시스템에서 캐시 메모리의 활용은 성능 최적화의 핵심적인 부분입니다. C#을 비롯한 고급 언어에서는 메모리 모델과 하드웨어 아키텍처 간의 상호작용을 고려하여 최적화된 애플리케이션을 개발할 수 있는 다양한 방법을 제공합니다. 본 글에서는 C#의 메모리 모델과 프로세서 아키텍처가 어떻게 상호작용하는지, 그리고 이를 기반으로 캐시 최적화 및 성능 극대화를 위한 전략을 살펴보겠습니다.</p>
+<h2 id="프로세서-아키텍처"><a href="#프로세서-아키텍처" class="headerlink" title="프로세서 아키텍처"></a>프로세서 아키텍처</h2><p>프로세서 아키텍처는 CPU의 설계 방식을 의미합니다. 각기 다른 프로세서 아키텍처는 메모리 접근 방식, 캐시 계층 구조, 데이터 처리 방식에 차이를 두고 있습니다. 예를 들어, <strong>x86</strong>과 <strong>ARM</strong> 아키텍처는 메모리 접근에 대한 방식에서 뚜렷한 차이를 보입니다.</p>
+<p><strong>캐시 계층(CPU 캐시)</strong>: 대부분의 현대 CPU는 여러 레벨의 캐시(L1, L2, L3)를 포함하고 있습니다. 각 캐시 레벨은 CPU와 메모리 간의 속도 차이를 줄이기 위한 버퍼 역할을 합니다. L1 캐시는 가장 빠르고, CPU 코어에 가까운 곳에 위치하며, L3 캐시는 상대적으로 크지만 속도가 느립니다. 이 캐시 계층은 데이터의 지역성(locality)을 활용하여 메모리 접근 시간을 최소화하는 데 중요한 역할을 합니다.</p>
+<h2 id="C-의-메모리-모델"><a href="#C-의-메모리-모델" class="headerlink" title="C#의 메모리 모델"></a>C#의 메모리 모델</h2><p>C#의 메모리 모델은 프로그램에서 메모리와 데이터를 처리하는 방식에 대한 규칙을 정의합니다. 특히 C#은 멀티스레딩 환경에서의 <strong>메모리 일관성(memory consistency)</strong> 을 보장하는데 중요한 역할을 합니다. C#의 메모리 모델은 <strong>락-프리(lock-free)</strong> 및 <strong>스핀-락(spin-lock)</strong> 과 같은 동기화 기법을 제공하여 멀티스레드 애플리케이션의 효율적인 메모리 관리를 지원합니다.</p>
+<p>C#에서 메모리 모델의 주요 개념 중 하나는 <strong>memory barrier</strong> 입니다. 메모리 배리어는 CPU의 캐시 일관성을 유지하기 위한 명령어로, 특정 명령어들이 특정 순서로 실행되도록 보장하는 역할을 합니다. 이를 통해, 멀티스레딩 환경에서 스레드 간에 데이터가 일관되게 유지될 수 있습니다.</p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="캐시-최적화-및-성능-극대화-전략"><a href="#캐시-최적화-및-성능-극대화-전략" class="headerlink" title="캐시 최적화 및 성능 극대화 전략"></a>캐시 최적화 및 성능 극대화 전략</h2><p>캐시 최적화는 CPU의 캐시 계층을 효과적으로 활용하여 성능을 극대화하는 방법입니다. 이는 하드웨어와 소프트웨어가 상호작용하는 부분으로, 프로세서 아키텍처와 메모리 모델에 대한 깊은 이해가 필요합니다. C#에서 이를 최적화하기 위한 주요 전략을 살펴보겠습니다.</p>
+<h3 id="1-데이터-지역성-Locality-을-활용하라"><a href="#1-데이터-지역성-Locality-을-활용하라" class="headerlink" title="1. 데이터 지역성(Locality)을 활용하라"></a>1. 데이터 지역성(Locality)을 활용하라</h3><p>데이터 지역성은 데이터가 메모리에서 가까운 위치에 있을수록 캐시 히트율이 높아져 성능이 향상된다는 원칙입니다. C#에서는 <strong>배열</strong> 을 사용하는 것이 데이터 지역성을 극대화하는 데 유리합니다. 배열은 연속된 메모리 공간에 데이터를 저장하기 때문에, 캐시 메모리에서 데이터를 빠르게 접근할 수 있습니다. </p>
+<p>특히 <strong>컬렉션</strong> 이나 <strong>리스트</strong> 와 같은 동적 자료구조는 메모리 할당 방식에 따라 메모리 위치가 분산될 수 있어, 캐시 성능이 떨어질 수 있습니다. 따라서 성능이 중요한 코드에서는 가능한 한 배열을 사용하고, 동적 크기의 자료구조가 필요한 경우에는 미리 할당된 <strong>버퍼</strong> 를 사용하는 것이 좋습니다.</p>
+<h3 id="2-캐시-친화적인-코드-작성"><a href="#2-캐시-친화적인-코드-작성" class="headerlink" title="2. 캐시 친화적인 코드 작성"></a>2. 캐시 친화적인 코드 작성</h3><p>캐시 친화적인 코드란, CPU 캐시의 특성을 고려하여 데이터를 효율적으로 처리하는 코드를 의미합니다. C#에서는 <strong>padding</strong> 을 활용하여 데이터의 정렬을 최적화할 수 있습니다. 예를 들어, 배열이나 구조체의 크기를 최적화하여 캐시 라인(cache line)에 맞게 데이터를 정렬하는 방법이 있습니다.</p>
+<p>캐시 라인은 CPU가 메모리에서 한 번에 읽어오는 데이터 블록의 크기를 의미하며, 보통 64바이트입니다. 따라서 배열이나 구조체의 크기를 64바이트의 배수로 맞추면, 여러 데이터 항목이 동일한 캐시 라인에 적재되어 캐시 히트율을 높일 수 있습니다.</p>
+<h3 id="3-병렬-처리-및-스레드-최적화"><a href="#3-병렬-처리-및-스레드-최적화" class="headerlink" title="3. 병렬 처리 및 스레드 최적화"></a>3. 병렬 처리 및 스레드 최적화</h3><p>C#에서 멀티스레드를 사용할 때, 각 스레드가 공유하는 메모리를 어떻게 처리하느냐에 따라 성능 차이가 발생할 수 있습니다. <strong>thread locality</strong> 을 고려하여, 각 스레드가 자신의 데이터에 접근하도록 하는 것이 중요합니다. 이렇게 하면 각 스레드가 사용하는 데이터가 다른 스레드의 캐시와 충돌하는 것을 피할 수 있습니다.</p>
+<p>또한, <strong>캐시 일관성(cache coherence)</strong> 을 보장하는 방식으로 스레드를 설계해야 합니다. C#에서는 <code>volatile</code> 키워드나 <code>MemoryBarrier()</code> 메서드를 사용하여 메모리 일관성을 제어할 수 있습니다. 이를 통해 여러 스레드가 동일한 데이터에 접근할 때 일관성을 유지하면서도 캐시 충돌을 최소화할 수 있습니다.</p>
+<h3 id="4-CPU-캐시의-prefetching-활용"><a href="#4-CPU-캐시의-prefetching-활용" class="headerlink" title="4. CPU 캐시의 prefetching 활용"></a>4. CPU 캐시의 prefetching 활용</h3><p>프리페칭은 CPU가 데이터를 미리 예측하여 캐시에 로드하는 기법입니다. 현대 CPU는 코드 실행 중에 데이터를 미리 캐시로 가져오는 <strong>프리페치 명령어</strong> 를 활용할 수 있습니다. C#에서 이런 최적화를 직접 제어할 수는 없지만, 알고리즘 설계에서 데이터 접근 패턴을 예측 가능하게 만들어 프리페칭의 효과를 극대화할 수 있습니다.</p>
+<p>예를 들어, 데이터가 순차적으로 처리되는 알고리즘을 작성하면, CPU는 그 데이터가 메모리에서 연속적으로 나올 것이라고 예측하고 미리 캐시에 데이터를 불러옵니다. 이는 반복문에서 데이터가 순차적으로 접근되는 경우에 특히 유리합니다.</p>
+<h3 id="5-메모리-접근-패턴-최적화"><a href="#5-메모리-접근-패턴-최적화" class="headerlink" title="5. 메모리 접근 패턴 최적화"></a>5. 메모리 접근 패턴 최적화</h3><p>메모리 접근 패턴을 최적화하는 것도 캐시 성능을 높이는 중요한 방법입니다. C#에서는 <strong>다차원 배열</strong> 을 사용할 때, 차원 순서에 따라 메모리 접근 패턴이 달라지므로, 접근 패턴을 최적화하는 것이 필요합니다. 예를 들어, 다차원 배열을 사용하여 데이터를 처리할 때, 차원 순서가 배열의 메모리 배치 방식과 맞지 않으면 캐시 미스를 유발할 수 있습니다.</p>
+<p>가능하면 배열의 첫 번째 차원부터 순차적으로 접근하는 방식으로 코드를 작성하면, 캐시 효율성을 높일 수 있습니다.</p>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>C#에서 효율적인 캐시 활용을 위해서는 프로세서 아키텍처와 메모리 모델을 잘 이해하고, 이를 기반으로 최적화 전략을 세우는 것이 중요합니다. 데이터 지역성을 활용하고, 캐시 친화적인 코드 작성, 병렬 처리 최적화, CPU 캐시 프리페칭 등을 통해 성능을 극대화할 수 있습니다. 또한, C#의 메모리 모델과 동기화 기법을 적절히 활용하여 멀티스레딩 환경에서도 높은 성능을 유지할 수 있습니다.</p>
+<p>캐시 최적화는 하드웨어와 소프트웨어가 상호작용하는 중요한 부분으로, 잘 설계된 코드가 실제 성능 향상으로 이어집니다. 이러한 전략을 통해 C# 애플리케이션에서 성능을 극대화하고, 더욱 효율적인 시스템을 구축할 수 있습니다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a> <a class="fw5 ph1 dib" href="/tags/Computer-Architecture/">#Computer Architecture</a> <a class="fw5 ph1 dib" href="/tags/dotnet/">#dotnet</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/C/">C#</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>
