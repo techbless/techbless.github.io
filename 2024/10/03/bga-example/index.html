@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Halcon - BGA 비전 검사 코드 예시"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Halcon - BGA 비전 검사 코드 예시 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2024/10/03/bga-example/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">Halcon - BGA 비전 검사 코드 예시</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2024-10-03</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-microchip"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="HALCON을-활용한-BGA-검사-예시"><a href="#HALCON을-활용한-BGA-검사-예시" class="headerlink" title="HALCON을 활용한 BGA 검사 예시"></a>HALCON을 활용한 BGA 검사 예시</h1><p>지난 글까지 할콘의 기본 개념과 사용 방법을 다뤘습니다. 이번 글에서 살펴볼 응용 사례는 할콘 Solution Guide의 Practical Guidance에 소개된 <strong>Ball Grid Array(BGA)의 검사</strong> 입니다. BGA는 매우 작은 객체로 구성되어 있으며, 대략적으로 <strong>대칭적인 회색 값 분포</strong> 를 가지고 있으며, 객체의 영역에 비해 <strong>전경과 배경 사이의 전환 영역이 비교적 클</strong> 수 있습니다. 표준 영역 기반 또는 윤곽 기반 접근 방식은 급격한 전환을 처리하는 방식이므로(아래 그림 참고), 전환 영역이 큰 대칭 객체의 경우 회색 값 특성을 고려하는 접근 방식을 사용하여 객체의 특징을 추출하는 것이 권장됩니다. 사용 가능한 연산자로는 각 볼의 회색 값 볼륨과 중심 위치를 확인하는 <code>area_center_gray</code>가 있으며, 입력 영역과 동일한 방향과 종횡비를 가지는 타원의 축 길이 및 방향을 반환하는 <code>elliptic_axis_gray</code>가 있습니다.</p>
+<p><img src="/img/bga/transition.png"></p>
+<h2 id="BGA-검사란"><a href="#BGA-검사란" class="headerlink" title="BGA 검사란?"></a>BGA 검사란?</h2><p>BGA는 PCB와 칩을 연결하는 작은 볼 형태의 솔더 접합부를 의미합니다. 검사 시 가장 중요한 항목은 다음과 같습니다.</p>
+<ul>
+<li>볼 위치의 정확성</li>
+<li>볼의 누락 여부</li>
+<li>볼의 변형 여부</li>
+</ul>
+<p>특히 일반적인 영역 기반(region-based) 검사 방식보다 회색조(gray-value) 특징을 기반으로 접근해야 더 정확한 결과를 얻을 수 있습니다.</p>
+<p><img src="/img/bga/bga_sample.png"></p>
+<blockquote>
+<p><strong>이유:</strong> BGA 볼은 작고 대칭적인 구조이며 <strong>배경과의 전환부가 뚜렷하지 않아</strong> 일반적인 방법으로는 정확히 측정하기 어렵습니다.</p>
+</blockquote>
+<h2 id="검사-방법-절차-요약"><a href="#검사-방법-절차-요약" class="headerlink" title="검사 방법 절차 요약"></a>검사 방법 절차 요약</h2><table>
+<thead>
+<tr>
+<th>단계</th>
+<th>주요 작업</th>
+<th>HALCON 사용 연산자</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>기준(reference) BGA 볼 추출 및 위치 확인</td>
+<td><code>fast_threshold</code>, <code>connection</code>, <code>select_shape</code>, <code>dilation_rectangle1</code>, <code>area_center_gray</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>기준 BGA 볼 위치 정렬 (그리드 기준 정렬)</td>
+<td><code>gen_region_points</code>, <code>smallest_rectangle2</code>, <code>hom_mat2d_identity</code>, <code>hom_mat2d_rotate</code>, <code>hom_mat2d_translate</code>, <code>hom_mat2d_scale</code>, <code>affine_trans_point_2d</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>검사 대상 BGA 볼 추출 및 정렬 (기준 BGA와 동일 방법 적용), 추가적으로 볼 변형 정보 추출</td>
+<td>위 연산자에 추가로 <code>elliptic_axis_gray</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>검사 BGA와 기준 BGA 비교 및 검사</td>
+<td><code>vector_to_rigid</code>, <code>affine_trans_point_2d</code>, <code>distance_pp</code>, <code>gen_ellipse</code></td>
+</tr>
+</tbody></table>
+<hr>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="상세-실전-적용-가이드"><a href="#상세-실전-적용-가이드" class="headerlink" title="상세 실전 적용 가이드"></a>상세 실전 적용 가이드</h2><h3 id="1단계-기준-BGA-볼-추출"><a href="#1단계-기준-BGA-볼-추출" class="headerlink" title="1단계: 기준 BGA 볼 추출"></a>1단계: 기준 BGA 볼 추출</h3><p>기준 이미지에서 볼 영역을 다음과 같이 추출합니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fast_threshold (Image, Region, 95, 255, 3)  </span><br><span class="line">connection (Region, ConnectedRegions)  </span><br><span class="line">select_shape (ConnectedRegions, SelectedRegions, ['area', 'anisometry'], 'and', [20, 1.0], [100, 1.7])  </span><br><span class="line">dilation_rectangle1 (SelectedRegions, RegionDilation, 3, 3)  </span><br><span class="line">area_center_gray (RegionDilation, Image, Volume, Row, Column)  </span><br></pre></td></tr></table></figure>
+
+<p><strong>결과:</strong> 각 볼의 위치(Row, Column), 볼의 회색조 볼륨(Volume)을 얻음.</p>
+<hr>
+<h3 id="2단계-기준-BGA-위치-정렬-그리드-정규화"><a href="#2단계-기준-BGA-위치-정렬-그리드-정규화" class="headerlink" title="2단계: 기준 BGA 위치 정렬(그리드 정규화)"></a>2단계: 기준 BGA 위치 정렬(그리드 정규화)</h3><p><img src="/img/bga/normalization.png"></p>
+<p>볼 위치를 정확히 비교하기 위해 그리드 기준으로 정렬하고, 정렬 시 볼 간의 간격을 1로 표준화하여 상대적 위치로 관리합니다(left). <code>gen_region_points</code>로 볼 중심점을 영역으로 만들고 <code>smallest_rectangle2</code>로 외접 사각형을 찾습니다(right). 이 사각형 정보를 통해 좌표를 변환하여 정규화된 좌표를 얻습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">gen_region_points (RegionBGACenters, Row, Column)</span><br><span class="line">smallest_rectangle2 (RegionBGACenters, RowBGARect, ColumnBGARect, PhiBGARect, Length1BGARect, Length2BGARect)</span><br><span class="line">BallsPerRow := 14</span><br><span class="line">BallsPerCol := 14</span><br><span class="line">BallDistCol := 2 * Length1BGARect / (BallsPerCol - 1)</span><br><span class="line">BallDistRow := 2 * Length2BGARect / (BallsPerRow - 1)</span><br><span class="line">hom_mat2d_identity (HomMat2DIdentity)</span><br><span class="line">hom_mat2d_rotate (HomMat2DIdentity, -PhiBGARect, RowBGARect, ColumnBGARect, HomMat2DRotate)</span><br><span class="line">hom_mat2d_translate (HomMat2DRotate, -RowBGARect + Length2BGARect, -ColumnBGARect + Length1BGARect, HomMat2DTranslate)</span><br><span class="line">hom_mat2d_scale (HomMat2DTranslate, 1 / BallDistRow, 1 / BallDistCol, 0, 0, HomMat2DScale)</span><br><span class="line">affine_trans_point_2d (HomMat2DScale, Row, Column, RowNormalized, ColNormalized)</span><br><span class="line">BGARowIndex := round(RowNormalized)</span><br><span class="line">BGAColIndex := round(ColNormalized)</span><br></pre></td></tr></table></figure>
+
+<p>얻어진 볼의 중심 위치(Row, Column)는 <strong>임의의 순서로</strong> 반환되며, 즉 변수의 인덱스는 그리드 내에서 <strong>해당 볼의 위치에 대한 정보를 포함하지 않습니다</strong>. 서로 다른 BGA에서 대응하는 볼의 중심 위치를 비교하려면, 볼들의 일관된 순서가 필요하며, 이를 위해 볼을 공간적으로 정렬해야 합니다. 첫 번째 단계에서는 행과 열에 대해 각각 그리드 내 위치를 결정합니다. 이를 위해 BGA를 다음과 같이 정규화합니다. <code>gen_region_points</code>를 적용하여 볼의 중심점으로 정의된 영역을 생성하고, 해당 영역을 감싸는 사각형(<code>smallest_rectangle2</code>로 획득됨, left)을 사용하여 변환 행렬을 정의합니다.</p>
+<p>이를 통해 볼을 변환하여 그리드가 수평이 되도록 정렬하고, 좌측 상단 모서리에 위치한 볼의 중심을 좌표계의 원점에 배치하며, 개별 볼 간의 거리를 1로 조정합니다. 변환된 볼 위치의 값을 반올림하면 정규화된 그리드에서 행과 열에 대한 볼의 위치 인덱스를 나타내게 됩니다. 그림(right)는 시각화를 위해 다시 스케일 조정된 정규화된 그리드를 보여줍니다.</p>
+<p>이제 행과 열에 대한 개별 리스트 대신, 볼의 인덱스를 왼쪽에서 오른쪽으로, 위에서 아래로 연속적으로 정렬한 단일 리스트를 생성하려고 합니다. 이를 위해 BGA의 모든 그리드 포인트를 포함할 수 있는 크기의 튜플 <code>BallMatrix</code>를 생성하며, 이 크기는 행과 열에서 최대로 포함될 수 있는 볼의 개수로 정의됩니다. 그러나 실제로 BGA의 볼은 이 전체 그리드에 균일하게 배치되지 않기 때문에, 먼저 모든 인스턴스에 초기값 -1을 할당합니다.</p>
+<p><img src="/img/bga/sorting.png"></p>
+<p>이제, 추출된 볼의 행 및 열 인덱스(BGARowIndex, BGAColIndex)를 활용하여 <code>BallMatrix</code>의 해당 위치에 새로운 값을 할당함으로써 볼을 정렬합니다. 정렬이 완료된 후, 정렬된 그리드에서 특정 좌표의 인덱스를 참조하면 해당 좌표의 원래(정렬 전) 그리드에서의 인덱스를 반환하거나, 해당 위치에 볼이 없을 경우 -1을 반환합니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NumBalls := |Row|</span><br><span class="line">BallMatrix := gen_tuple_const(BallsPerRow * BallsPerCol,-1)</span><br><span class="line">for i := 0 to NumBalls - 1 by 1</span><br><span class="line">BallMatrix[BGARowIndex[i] * BallsPerCol + BGAColIndex[i]] := i</span><br><span class="line">endfor</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3단계-검사-BGA-추출-및-변형-정보-계산"><a href="#3단계-검사-BGA-추출-및-변형-정보-계산" class="headerlink" title="3단계: 검사 BGA 추출 및 변형 정보 계산"></a>3단계: 검사 BGA 추출 및 변형 정보 계산</h3><p>검사 이미지에서 같은 방법으로 볼을 추출하며, 추가로 변형 여부(타원축 길이, 방향 등)를 계산합니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">elliptic_axis_gray (RegionDilation, Image, RaCheck, RbCheck, PhiCheck)  </span><br><span class="line">AnisometryCheck := RaCheck / RbCheck  </span><br></pre></td></tr></table></figure>
+<p><code>area_center_gray</code>를 통해 얻은 중심점들은 변환된 후, 기준 이미지에서 수행한 것과 동일한 방식으로 정렬됩니다. 기준 BGA와의 처리 과정은 거의 동일하며, 단, 이후 단계에서 볼을 조사하기 위해 <code>elliptic_axis_gray</code>의 추가 적용과 <strong>비등방성(Anisometry)</strong> 검사가 추가로 수행됩니다. 이때 <strong>타원의 Anisometry이 높으면</strong> 볼의 변형으로 판단할 수 있습니다.</p>
+<p><img src="/img/bga/bga_grid.png"></p>
+<hr>
+<h3 id="4단계-두-BGA-비교-및-최종-검사"><a href="#4단계-두-BGA-비교-및-최종-검사" class="headerlink" title="4단계: 두 BGA 비교 및 최종 검사"></a>4단계: 두 BGA 비교 및 최종 검사</h3><p>검사 대상 BGA와 기준 BGA의 위치 정보를 이용하여 최종적으로 검사합니다. 검사 과정은 아래와 같이 요약할 수 있습니다.</p>
+<ul>
+<li>데이터 통합(Row, Col, Anisometry, Volume 등) 튜플 생성</li>
+<li>두 BGA의 위치를 일치시키기 위한 변환 행렬 계산 (<code>vector_to_rigid</code>)</li>
+<li>변환 행렬을 통해 위치를 맞춤 (<code>affine_trans_point_2d</code>)</li>
+<li>두 위치의 거리를 측정하여 오차 범위를 벗어난 볼을 찾아냄 (<code>distance_pp</code>)</li>
+<li>볼 간 거리가 기준(0.05 픽셀)을 넘으면 불량 위치로 판단하고, 변형된 볼이나 회색조 볼륨이 비정상적인 볼도 따로 구분합니다.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">j := 0</span><br><span class="line">for i := 0 to BallsPerRow * BallsPerCol - 1 by 1</span><br><span class="line">  if (BallMatrix[i] &gt;= 0 and BallMatrixCheck[i] &gt;= 0)</span><br><span class="line">    Rows1[j] := Row[BallMatrix[i]]</span><br><span class="line">    Cols1[j] := Column[BallMatrix[i]]</span><br><span class="line">    Rows2[j] := RowCheck[BallMatrixCheck[i]]</span><br><span class="line">    Cols2[j] := ColumnCheck[BallMatrixCheck[i]]</span><br><span class="line">    Phi2[j] := PhiCheck[BallMatrixCheck[i]]</span><br><span class="line">    Ra2[j] := RaCheck[BallMatrixCheck[i]]</span><br><span class="line">    Rb2[j] := RbCheck[BallMatrixCheck[i]]</span><br><span class="line">    Anisometry2[j] := AnisometryCheck[BallMatrixCheck[i]]</span><br><span class="line">    Volume2[j] := VolumeCheck[BallMatrixCheck[i]]</span><br><span class="line">    j := j + 1</span><br><span class="line">  endif</span><br><span class="line">endfor</span><br></pre></td></tr></table></figure>
+<p>지금까지는 정렬된 그리드의 점 인덱스를 정렬되지 않은 그리드의 점 인덱스와 연결하는 작업만 수행했습니다. 이제, 지정된 순서대로 <strong>기존 볼의 실제 데이터를 포함하는 튜플을 생성</strong> 합니다. 특히, 기준 BGA에서의 볼의 행 및 열 좌표(Rows1, Cols1)와 검사 대상 BGA에서의 볼의 행 및 열 좌표(Rows2, Cols2), 그리고 두 번째 BGA의 타원 반지름(Ra2, Rb2), 비등방성(Anisometry) 값(Anisometry2), 회색 값 볼륨(Volume2)을 포함하는 튜플이 생성됩니다. 이 튜플들은 데이터를 축소한 형태로, 두 BGA 모두에서 볼이 존재하는 그리드 위치의 데이터만 포함합니다.</p>
+<p>이제 두 번째 BGA의 볼 중심 위치를 기준 BGA의 볼 중심 위치와 비교하기 위해, 두 데이터 세트를 겹쳐서 정렬(superimpose)합니다. 즉, <strong>기준 BGA의 볼을 변환하여 검사 대상 BGA의 볼과 동일한 위치, 방향, 스케일을 갖도록 조정</strong> 합니다. 이 겹치기 과정에서는 <code>vector_to_rigid</code>를 사용하여 두 좌표 세트 간의 점 대응 관계를 기반으로 2D Affine 변환을 결정합니다.</p>
+<p>획득한 변환 행렬을 사용하여 기준 BGA의 축소된 위치 세트(Rows1, Cols1)를 변환하여 <code>RowTrans</code> 및 <code>ColumnTrans</code>를 생성합니다. 또한, 검사 대상 BGA에서 누락된 볼을 확인하기 위해, <code>area_center_gray</code>를 통해 원래 얻어진 기준 BGA의 정렬되지 않은 위치 세트(Row, Column)를 추가로 변환합니다. 이 세트는 <code>BallMatrix</code>에서 -1로 표시된, 원래 볼이 존재하지 않는 위치뿐만 아니라 기준 BGA에서만 감지된 볼의 위치까지 포함하는 전체 정규 그리드의 모든 위치를 유지하고 있습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vector_to_rigid (Rows1, Cols1, Rows2, Cols2, HomMat2D)</span><br><span class="line">affine_trans_point_2d (HomMat2D, Rows1, Cols1, RowTrans, ColumnTrans)</span><br><span class="line">affine_trans_point_2d (HomMat2D, Row, Column, RowTransFull, ColumnTransFull)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>그 후, 검사 대상 BGA의 정렬된 점들(Rows2, Cols2)과 기준 BGA의 정렬 및 변환된 점들(RowTrans, ColumnTrans) 간의 거리를 <code>distance_pp</code> 연산자를 사용하여 계산합니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">distance_pp (Rows2, Cols2, RowTrans, ColumnTrans, Distance)</span><br></pre></td></tr></table></figure>
+
+<p>위 거리 계산 후 결과를 다음과 같이 처리합니다.</p>
+<table>
+<thead>
+<tr>
+<th>거리 (픽셀)</th>
+<th>처리 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&gt; 0.05</td>
+<td>위치 이상</td>
+</tr>
+<tr>
+<td>≤ 0.05, Anisometry &gt; 1.2</td>
+<td>변형된 볼</td>
+</tr>
+<tr>
+<td>≤ 0.05, Volume 비정상</td>
+<td>회색조 볼륨 이상</td>
+</tr>
+<tr>
+<td>그 외</td>
+<td>정상 볼</td>
+</tr>
+</tbody></table>
+<hr>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="실제-적용-시-유의점"><a href="#실제-적용-시-유의점" class="headerlink" title="실제 적용 시 유의점"></a>실제 적용 시 유의점</h2><ul>
+<li>이 글은 <strong>할콘 Solution Guide의 Practical Guidance</strong> 예시를 참고하여  <code>2d_measuring/inspect_bga.hdev</code> 샘플 코드의 이해를 돕기 위해 작성되었습니다.</li>
+<li>실제 검사에 활용하기에는 많은 제약이 있으며, 각 프로시저의 활용법과 접근법등을 익히는 용도로 활용해야합니다.</li>
+</ul>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/영상처리/">영상처리</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

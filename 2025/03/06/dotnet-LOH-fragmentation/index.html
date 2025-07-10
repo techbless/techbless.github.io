@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2025/03/06/dotnet-loh-fragmentation/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2025-03-06</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-compress"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a> <a class="fw5 ph1 dib" href="/tags/dotnet/">#dotnet</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="LOH-Fragmentation-관리와-최적화-방법-24시간-돌아야-하는-시스템에서의-성능-최적화"><a href="#LOH-Fragmentation-관리와-최적화-방법-24시간-돌아야-하는-시스템에서의-성능-최적화" class="headerlink" title="LOH Fragmentation 관리와 최적화 방법: 24시간 돌아야 하는 시스템에서의 성능 최적화"></a>LOH Fragmentation 관리와 최적화 방법: 24시간 돌아야 하는 시스템에서의 성능 최적화</h1><p>이전에 작성한 글에서 C# 의 Garbage Collection 과 LOH(Large Object Heap) 과 SOH(Small Object Heap) 의 차이를 간단히 설명했었습니다. 아직 읽지 않으신 분들은 그 글을 먼저 확인해 보세요. 이번 글에서는 LOH Fragmentation 문제를 다루고, 이를 관리해야 하는 이유와 24시간 돌아야 하는 장비 같은 중요한 시스템 환경에서 LOH를 어떻게 최적화할 수 있는지, 구체적인 방법들을 설명할 것입니다.</p>
+<h2 id="LOH란-무엇인가"><a href="#LOH란-무엇인가" class="headerlink" title="LOH란 무엇인가?"></a>LOH란 무엇인가?</h2><p>Large Object Heap(LOH) 는 85,000바이트 이상 크기의 큰 객체들을 저장하는 .NET의 메모리 영역입니다. SOH와는 달리 LOH는 큰 객체들을 처리하는데 특화되어 있으며, LOH의 객체들은 가비지 컬렉션 시 compaction이 이루어지지 않습니다. 이로 인해 LOH에 할당된 객체들이 시간이 지나면서 fragmentation를 일으킬 수 있습니다. </p>
+<h2 id="LOH-Fragmentation이란"><a href="#LOH-Fragmentation이란" class="headerlink" title="LOH Fragmentation이란?"></a>LOH Fragmentation이란?</h2><p>LOH Fragmentation 은 LOH에서 객체들이 할당되고 해제되면서 발생하는 메모리 단편화 현상을 말합니다. LOH에 할당된 객체들은 크기가 크기 때문에, 한 번 할당되면 그 크기만큼 연속된 메모리 공간을 차지하게 됩니다. 그러나 시간이 지나면서 여러 객체가 할당되고 해제되면서, 메모리 내에 빈 공간이 흩어지게 됩니다. 이로 인해 새로운 큰 객체를 할당하려고 할 때, 연속된 메모리 공간을 찾기 어려워지며 단편화가 발생하게 됩니다.</p>
+<h3 id="LOH-Fragmentation-시나리오"><a href="#LOH-Fragmentation-시나리오" class="headerlink" title="LOH Fragmentation 시나리오"></a>LOH Fragmentation 시나리오</h3><p>LOH단편화 또한 일반적인 메모리 단편화와 발생하는 시나리오가 유사하지만, 아래의 이미지를 보면 LOH가 어떻게 단편화되는지 잘 설명되어 있습니다.</p>
+<p><img src="/img/loh_fragmentation/Figure1.png"><br><a href="https://www.codeproject.com/Articles/1191534/To-Heap-or-not-to-Heap-That-s-the-Large-Object-Que" rel="external nofollow noreferrer">Source (Figure. 13)</a></p>
+<ol>
+<li>After Full GC:<br>가비지 컬렉션이 실행된 후 LOH에서 메모리는 깔끔하게 정리되고 빈 공간이 발생합니다. 이 공간은 새로운 큰 객체를 할당할 수 있는 여유가 있지만, 할당된 객체들이 크기 때문에 그 자리가 다시 채워지지 않으면 빈 공간으로 남게 됩니다.</li>
+<li>After New Allocation:<br>새로운 객체가 할당되면 LOH에 빈 공간이 재사용됩니다. 그러나 이 재사용된 공간은 작은 조각으로 남게 되며, 이 조각은 다시 사용되지 않을 가능성이 높습니다. 왜냐하면 그 공간은 85,000바이트 이하의 크기로, LOH의 크기 기준에 맞지 않기 때문입니다. 따라서 이 작은 조각은 다시 재사용되지 않으며, 단편화된 메모리로 남게 됩니다.</li>
+<li>After New Allocation (더 많은 할당):<br>새로운 객체들이 계속 할당되면, 이전에 재사용된 작은 빈 공간들이 점차 재활용되지 않게 되고, LOH 내 단편화가 더욱 심해집니다. 이때 큰 객체를 할당하려고 시도하면 빈 공간을 찾는 데 어려움이 생깁니다. 결국 새로운 큰 객체는 연속된 공간을 찾지 못하고 새로운 메모리 공간에 할당될 수 있습니다.</li>
+</ol>
+<h3 id="LOH-Fragmentation의-영향"><a href="#LOH-Fragmentation의-영향" class="headerlink" title="LOH Fragmentation의 영향"></a>LOH Fragmentation의 영향</h3><p>위의 이미지는 LOH가 어떻게 빈 공간을 관리하는지, 그리고 새로운 객체 할당이 어떻게 단편화되는지 시각적으로 잘 보여줍니다. LOH에 단편화가 발생하면, 새로운 큰 객체를 할당할 때 필요한 연속된 메모리가 부족해지며, 이는 성능 저하나 OutOfMemoryException 과 같은 문제가 발생할 수 있습니다.</p>
+<h2 id="LOH-Fragmentation-관리가-중요한-이유"><a href="#LOH-Fragmentation-관리가-중요한-이유" class="headerlink" title="LOH Fragmentation 관리가 중요한 이유"></a>LOH Fragmentation 관리가 중요한 이유</h2><p>LOH Fragmentation 을 관리하지 않으면 메모리 부족문제나 성능 저하를 초래할 수 있습니다. 특히 24시간 돌아야 하는 장비에서는 메모리 관리가 중요한 역할을 합니다. 예를 들어, 실시간 데이터 처리 시스템이나 금융 거래 시스템 등과 같은 중요한 시스템에서는 LOH 단편화가 발생하면 시스템 장애로 이어질 수 있습니다.</p>
+<h3 id="1-성능-저하"><a href="#1-성능-저하" class="headerlink" title="1. 성능 저하"></a>1. 성능 저하</h3><p>LOH에서 발생한 단편화는 메모리 할당을 비효율적으로 만들고, 객체 배치가 어렵게 되어 성능 저하를 일으킬 수 있습니다.</p>
+<h3 id="2-메모리-부족"><a href="#2-메모리-부족" class="headerlink" title="2. 메모리 부족"></a>2. 메모리 부족</h3><p>LOH에서 메모리를 할당할 때 연속된 공간을 찾는 데 어려움이 생기면, 결국 OutOfMemoryException 을 발생시킬 수 있습니다. 이는 서비스 중단으로 이어질 수 있어 24시간 가동이 중요한 시스템에서는 치명적일 수 있습니다.</p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="LOH-Fragmentation을-방지하는-방법"><a href="#LOH-Fragmentation을-방지하는-방법" class="headerlink" title="LOH Fragmentation을 방지하는 방법"></a>LOH Fragmentation을 방지하는 방법</h2><p>그렇다면 LOH Fragmentation 을 어떻게 방지할 수 있을까요? 몇 가지 방법을 제시해 보겠습니다.</p>
+<h3 id="1-큰-객체의-크기-분할"><a href="#1-큰-객체의-크기-분할" class="headerlink" title="1. 큰 객체의 크기 분할"></a>1. 큰 객체의 크기 분할</h3><p>가능한 한 큰 객체를 여러 개의 작은 객체로 나누어 SOH에 할당되도록 유도하는 방법입니다. SOH는 LOH보다 메모리 관리가 효율적이고 단편화가 덜 발생하기 때문에, 큰 객체를 분할하면 LOH의 단편화를 줄일 수 있습니다.</p>
+<h3 id="2-배열-관리-최적화"><a href="#2-배열-관리-최적화" class="headerlink" title="2. 배열 관리 최적화"></a>2. 배열 관리 최적화</h3><p>배열을 사용할 때, 배열의 크기를 예측하여 배열을 너무 크게할당하지 않는 것이 중요합니다. 배열의 총 크기가 LOH의 임계값을 넘지 않도록 신경 써야 하며, 배열이 여러 조각으로 나누어지지 않도록 합니다.</p>
+<h3 id="3-MemoryPool-사용"><a href="#3-MemoryPool-사용" class="headerlink" title="3. MemoryPool 사용"></a>3. MemoryPool 사용</h3><p><code>ArrayPool&lt;T&gt;</code>나 <code>MemoryPool&lt;T&gt;</code>와 같은 객체 풀을 사용하면 LOH에서 발생할 수 있는 단편화를 방지할 수 있습니다. 객체 풀을 사용하면 반복적인 메모리 할당과 해제가 줄어들고, 미리 할당된 메모리 공간을 재사용할 수 있기 때문에 단편화 문제를 최소화할 수 있습니다.</p>
+<h3 id="4-Full-GC-호출-최소화"><a href="#4-Full-GC-호출-최소화" class="headerlink" title="4. Full GC 호출 최소화"></a>4. Full GC 호출 최소화</h3><p><code>GC.Collect()</code> 메서드를 사용하여 Full GC 를 강제로 호출할 수 있지만, LOH는 Full GC가 필요하지 않으면 호출하지 않는 것이 좋습니다. Full GC는 성능에 큰 영향을 미치기 때문에, 불필요한 호출을 피해야 합니다.</p>
+<h3 id="5-큰-객체-할당-최소화"><a href="#5-큰-객체-할당-최소화" class="headerlink" title="5. 큰 객체 할당 최소화"></a>5. 큰 객체 할당 최소화</h3><p>LOH에 큰 객체를 자주 할당하지 않도록 하며, 큰 객체가 반드시 필요할 때만 할당하도록 합니다. LOH에 큰 객체가 많이 할당되면 Gen2 가비지 컬렉션이 자주 일어나고, 그로 인해 성능 저하를 겪을 수 있습니다.</p>
+<h2 id="LOH-단편화-방지의-중요성-24시간-돌아야-하는-장비-예시"><a href="#LOH-단편화-방지의-중요성-24시간-돌아야-하는-장비-예시" class="headerlink" title="LOH 단편화 방지의 중요성: 24시간 돌아야 하는 장비 예시"></a>LOH 단편화 방지의 중요성: 24시간 돌아야 하는 장비 예시</h2><p>실제로 금융 거래 시스템 같은 24시간 돌아야 하는 시스템에서는 메모리 부족으로 인한 다운타임을 절대 허용할 수 없습니다. 이런 시스템에서는 LOH 단편화가 발생하면, 실시간 데이터 처리에 큰 영향을 미치고, 이는 결국 사용자 경험에 심각한 영향을 미칠 수 있습니다.</p>
+<h3 id="예시-실시간-데이터-처리-시스템"><a href="#예시-실시간-데이터-처리-시스템" class="headerlink" title="예시: 실시간 데이터 처리 시스템"></a>예시: 실시간 데이터 처리 시스템</h3><p>예를 들어, 실시간으로 트랜잭션을 처리하는 시스템에서 LOH 단편화가 발생하면, 새로운 큰 객체를 할당하는데 필요한 메모리 공간을 확보할 수 없어 트랜잭션 처리 지연이 발생할 수 있습니다. 이로 인해 성능 저하나 서비스 중단이 발생하면, 큰 손실을 초래할 수 있습니다.</p>
+<h2 id="LOH-압축-GCSettings를-통한-LOH-압축"><a href="#LOH-압축-GCSettings를-통한-LOH-압축" class="headerlink" title="LOH 압축: GCSettings를 통한 LOH 압축"></a>LOH 압축: GCSettings를 통한 LOH 압축</h2><p>LOH Fragmentation 문제를 해결하기 위한 방법 중 하나는 LOH 압축을 수동으로 수행하는 것입니다. .NET Framework 4.5.1부터는 LOH를 수동으로 compact할 수 있는 기능이 제공됩니다. 기본적으로 LOH는 가비지 컬렉션 동안 자동으로 압축되지 않지만, GCSettings.LargeObjectHeapCompactionMode 속성을 사용하면 LOH를 명시적으로 압축할 수 있습니다.</p>
+<h3 id="LOH-압축-사용-예시"><a href="#LOH-압축-사용-예시" class="headerlink" title="LOH 압축 사용 예시"></a>LOH 압축 사용 예시</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LOH 압축 모드를 '한 번만 압축'으로 설정</span></span><br><span class="line">GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;</span><br><span class="line"><span class="comment">// 가비지 컬렉션을 강제로 실행하여 LOH를 압축</span></span><br><span class="line">GC.Collect();</span><br></pre></td></tr></table></figure>
+
+<h3 id="LOH-압축의-장점과-고려-사항"><a href="#LOH-압축의-장점과-고려-사항" class="headerlink" title="LOH 압축의 장점과 고려 사항"></a>LOH 압축의 장점과 고려 사항</h3><p>LOH 압축을 명시적으로 호출하는 방법은 단편화를 줄이고 메모리 사용을 최적화하는 데 도움이 될 수 있습니다. 하지만 이 방법에는 몇 가지 성능 비용이 따르므로, 신중하게 사용해야 할 필요가 있습니다</p>
+<ul>
+<li>장점</li>
+</ul>
+<ol>
+<li>메모리 압축을 통해 LOH 단편화를 줄일 수 있으며, 연속된 메모리 공간을 확보하게 되어 새로운 큰 객체의 할당이 수월해집니다.</li>
+<li>특히 24시간 돌아야 하는 장비에서 메모리 부족 문제나 성능 저하를 예방하는 데 유용할 수 있습니다.</li>
+</ol>
+<ul>
+<li>고려 사항:</li>
+</ul>
+<ol>
+<li>LOH 압축은 가비지 컬렉션을 수행한 후에 발생하므로, 성능 비용이 들 수 있습니다. LOH가 크고 복잡한 경우, 압축을 자주 호출하면 시스템 성능에 부정적인 영향을 미칠 수 있습니다.</li>
+<li>압축을 자주 수행하는 것보다, LOH의 크기나 객체 할당 방식을 최적화하여 단편화가 발생하지 않도록 하는 것이 보다 효율적일 수 있습니다.</li>
+</ol>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>LOH 단편화 는 메모리 효율성에 큰 영향을 미칠 수 있는 문제입니다. 특히 24시간 돌아야 하는 장비와 같이 높은 가용성과 성능이 중요한 시스템에서는 LOH의 단편화 문제를 반드시 해결해야 합니다.</p>
+<p>큰 객체 분할, 배열 최적화, MemoryPool 사용 등을 통해 LOH 단편화를 예방하고, 성능 저하 없이 안정적인 시스템을 운영할 수 있도록 관리해야 합니다. LOH 관리에 신경 써서 효율적인 메모리 사용을 통해 높은 성능을 유지할 수 있도록 노력해야 합니다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a> <a class="fw5 ph1 dib" href="/tags/dotnet/">#dotnet</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/C/">C#</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C#)"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C#) - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2024/12/02/blocking-w-semaphore/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C#)</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2024-12-02</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-anchor"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="세마포어-Semaphore-를-이용한-블로킹-Blocking-구현-원리-및-활용-예제-C"><a href="#세마포어-Semaphore-를-이용한-블로킹-Blocking-구현-원리-및-활용-예제-C" class="headerlink" title="세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리 및 활용 예제 (C#)"></a>세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리 및 활용 예제 (C#)</h1><p>이번 글에서는 세마포어(Semaphore)를 이용하여 블로킹(Blocking)을 구현하는 원리를 이해하고, 이를 활용한 대표적 사례로서 C#에서 블로킹 큐(Blocking Queue)를 구현하는 방법을 소개하도록 하겠습니다. 추가로 세마포어 기반 블로킹 방식을 채택할 때 일반적으로 고려해야 하는 성능적, 기능적 장단점에 대해서도 알아보겠습니다.</p>
+<hr>
+<h2 id="1-세마포어를-활용한-블로킹-구현-원리"><a href="#1-세마포어를-활용한-블로킹-구현-원리" class="headerlink" title="1. 세마포어를 활용한 블로킹 구현 원리"></a>1. 세마포어를 활용한 블로킹 구현 원리</h2><p>세마포어는 동시성 환경에서 스레드의 접근을 제어하기 위한 동기화 원시 객체(Primitive)이다. 세마포어의 주요 기능은 다음 두 가지로 정리할 수 있다.</p>
+<ul>
+<li><code>Wait</code>: 세마포어 카운트가 0보다 크면 카운트를 감소시키고 진입을 허용하며, 0이라면 호출한 스레드는 블로킹된다.</li>
+<li><code>Release</code>: 세마포어 카운트를 증가시키고, 블로킹 중인 스레드 하나의 대기를 해제한다.</li>
+</ul>
+<p>즉, 세마포어는 특정 조건이 충족될 때까지 스레드를 차단(Block)했다가, 해당 조건 충족 시 차단을 해제하는 방식으로 블로킹을 구현하는 데 매우 적합하다.</p>
+<hr>
+<h2 id="2-세마포어를-활용한-블로킹-큐-예제-C"><a href="#2-세마포어를-활용한-블로킹-큐-예제-C" class="headerlink" title="2. 세마포어를 활용한 블로킹 큐 예제 (C#)"></a>2. 세마포어를 활용한 블로킹 큐 예제 (C#)</h2><p>블로킹 큐는 큐가 비어있을 때 소비자 스레드를 블로킹하고, 아이템이 들어오면 자동으로 블로킹을 해제하여 소비자를 깨우는 구조를 가진 자료구조이다. 세마포어의 블로킹 기능을 잘 나타내는 대표적인 예시로, C#에서 아래와 같이 구현할 수 있다.</p>
+<h3 id="C-세마포어-기반-블로킹-큐-예시-코드"><a href="#C-세마포어-기반-블로킹-큐-예시-코드" class="headerlink" title="C# 세마포어 기반 블로킹 큐 예시 코드"></a>C# 세마포어 기반 블로킹 큐 예시 코드</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Threading;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">BlockingQueue</span>&lt;<span class="title">T</span>&gt;</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> Queue&lt;T&gt; queue = <span class="keyword">new</span> Queue&lt;T&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> SemaphoreSlim itemsAvailable = <span class="keyword">new</span> SemaphoreSlim(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="built_in">object</span> lockObject = <span class="keyword">new</span> <span class="built_in">object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Enqueue</span>(<span class="params">T item</span>)</span></span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">lock</span> (lockObject)</span><br><span class="line">        {</span><br><span class="line">            queue.Enqueue(item);</span><br><span class="line">        }</span><br><span class="line">        itemsAvailable.Release();  <span class="comment">// 아이템이 추가되었음을 알림</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">Dequeue</span>()</span></span><br><span class="line">    {</span><br><span class="line">        itemsAvailable.Wait();  <span class="comment">// 아이템이 없으면 여기서 블로킹됨</span></span><br><span class="line">        <span class="keyword">lock</span> (lockObject)</span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">return</span> queue.Dequeue();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="코드-핵심-설명"><a href="#코드-핵심-설명" class="headerlink" title="코드 핵심 설명"></a>코드 핵심 설명</h3><ul>
+<li>큐가 비었을 때 소비자 스레드는 <code>itemsAvailable.Wait()</code> 메서드를 통해 블로킹 상태에 들어가며, CPU 자원을 낭비하지 않고 효율적으로 대기한다.</li>
+<li>생산자가 <code>Enqueue</code>로 아이템을 추가하면 <code>itemsAvailable.Release()</code>를 통해 대기 중인 소비자를 깨운다.</li>
+</ul>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="3-세마포어-기반-블로킹-구현-시-고려해야-할-성능적-기능적-장단점"><a href="#3-세마포어-기반-블로킹-구현-시-고려해야-할-성능적-기능적-장단점" class="headerlink" title="3. 세마포어 기반 블로킹 구현 시 고려해야 할 성능적, 기능적 장단점"></a>3. 세마포어 기반 블로킹 구현 시 고려해야 할 성능적, 기능적 장단점</h2><p>세마포어를 기반으로 블로킹을 구현할 때는 다음과 같은 장단점을 반드시 고려해야 한다.</p>
+<h3 id="장점"><a href="#장점" class="headerlink" title="장점"></a>장점</h3><ul>
+<li><strong>효율적 자원 관리</strong>: 스레드를 블로킹하여 CPU 자원 소모를 최소화할 수 있다.</li>
+<li><strong>명확한 동기화</strong>: 블로킹 조건과 해제가 명시적이어서 코드의 흐름과 동작이 직관적이며 관리하기 쉽다.</li>
+<li><strong>간단한 조건부 대기 구현</strong>: 특정 조건이 충족될 때까지 대기해야 하는 상황에서 코드 복잡성을 낮추고 명확한 로직으로 구현할 수 있다.</li>
+</ul>
+<h3 id="단점"><a href="#단점" class="headerlink" title="단점"></a>단점</h3><ul>
+<li><strong>데드락(Deadlock)의 위험</strong>: 여러 세마포어를 조합할 경우, 신중하지 못한 순서 관리로 인해 데드락 발생 가능성이 존재한다.</li>
+<li><strong>스타베이션(Starvation) 문제</strong>: 특정 스레드가 장시간 블로킹 상태에 갇혀 리소스를 할당받지 못할 위험이 있다.</li>
+<li><strong>성능 저하 가능성</strong>: 과도한 세마포어 사용 및 빈번한 컨텍스트 전환(Context Switch)은 성능 저하를 유발할 수 있으므로, 대규모 동시성 환경에선 주의가 필요하다.</li>
+</ul>
+<h3 id="권장사항"><a href="#권장사항" class="headerlink" title="권장사항"></a>권장사항</h3><ul>
+<li>가능한 단순하고 명확한 로직에서만 세마포어 블로킹을 적용하는 것이 좋다.</li>
+<li>복잡한 조건부 블로킹 상황에서는 타임아웃(timeout)을 활용하여 예외상황 및 데드락을 방지한다.</li>
+</ul>
+<hr>
+<h2 id="4-결론-및-요약"><a href="#4-결론-및-요약" class="headerlink" title="4. 결론 및 요약"></a>4. 결론 및 요약</h2><p>세마포어를 이용한 블로킹 구현은 스레드를 효율적으로 차단(Block)하고 해제(Release)하는 명시적인 동기화 방식이다. 이를 이용한 블로킹 큐 구현 예제를 통해 개념을 구체적으로 이해할 수 있었다.</p>
+<p>그러나 세마포어를 사용할 때는 데드락과 스타베이션 같은 문제를 피하기 위한 세심한 설계가 필수이며, 특히 고도의 동시성 환경에서는 세마포어 사용 빈도와 컨텍스트 전환의 비용을 신중히 고려하여야 한다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Operating-System/">Operating System</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

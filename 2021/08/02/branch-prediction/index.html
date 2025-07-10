@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Branch Prediction 분기 예측 실패와 조건문 설계: CPU 관점에서의 성능 최적화 전략"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Branch Prediction 분기 예측 실패와 조건문 설계: CPU 관점에서의 성능 최적화 전략 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2021/08/02/branch-prediction/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">Branch Prediction 분기 예측 실패와 조건문 설계: CPU 관점에서의 성능 최적화 전략</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2021-08-02</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-chevron-left"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a> <a class="fw5 ph1 dib" href="/tags/Computer-Architecture/">#Computer Architecture</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="분기-예측-실패와-조건문-설계-CPU-관점에서의-성능-최적화-전략"><a href="#분기-예측-실패와-조건문-설계-CPU-관점에서의-성능-최적화-전략" class="headerlink" title="분기 예측 실패와 조건문 설계: CPU 관점에서의 성능 최적화 전략"></a>분기 예측 실패와 조건문 설계: CPU 관점에서의 성능 최적화 전략</h1><p>조건문은 고급 언어에서 흔히 사용되는 구조지만, 하드웨어 수준에서는 <strong>분기 명령어(branch instruction)</strong> 로 변환된다. 현대 CPU는 이러한 분기가 예측가능한 흐름인지 여부에 따라 성능에 큰 차이를 보인다. 이글에서는 특정 언어에 국한되지 않고, CPU 관점에서 조건문 설계가 어떻게 성능에 영향을 미치는지를 설명하며, C 언어기반 예시를 통해 개념을 구체화한다.</p>
+<hr>
+<h2 id="CPU의-분기-예측-왜-중요한가"><a href="#CPU의-분기-예측-왜-중요한가" class="headerlink" title="CPU의 분기 예측: 왜 중요한가?"></a>CPU의 분기 예측: 왜 중요한가?</h2><p>현대 프로세서는 <strong>파이프라인(pipeline)</strong> 구조로 작동하며, 여러 명령어를 동시에 처리한다. 그러나 조건 분기가 등장하면 다음 명령어가 무엇인지 알 수 없기 때문에, <strong>CPU는 분기 예측기(branch predictor)</strong> 를 사용해 다음흐름을 미리 예측한다.</p>
+<h3 id="예측-실패의-비용"><a href="#예측-실패의-비용" class="headerlink" title="예측 실패의 비용"></a>예측 실패의 비용</h3><p>예측이 맞으면 파이프라인은 그대로 진행되지만, <strong>예측이 틀릴 경우 파이프라인은 flush되고 다시 fetch 단계부터 시작</strong>해야 한다. 이는 15~25사이클, 많게는 40사이클 이상의 비용으로 이어진다.</p>
+<h3 id="예측-방식의-개요"><a href="#예측-방식의-개요" class="headerlink" title="예측 방식의 개요"></a>예측 방식의 개요</h3><ul>
+<li><strong>정적 예측 (Static Prediction)</strong>: 특정 규칙 기반 (예: 뒤로 가는 분기는 taken으로 간주)</li>
+<li><strong>동적 예측 (Dynamic Prediction)</strong>: 분기 히스토리 테이블(BHT), 분기 대상 버퍼(BTB), saturating counter 등을 사용해 실시간 학습 기반 예측</li>
+</ul>
+<p><img src="https://mermaid.ink/img/pako:eNplkctKw0AUhl9lOOtYekltk4ViL7py58qmi6GZNIUmKdMEL2lBMEqlXWop2EiLgiAu1FapUF8ombyD6c1SHAbmnJn___4ZxoaSIRMQASGlapyUVExNdJSTdBSOvYL_5XiTN-S_XPmDb9YdF9HW1g7K2N5o6r2_ofDMH7qIPbSY29ltLlyZmabBeq0GyhbChU2GaMlhj1N23UEKMUtqcUN95_jtFus9NVCuMKOOJiuP9_HjD_uIOYPg0l2asvNr5O0lnTnv3uhzlZ9f5-8Xgk6HuePg1vHdKXMniPUH7PmiuKFcZx_80ytVq66i4N4JH_nK2k9B96YIHJRpRQbRpBbhQCNUw7MW7BlWAlMlGpFADEsdmxbFVQkkvRnaalg_Ngxt5aSGVVZBVHC1HnZWTcYmyVVwmWLtb5cSXSY0a1i6CSKfmjNAtOEUxJjAR6IxIckn0-Hcjqc5OAMxmYjwgiCk4nxCiCfSqSjf5OB8nhqNpFNJDohcMQ16uPj3kqErlTI0fwFQtds2?type=svg"></p>
+<h2 id="조건문이-성능에-미치는-영향"><a href="#조건문이-성능에-미치는-영향" class="headerlink" title="조건문이 성능에 미치는 영향"></a>조건문이 성능에 미치는 영향</h2><p>다음과 같은 조건문은 고급 언어에서는 간단하지만, CPU한테는 명확한 분기 예측이 어려울 수 있다.</p>
+<h3 id="비대칭-조건-분기"><a href="#비대칭-조건-분기" class="headerlink" title="비대칭 조건 분기"></a>비대칭 조건 분기</h3><p>다음과 같은 코드가 있다고 할때:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (x == <span class="number">0</span>) {</span><br><span class="line">  handle_zero();</span><br><span class="line">} <span class="keyword">else</span> {</span><br><span class="line">  handle_nonzero();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+
+<p>만약 대부분의 경우 x가 0이 아니라면, CPU는 ‘not taken’을 예측할 것이고, 예외적으로 0이 들어오는 상황에서 예측 실패가 발생한다.</p>
+<h3 id="데이터-기반-분기"><a href="#데이터-기반-분기" class="headerlink" title="데이터 기반 분기"></a>데이터 기반 분기</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (is_prime(x)) {</span><br><span class="line">  expensive_branch();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+
+<p>소수판별과 같ㅇ 데이터 패턴이 불규칙한 경우, 분기 예측기는 학습하기 어렵고 예측 실패가 빈번해진다.</p>
+<h3 id="switch-case-분기"><a href="#switch-case-분기" class="headerlink" title="switch-case 분기"></a>switch-case 분기</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> (x) {</span><br><span class="line">  <span class="keyword">case</span> <span class="number">0</span>: case0(); <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span>: case1(); <span class="keyword">break</span>;</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">case</span> <span class="number">9</span>: case9(); <span class="keyword">break</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+
+<p>값이 균등하게 분포되어 있다면 jump table로 최적화되지만, 편향된 분포에서는 불필요한 분기가 많아져 예측 실패율이 상승한다.</p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="조건문-설계-전략-예측-실패를-줄이기-위해"><a href="#조건문-설계-전략-예측-실패를-줄이기-위해" class="headerlink" title="조건문 설계 전략: 예측 실패를 줄이기 위해"></a>조건문 설계 전략: 예측 실패를 줄이기 위해</h2><h3 id="조건-순서-재배치"><a href="#조건-순서-재배치" class="headerlink" title="조건 순서 재배치"></a>조건 순서 재배치</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (rare_condition()) {</span><br><span class="line">  handle_rare();</span><br><span class="line">} <span class="keyword">else</span> {</span><br><span class="line">  handle_common();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+
+<p>보다 나은 방식은 다음과 같다:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!rare_condition()) {</span><br><span class="line">  handle_common();</span><br><span class="line">} <span class="keyword">else</span> {</span><br><span class="line">  handle_rare();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+
+<p>CPU는 더 자주 실행되는 분기를 기본 경로(not taken)로 예측하기 때문에, 이를 고려한 순서구성은 예측 성공률을 높인다.</p>
+<h3 id="테이블-기반-설계"><a href="#테이블-기반-설계" class="headerlink" title="테이블 기반 설계"></a>테이블 기반 설계</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="title function_">void</span> <span class="params">(*<span class="type">handler_t</span>)</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">handler_t</span> handlers[<span class="number">3</span>] = {handle0, handle1, handle2};</span><br><span class="line">handlers[x]();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>명시적인 조건문 없이 배열 인덱스를 통한 흐름 제어는 분기를 제거할 수 있다. 이 방식은 특히 switch 문보다 예측 실패를 줄이는 데 효과적이다.</p>
+<hr>
+<h2 id="Branchless-프로그래밍-기법"><a href="#Branchless-프로그래밍-기법" class="headerlink" title="Branchless 프로그래밍 기법"></a>Branchless 프로그래밍 기법</h2><p>예측 실패를 아예 회피하려면 분기를 없애는 방식도 존재한다.</p>
+<h3 id="삼항-연산자-또는-조건-없는-함수"><a href="#삼항-연산자-또는-조건-없는-함수" class="headerlink" title="삼항 연산자 또는 조건 없는 함수"></a>삼항 연산자 또는 조건 없는 함수</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> max = (a &gt; b) ? a : b;</span><br></pre></td></tr></table></figure>
+
+<p>대부분의 컴파일러는 이를 조건 이동 명령어(CMOV)로 최적화하여 분기를 생성하지 않는다.</p>
+<h3 id="비트-연산-기반-조건-제거"><a href="#비트-연산-기반-조건-제거" class="headerlink" title="비트 연산 기반 조건 제거"></a>비트 연산 기반 조건 제거</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> min = y ^ ((x ^ y) &amp; -(x &lt; y));</span><br></pre></td></tr></table></figure>
+
+
+<p>위 코드는 조건 분기 없이 최소값을 계산한다. <code>(x &lt; y)</code>는 0 또는 1로 평가되고, <code>-1</code> 또는 <code>0</code>으로 변환되어 전체 표현식을 제어한다. 이는 분기 없는 계산으로 예측 실패 자체를 없앤다.</p>
+<hr>
+<h2 id="5-설계-시-고려할-원칙-요약"><a href="#5-설계-시-고려할-원칙-요약" class="headerlink" title="5. 설계 시 고려할 원칙 요약"></a>5. 설계 시 고려할 원칙 요약</h2><ol>
+<li><strong>조건문의 분기 빈도를 기반으로 순서를 조정하라.</strong></li>
+<li><strong>핫 루프 내 조건문은 예측 실패 시 penalty가 크므로, branchless 구조를 고려하라.</strong></li>
+<li><strong>switch 문 대신 lookup table 또는 함수 포인터 배열을 활용하라.</strong></li>
+<li><strong>조건 연산자나 비트 연산을 활용하여 분기를 제거할 수 있는지 검토하라.</strong></li>
+<li><strong>컴파일러가 생성하는 어셈블리를 확인하여 실제 분기 유무를 분석하라.</strong></li>
+</ol>
+<hr>
+<h2 id="마무리"><a href="#마무리" class="headerlink" title="마무리"></a>마무리</h2><p>분기 예측 실패는 알고리즘이나 I/O 성능보다도 CPU 성능을 좌우하는 <strong>핫스팟의 병목 요인</strong>이 될 수 있다. 조건문 설계는 단순한 코드 스타일의 문제가 아니라, CPU 파이프라인 구조를 고려한 <strong>하드웨어 친화적 프로그래밍의 핵심</strong>이다. 성능이 중요한 코드를 작성할 때는, 예측 가능한 흐름을 유지하거나, 예측 자체를 회피하는 전략을 적극적으로 활용해야 한다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/General/">#General</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a> <a class="fw5 ph1 dib" href="/tags/Computer-Architecture/">#Computer Architecture</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Computer-Architecture/">Computer Architecture</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

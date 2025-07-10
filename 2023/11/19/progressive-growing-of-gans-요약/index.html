@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="[논문 리뷰] Progressive Growing of GANs for Improved Quality, Stability, and Variation"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>[논문 리뷰] Progressive Growing of GANs for Improved Quality, Stability, and Variation - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2023/11/19/progressive-growing-of-gans-요약/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">[논문 리뷰] Progressive Growing of GANs for Improved Quality, Stability, and Variation</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2023-11-19</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-themeisle"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/GAN/">#GAN</a> <a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/DL/">#DL</a> <a class="fw5 ph1 dib" href="/tags/Review/">#Review</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="Progressive-Growing-of-GANs-for-Improved-Quality-Stability-and-Variation-논문-리뷰"><a href="#Progressive-Growing-of-GANs-for-Improved-Quality-Stability-and-Variation-논문-리뷰" class="headerlink" title="Progressive Growing of GANs for Improved Quality, Stability, and Variation 논문 리뷰"></a>Progressive Growing of GANs for Improved Quality, Stability, and Variation 논문 리뷰</h1><p>링크: <a href="https://arxiv.org/pdf/1710.10196.pdf" rel="external nofollow noreferrer">https://arxiv.org/pdf/1710.10196.pdf</a><br>저널|학회: ICLR 2018<br>연구목적: 고해상도 이미지 생성, 안정적 학습<br>연구방법: 저해상도의 레이어부터 점진적으로 쌓아 고해상도 생성<br>데이터셋: CELEB A HQ<br>주요결과: high resolution, x2–6 Faster converge,CelebA HQ 데이터셋 제시<br>저자: Tero Karras et al.</p>
+<h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><blockquote>
+<p>이 연구는 proGAN혹은 PG-GAN으로 더 잘 알려져 있습니다.</p>
+</blockquote>
+<p>GAN을 이용하여 <strong>고해상도의 이미지를 생성하는 것은 아주 어려운 태스크이다.</strong> 고해상도의 이미지를 생성하도록 generator를 학습시키는 경우 학습 이미지의 <strong>distribution과 학습 결과 생성된 이미지의 distribution의 차이가 커진다</strong>. 또한 고해상도의 이미지는 같은 자원에서 저해상도의 이미지보다 <strong>적은 배치사이즈를 가져가게 하는데, 이는 불안정한 학습을 야기한</strong>다. 이러한 상황에서 본 논문에서는 generator와 discriminator를 저해상도의 이미지로부터 고해상도의 이미지로까지 layer들을 추가하면서 점진적으로 커지게 한다. 이를 통해 학습 속도를 향상시키고 고해상도에서도 안정적인 학습을 가능하게 한다.</p>
+<h2 id="2-Progressive-Growing-of-GANs"><a href="#2-Progressive-Growing-of-GANs" class="headerlink" title="2. Progressive Growing of GANs"></a>2. Progressive Growing of GANs</h2><p><img src="/img/progan/Untitled.png" alt="Untitled"></p>
+<p>GAN을 학습시킬때 저해상도의 이미지부터 고해상도의 이미지까지 점진적으로 레이어를 추가하며 학습해 최종적으로 고해상도까지 도달한다. 저해상도에서는 전체적인(large-scale) 구조를, 고해상도로 갈수록 더 디테일한(finer scale detail) 구조를 학습한다. 이러한 구조는 1) 학습 초기의 더 높은 안정성 2) 훨씬 단순한 질문을 지속적으로 제시 3) 훈련시간 감소의 이점을 가진다. 그 이유는 다음과 같다.</p>
+<ol>
+<li>학습 초기의 더 높은 안정성<ol>
+<li>초기에는 클래스 정보가 적고 모드(mode)가 적기 때문에 작은 이미지를 생성하는 것이 훨씬 더 안정적이다.</li>
+</ol>
+</li>
+<li>훨씬 단순한 질문을 지속적으로 제시<ol>
+<li>해상도를 조금씩 높임으로써 예를 들어 잠재 벡터에서 높은 해상도의 이미지로의 매핑을 발견하는 최종 목표와 비교해 훨씬 간단한 질문을 제시한다.</li>
+</ol>
+</li>
+<li>훈련시간 감소<ol>
+<li>대부분의 반복 작업이 낮은 해상도에서 수행되며 점진적으로 세밀한 디테일로 초점을 옮기기 때문에, 종종 최종 출력 해상도에 따라 2~6배 더 빠른 속도로 비슷한 결과 품질을 얻을 수 있다.</li>
+</ol>
+</li>
+</ol>
+<h3 id="Doubling-the-resolution-of-the-G"><a href="#Doubling-the-resolution-of-the-G" class="headerlink" title="Doubling the resolution of the G"></a>Doubling the resolution of the G</h3><p><img src="/img/progan/Untitled%201.png" alt="Untitled"></p>
+<p>G와 D의 해상도를 증가시키는 과정에서 잘 학습된 레이어에 새로운 레이어가 추가되면서 갑작스러운 변화로 인해 충격이 생겨 이전 layer까지 안좋은 영향을 줄 수 있기 때문에 부드럽게 레이어를 추가하는 방법이 필요하다.</p>
+<p>새로운 레이어가 부드럽게 추가될 수 있도록 하기 위해 전환 과정에서 위 그림의 (b)가 나타내듯이, Residual Block처럼 구성해 16x16 레이어가 만든 이미지를 2배(D에서는 0.5배)로 키운 것과 interpolate한다. 어느정도 형태를 가진 이미지를 보여주어 저해상도 레이어가 학습된 방향을 잘 유지하면서 새로운 레이어를 추가한다. 합쳐지는 두 이미지에는 α와 1−α가 곱해져 더해지며, 학습이 진행되면서 α가 0에서 부터 1까지 커지면서 이전 layer의 영향을 점차 줄여간다. 이 방법으로 새로운 레이어가 추가되는 과정에서의 충격을 완화할 수 있다.</p>
+<p>여기서 fromRGB와 toRGB는 1x1 conv레이어를 이용하여 feature 채널을 RGB 채널로 projection하는 부수적인 layer이다.</p>
+<blockquote>
+<p>이러한 구조는 StyleGAN2 부터는 사용하지 않는다.</p>
+</blockquote>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="Increasing-Variation-using-Minibatch-Standard-Deviation"><a href="#Increasing-Variation-using-Minibatch-Standard-Deviation" class="headerlink" title="Increasing Variation using Minibatch Standard Deviation"></a>Increasing Variation using Minibatch Standard Deviation</h2><p>GAN은 training data에서 subset of the variation만 포착하는 경향이 있는데, 그 해결책이 Salimans et al.이 제안하는 <code>mini-batch discrimination</code>이다 PGGAN에서는 모드 붕괴(mode collapse)를 완화하기 위해 <code>mini-batch discrimination</code>을 사용한다. 이를 통해 feature statistics를 개별 이미지 뿐만이 아니라 mini-batch에서도 계산하여 generated/training image minibatch의 statistics가 비슷하게 가지도록 한다. </p>
+<ol>
+<li>각 mini-batch의 각 spatial location에서 각각의 feature들의 standard deviation을 계산한다. (Input: NxCxHxW) -&gt; (Output: CxHxW)</li>
+<li>모든 feature들과 spatial location에 대한 평균을 추정하고 하나의 값으로 표현한다. (Input: CxHxW) -&gt; (Output: 1xHxW)</li>
+</ol>
+<ol start="3">
+<li>이 값을 복제하여 mini-batch들에 대응하는 모든 spatial location들에 추가적인 constant feature map을 생성한 것을 concat한다.</li>
+</ol>
+<p><img src="/img/progan/Untitled%202.png" alt="Untitled"></p>
+<blockquote>
+<p>이 값을 discriminator 어디에나 추가해도 되지만 보통은 맨 뒤에 추가한다<br>이 방식은 learnable parameter나 새로운 hyperparameter가 필요하지 않다. (단순함)</p>
+</blockquote>
+<h2 id="Normalization-in-Generator-and-Discriminator"><a href="#Normalization-in-Generator-and-Discriminator" class="headerlink" title="Normalization in Generator and Discriminator"></a><strong>Normalization in Generator and Discriminator</strong></h2><p>GAN은 G와 D의 비정상적인(G와 D의 학습속도가 다른) 경쟁에 의해 발생하는 gradient에 취약하다. 기존에는 batch normalization을 추가하는 등의 방법을 사용하였지만, 본 논문에서는 이러한 signal을 직접적으로 규제하는 방법을 제안한다. 그 방법은 아래와 같다.</p>
+<h2 id="Equalized-Learning"><a href="#Equalized-Learning" class="headerlink" title="Equalized Learning"></a>Equalized Learning</h2><p><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.98ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 433 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D450" d="M34 159Q34 268 120 355T306 442Q362 442 394 418T427 355Q427 326 408 306T360 285Q341 285 330 295T319 325T330 359T352 380T366 386H367Q367 388 361 392T340 400T306 404Q276 404 249 390Q228 381 206 359Q162 315 142 235T121 119Q121 73 147 50Q169 26 205 26H209Q321 26 394 111Q403 121 406 121Q410 121 419 112T429 98T420 83T391 55T346 25T282 0T202 -11Q127 -11 81 37T34 159Z"></path></g></g></g></svg></mjx-container>는 He’s initializer에서 제안된 per-layer normalization constant이다. Gaussian Distributaion <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="7.038ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3110.7 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(888,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mn" transform="translate(1277,0)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g><g data-mml-node="mo" transform="translate(1777,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mn" transform="translate(2221.7,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g><g data-mml-node="mo" transform="translate(2721.7,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container>으로 초기화 한후, runtime에서 weight를 스케일링한다.</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -1.577ex;" xmlns="http://www.w3.org/2000/svg" width="8.732ex" height="4.109ex" role="img" focusable="false" viewBox="0 -1119 3859.5 1816"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D464" d="M580 385Q580 406 599 424T641 443Q659 443 674 425T690 368Q690 339 671 253Q656 197 644 161T609 80T554 12T482 -11Q438 -11 404 5T355 48Q354 47 352 44Q311 -11 252 -11Q226 -11 202 -5T155 14T118 53T104 116Q104 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Q21 293 29 315T52 366T96 418T161 441Q204 441 227 416T250 358Q250 340 217 250T184 111Q184 65 205 46T258 26Q301 26 334 87L339 96V119Q339 122 339 128T340 136T341 143T342 152T345 165T348 182T354 206T362 238T373 281Q402 395 406 404Q419 431 449 431Q468 431 475 421T483 402Q483 389 454 274T422 142Q420 131 420 107V100Q420 85 423 71T442 42T487 26Q558 26 600 148Q609 171 620 213T632 273Q632 306 619 325T593 357T580 385Z"></path></g><g data-mml-node="mo" transform="translate(441.3,17) translate(-250 0)"><path data-c="5E" d="M112 560L249 694L257 686Q387 562 387 560L361 531Q359 532 303 581L250 627L195 580Q182 569 169 557T148 538L140 532Q138 530 125 546L112 560Z"></path></g></g></g><g data-mml-node="mi" transform="translate(749,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(1320.7,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mfrac" transform="translate(2376.5,0)"><g data-mml-node="msub" transform="translate(220,676)"><g data-mml-node="mi"><path data-c="1D464" d="M580 385Q580 406 599 424T641 443Q659 443 674 425T690 368Q690 339 671 253Q656 197 644 161T609 80T554 12T482 -11Q438 -11 404 5T355 48Q354 47 352 44Q311 -11 252 -11Q226 -11 202 -5T155 14T118 53T104 116Q104 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Q21 293 29 315T52 366T96 418T161 441Q204 441 227 416T250 358Q250 340 217 250T184 111Q184 65 205 46T258 26Q301 26 334 87L339 96V119Q339 122 339 128T340 136T341 143T342 152T345 165T348 182T354 206T362 238T373 281Q402 395 406 404Q419 431 449 431Q468 431 475 421T483 402Q483 389 454 274T422 142Q420 131 420 107V100Q420 85 423 71T442 42T487 26Q558 26 600 148Q609 171 620 213T632 273Q632 306 619 325T593 357T580 385Z"></path></g><g data-mml-node="mi" transform="translate(749,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mi" transform="translate(525,-686)"><path data-c="1D450" d="M34 159Q34 268 120 355T306 442Q362 442 394 418T427 355Q427 326 408 306T360 285Q341 285 330 295T319 325T330 359T352 380T366 386H367Q367 388 361 392T340 400T306 404Q276 404 249 390Q228 381 206 359Q162 315 142 235T121 119Q121 73 147 50Q169 26 205 26H209Q321 26 394 111Q403 121 406 121Q410 121 419 112T429 98T420 83T391 55T346 25T282 0T202 -11Q127 -11 81 37T34 159Z"></path></g><rect width="1243" height="60" x="120" y="220"></rect></g></g></g></svg></mjx-container></p>
+<p>기존의 RMSProp이나 Adam과 같은 adaptive SGD 방식은 scale에 불변한 상태로 추정 표준 편차를 이용하여 gradient를 업데이트하는데, 그 결과 상대적으로 큰 dynamic range를 가지는 일부 파라미터들에 대해 적응하는데 더 많은 시간이 필요하다. 즉, 동일한 dynamic range를 가질 수 있도록 weights를 수정하여 동일한 학습 속도를 보장한다.</p>
+<blockquote>
+<p>모든 weights들이 동일한 dynamic range를 가짐 -&gt; 동일한 learning speed를 보장</p>
+</blockquote>
+<h2 id="Pixelwise-Feature-Vector-Normalization-in-Generator"><a href="#Pixelwise-Feature-Vector-Normalization-in-Generator" class="headerlink" title="Pixelwise Feature Vector Normalization in Generator"></a>Pixelwise Feature Vector Normalization in Generator</h2><p>G와 D 간의 경쟁으로 두 네트워크의 magnitude가 통제 불능의 상태가 되는 시나리오를 막기 위해 G에서 conv이후에 pixel 마다의 feature vector를 unit length로 normalize한다. 이걸 Local Response Normalization을 통해 하였고, 그 식은 아래와 같다.</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -4.118ex;" xmlns="http://www.w3.org/2000/svg" width="27.035ex" height="6.823ex" role="img" focusable="false" viewBox="0 -1196 11949.4 3016"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="TeXAtom" transform="translate(462,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(572,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(850,0)"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g><g data-mml-node="mo" transform="translate(1737.3,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mfrac" transform="translate(2793.1,0)"><g data-mml-node="msub" transform="translate(3798.4,755)"><g data-mml-node="mi"><path data-c="1D44E" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path></g><g data-mml-node="TeXAtom" transform="translate(562,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(572,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(850,0)"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g><g data-mml-node="msqrt" transform="translate(220,-1354.3)"><g transform="translate(1020,0)"><g data-mml-node="mfrac"><g data-mml-node="mn" transform="translate(357.2,394) scale(0.707)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g><g data-mml-node="mi" transform="translate(220,-345) scale(0.707)"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><rect width="827.9" height="60" x="120" y="220"></rect></g><g data-mml-node="munderover" transform="translate(1234.6,0)"><g data-mml-node="mo"><path data-c="2211" d="M61 748Q64 750 489 750H913L954 640Q965 609 976 579T993 533T999 516H979L959 517Q936 579 886 621T777 682Q724 700 655 705T436 710H319Q183 710 183 709Q186 706 348 484T511 259Q517 250 513 244L490 216Q466 188 420 134T330 27L149 -187Q149 -188 362 -188Q388 -188 436 -188T506 -189Q679 -189 778 -162T936 -43Q946 -27 959 6H999L913 -249L489 -250Q65 -250 62 -248Q56 -246 56 -239Q56 -234 118 -161Q186 -81 245 -11L428 206Q428 207 242 462L57 717L56 728Q56 744 61 748Z"></path></g><g data-mml-node="TeXAtom" transform="translate(1089,477.1) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mo" transform="translate(888,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(1666,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g><g data-mml-node="TeXAtom" transform="translate(1089,-285.4) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g><g data-mml-node="mo" transform="translate(412,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mn" transform="translate(1190,0)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g></g><g data-mml-node="msup" transform="translate(4071.8,0)"><g data-mml-node="TeXAtom" data-mjx-texclass="ORD"><g data-mml-node="msubsup"><g data-mml-node="mi"><path data-c="1D44E" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path></g><g data-mml-node="mi" transform="translate(562,497.8) scale(0.707)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g><g data-mml-node="TeXAtom" transform="translate(562,-138.9) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(572,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(850,0)"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></g><g data-mml-node="mn" transform="translate(1592.5,692.3) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g><g data-mml-node="mo" transform="translate(6290.1,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mi" transform="translate(7290.4,0)"><path data-c="1D716" d="M227 -11Q149 -11 95 41T40 174Q40 262 87 322Q121 367 173 396T287 430Q289 431 329 431H367Q382 426 382 411Q382 385 341 385H325H312Q191 385 154 277L150 265H327Q340 256 340 246Q340 228 320 219H138V217Q128 187 128 143Q128 77 160 52T231 26Q258 26 284 36T326 57T343 68Q350 68 354 58T358 39Q358 36 357 35Q354 31 337 21T289 0T227 -11Z"></path></g></g><g data-mml-node="mo" transform="translate(0,184.3)"><path data-c="221A" d="M1001 1150Q1017 1150 1020 1132Q1020 1127 741 244L460 -643Q453 -650 436 -650H424Q423 -647 423 -645T421 -640T419 -631T415 -617T408 -594T399 -560T385 -512T367 -448T343 -364T312 -259L203 119L138 41L111 67L212 188L264 248L472 -474L983 1140Q988 1150 1001 1150Z"></path></g><rect width="7696.4" height="60" x="1020" y="1274.3"></rect></g><rect width="8916.4" height="60" x="120" y="220"></rect></g></g></g></svg></mjx-container></p>
+<ul>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.009ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 888 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg></mjx-container>: feature map의 개수</li>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.667ex;" xmlns="http://www.w3.org/2000/svg" width="3.528ex" height="1.665ex" role="img" focusable="false" viewBox="0 -441 1559.5 736"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D44E" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path></g><g data-mml-node="TeXAtom" transform="translate(562,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(572,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(850,0)"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></g></g></svg></mjx-container>: pixel<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.169ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2284.7 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(389,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(961,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1405.7,0)"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(1895.7,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container>의 원래 feature vector</li>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.667ex;" xmlns="http://www.w3.org/2000/svg" width="3.302ex" height="2.237ex" role="img" focusable="false" viewBox="0 -694 1459.5 989"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"></path></g><g data-mml-node="TeXAtom" transform="translate(462,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(572,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(850,0)"><path data-c="1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></g></g></svg></mjx-container>: normalized된 feature vector</li>
+</ul>
+<blockquote>
+<p>이 방식은 G에 해로워 보이지 않았고, 오히려 효과적으로 signal magnitude 상승을 방지한다.</p>
+</blockquote>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="Multi-scale-Statistical-Similarity-for-Assessing-GAN-Results"><a href="#Multi-scale-Statistical-Similarity-for-Assessing-GAN-Results" class="headerlink" title="Multi-scale Statistical Similarity for Assessing GAN Results"></a>Multi-scale Statistical Similarity for Assessing GAN Results</h2><p>GAN을 평가할때 사용되던 MS-SSIM은 큰 규모의 mode collapse는 잘 포착하지만 색상이나 질감의 변화 손실과 같은 더 작은 변화는 잘 포착하지 못한다고 한다. 따라서 본 논문에서는 G는 training set이 모든 scale에서 유사한 샘플을 생성해야한다는 영감하에 Laplacian pyramid로 부터 뽑힌 local image patch 분포들 간의 멀티 스케일 통계적 유사성을 고려하는 연구 방법을 제안한다.</p>
+<ol>
+<li>Training set과 Generated set으로 부터 각각 local image patch를 얻는다.</li>
+<li>각 색 채널별 평균과 표준편차로 normalize한다.</li>
+<li>이후 sliced Wasserstein distance(SWD)를 통해 계산한 통계적 유사성을 추정한다.</li>
+</ol>
+<p>작은 Wasserstein distance는 패치들간 유사도가 높다는 것을 의미한다.</p>
+<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><h3 id="Importance-of-Individual-Contributions-in-terms-of-Statistical-Similarity"><a href="#Importance-of-Individual-Contributions-in-terms-of-Statistical-Similarity" class="headerlink" title="Importance of Individual Contributions in terms of Statistical Similarity"></a>Importance of Individual Contributions in terms of Statistical Similarity</h3><p>본 논문에서는 SWD와 MS-SSIM을 성능을 측정하기 위해 사용하였다.<br><img src="/img/progan/Untitled%204.png" alt="Untitled"><br><img src="/img/progan/Untitled%205.png" alt="Untitled"></p>
+<p>(a)는 (h)보다 더 나쁜 이미지를 생성하고 있지만, MS-SSIM을 사용한 측정 결과 두 이미지 간에 큰 차이가 없었다. 반면에 SWD는 두 이미지 간에 큰 차이를 보여주었다. 이는 SWD가 MS-SSIM과 달리 색상, 질감, 시점 등의 다양성을 잘 포착하고 있음을 나타낸다.</p>
+<p>고해상도 이미지를 처리하기 위해 (c)에서는 배치 크기를 64에서 16으로 줄였다. 그 결과 생성된 이미지가 매우 불안정해졌으나, (d)에서 BatchNorm이나 LinearNorm을 제거하는 등 훈련 매개변수를 수정한 후에는 학습이 안정적으로 진행되었다. (e*)에서는 Salimans et al.의 미니배치 차별화를 적용했으나 성능 향상은 보이지 않았고, (e)에서는 본 논문의 미니배치 표준 편차를 적용하자 SWD에서 성능이 향상되었다. (f), (g)에서도 성능 향상이 나타났다. 마지막으로 (h)에서는 학습을 충분히 시켜 결과를 수렴시켰다.</p>
+<h3 id="Convergence-and-Training-Speed"><a href="#Convergence-and-Training-Speed" class="headerlink" title="Convergence and Training Speed"></a>Convergence and Training Speed</h3><p><img src="/img/progan/Untitled%203.png" alt="Untitled"><br>위 그림(a)와 (b)는 훈련 시간(가로 축)과 SWD의 수치 (세로 축), 그림 (c)는 훈련 시간(가로 축)과 Discriminator에게 보여준 진짜 이미지의 숫자(세로 축)이다. (a)는 Gulrajani et al. (2017)의 학습 구성에서의 결과이다. 그러나 (a)는 단계적으로 학습 (층을 서서히 추가시켜가며 학습)의 네트워크가 아니며 (제일 처음부터 모든 층을 네트워크에 넣어 둔 것), (b)는 점진적 학습 (층을 서서히 추가시켜 학습)의 네트워크이다.</p>
+<p>점진적인 학습은 2개의 메리트가 있다.</p>
+<ol>
+<li>매우 우수한 최적치에 수렴한다.</li>
+<li>학습 수렴 시간을 획기적으로 줄였다.</li>
+</ol>
+<h2 id="CelebA-HQ"><a href="#CelebA-HQ" class="headerlink" title="CelebA-HQ"></a>CelebA-HQ</h2><p>본 연구에서 고해상도의 이미지 출력의 의미있는 평가를 위해 CELEBA-HQ라는 데이터셋을 생성하여 제시하였다. 이는 1024x1024 해상도의 30,000장의 이미지를 포함하고 있다.</p>
+<h2 id="Official-Demo"><a href="#Official-Demo" class="headerlink" title="Official Demo"></a>Official Demo</h2><iframe style="width: 100%; height: 420px" width="560" height="315" src="https://www.youtube.com/embed/G06dEcZ-QTg?si=co5CHTe6oHP7NI2I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/GAN/">#GAN</a> <a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/DL/">#DL</a> <a class="fw5 ph1 dib" href="/tags/Review/">#Review</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Paper-Review/">Paper Review</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

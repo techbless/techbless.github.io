@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="[자료구조] Trie 구조 (트라이)의 개념과 구현방법을 알아보자 (접두사 트리)"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>[자료구조] Trie 구조 (트라이)의 개념과 구현방법을 알아보자 (접두사 트리) - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2020/10/30/자료구조-trie-트라이-개념과-구현방법을-알아보자/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">[자료구조] Trie 구조 (트라이)의 개념과 구현방법을 알아보자 (접두사 트리)</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2020-10-30</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-tree"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/알고리즘/">#알고리즘</a> <a class="fw5 ph1 dib" href="/tags/자료구조/">#자료구조</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="트라이-Trie"><a href="#트라이-Trie" class="headerlink" title="트라이(Trie)"></a>트라이(Trie)</h1><p><code>Trie</code>는 문자열 집합을 표현과 검색에 특화된 트리 구조의 자료구조입니다. <code>Trie</code>를 이용하면 검색하려는 문자열의 길이를 <code>M</code>이라 할때 문자열을 <code>O(M)</code>시간에 검색할 수 있습니다. 만약 배열에서 특정 문자열을 찾고자 한다면 <code>O(N)</code>만큼의 시간이, 이진 탐색을 하더라도 <code>O(logN)</code>시간이 필요합니다. 이에 비하면 <code>Trie</code> 구조는 문자열 검색에 있어 문자열의 길이만큼 소모 되므로 문자열 검색에 매우 특화되어 있음을 알 수 있습니다.</p>
+<h2 id="구조"><a href="#구조" class="headerlink" title="구조"></a>구조</h2><p>구현을 하기전에 개념부터 알아보겠습니다. 루트 노드는 어떠한 단어도 가지지 않고 루트 노드의 아래부터 문자열의 접두사(prefix) 가 하나씩 이어지게 됩니다. 이러한 특징때문에 <code>Trie</code>는 <code>접두사 트리(Prefix Tree)</code>라고 불리기도 합니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">    &quot;ABSORB&quot;, </span><br><span class="line">    &quot;ABSORBED&quot; , </span><br><span class="line">    &quot;ABSTRACT&quot;, </span><br><span class="line">    &quot;ABSTENTION&quot;, </span><br><span class="line">    &quot;ACCESS&quot;, </span><br><span class="line">    &quot;ACCESSIBLE&quot;, </span><br><span class="line">    &quot;GOOD&quot;, </span><br><span class="line">    &quot;GOODNESS&quot;, </span><br><span class="line">    &quot;GOOGLE&quot;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p>  위의 문자열 집합을 가지고 있다고 가정할 때 아래의 그림은 <code>Trie</code>를 시각화한 것입니다. 아래에 그림에서 연두색 노드는 문자열의 말단을 의미합니다. 즉, 루트 노드의 자식노드 부터 연두색의 노드까지의 접두사들이 모여 하나의 단어를 이루게 되는 것입니다.</p>
+<p><img src="/img/%EC%9E%90%EB%A3%8C%EA%B5%AC%EC%A1%B0-Trie-%ED%8A%B8%EB%9D%BC%EC%9D%B4-%EA%B0%9C%EB%85%90%EA%B3%BC-%EA%B5%AC%ED%98%84%EB%B0%A9%EB%B2%95%EC%9D%84-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90/trie.png" alt="Trie 시각화"></p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="구현"><a href="#구현" class="headerlink" title="구현"></a>구현</h2><p>개념을 알아보았으니 구현을 해보도록 하겠습니다. <code>Trie</code>구조에 노드가 되는 부분 부터 정의하도록 합시다.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> N_ALPHABATS 26</span></span><br><span class="line">-----------------------------</span><br><span class="line">TrieNode* child[N_ALPHABATS];</span><br><span class="line"><span class="type">bool</span> isTerm;</span><br></pre></td></tr></table></figure>
+
+<p>앞서 설명한 개념과 같이 위의 두개의 맴버 변수만 가지면 됩니다. 자식노드를 담고 있는  <code>child</code> 배열은 26의 길이를 가지며 이는 알파벳의 개수로 숫자 집합의 문자열을 가진다면 0~9까지 길이 10과 같이 적절한 길이를 주면 됩니다. <code>isTerm</code>은 <code>bool</code> 타입으로 단어의 말단여부를 나타내고 <code>true</code>라면 단어의 끝이 됩니다. 위의 그림에서 초록색 노드가 <code>true</code>인 경우입니다. 따라서 위의 그림에서도 <code>ABSTEN</code>이 <code>Trie</code>에 포함되지만 <code>ABSTEN</code>의 말단인 <code>N</code>이 Trie의 말단이 아니기때문에 단어가 아니라는 것을 의미합니다.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> N_ALPHABATS 26</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TrieNode</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    TrieNode* child[N_ALPHABATS];</span><br><span class="line">    <span class="type">bool</span> isTerm;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">TrieNode</span>() &#123;</span><br><span class="line">        isTerm = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N_ALPHABATS; i++) &#123;</span><br><span class="line">            child[i] = <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">TrieNode</span>() &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N_ALPHABATS; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (child[i] != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                <span class="keyword">delete</span> child[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">toNum</span><span class="params">(<span class="type">char</span> c)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">tolower</span>(c) - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* words)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (*words == <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">            isTerm = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> next = <span class="built_in">toNum</span>(*words);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (child[next] == <span class="literal">NULL</span>) &#123;</span><br><span class="line">            child[next] = <span class="keyword">new</span> TrieNode;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        child[next]-&gt;<span class="built_in">insert</span>(words + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">find</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* words)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (*words == <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> isTerm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> next = <span class="built_in">toNum</span>(*words);</span><br><span class="line">        <span class="keyword">if</span> (child[next] == <span class="literal">NULL</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> child[next]-&gt;<span class="built_in">find</span>(words + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>생성자에서 <code>isTerm</code>을 <code>false</code>로, <code>child</code>는 모두 <code>NULL</code>로 초기화 합니다. 소멸자에서는 동적할당한 메모리를 해제합니다. <code>toNum(char c)</code> 메서드는 A~Z 까지 대소문자를 구분하지 않고 0 ~ 25로 대응시킵니다. 이 메서드는 각 알파벳의 자식 노드가 있는 배열의 인덱스를 찾기 위해 필요합니다. </p>
+<p><code>void insert(const char* words)</code> 메서드는  단어의 각 접두사를 자식노드에 하나씩 추가하고 단어의 말단 부분에서는 <code>isTerm</code>을 <code>true</code>로 표시하여 단어의 끝임을 나타냅니다. 접두사에 해당되는 자식노드가 <code>NULL</code>이라면 새로 할당합니다. <code>word + 1</code>은 포인터로 현재 <code>word</code>다음의 접두사인 문자를 가리케 됩니다. 예를 들면 <code>GOOD</code>에서 <code>word</code>가 가리키는 부분이 <code>G</code>라면 <code>word + 1</code>은 <code>char</code> 사이즈 만큼 다음 주소를 가리키므로 <code>O</code>가 됩니다. 이를 반복하면 <code>Trie</code>에 새로운 단어를 추가할 수 있습니다.</p>
+<p><code>bool find(const char* words)</code> 메서드는 <code>Trie</code>가 해당 문자열을 갖고 있는지 여부를 확인하여 반환합니다. 문자열 접두사를 하나씩 따라 자식노드로 이동하고 문자열의 말단 <code>\0</code>에서 <code>Trie</code> 노드의 <code>isTerm</code>을 반환합니다. 이는 <code>isTerm</code>이 <code>true</code>인 경우, <code>Trie</code>가 해당 문자열을 갖고 있다고 판단 할 수 있고 따라서 <code>true</code>를 반환합니다.</p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="테스트"><a href="#테스트" class="headerlink" title="테스트"></a>테스트</h2><p>아래의 테스트 코드를 통해 위에서 구현한 <code>Trie</code>가 잘 작동하는지 확인하도록 하겠습니다. </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    TrieNode root;</span><br><span class="line"></span><br><span class="line">    string words[<span class="number">18</span>];</span><br><span class="line"></span><br><span class="line">    words[<span class="number">0</span>] = <span class="string">&quot;ABSORB&quot;</span>;</span><br><span class="line">    words[<span class="number">1</span>] = <span class="string">&quot;ABSORBED&quot;</span>;</span><br><span class="line">    words[<span class="number">2</span>] = <span class="string">&quot;ABSTRACT&quot;</span>;</span><br><span class="line">    words[<span class="number">3</span>] = <span class="string">&quot;ABSTENTION&quot;</span>;</span><br><span class="line">    words[<span class="number">4</span>] = <span class="string">&quot;ACCESS&quot;</span>;</span><br><span class="line">    words[<span class="number">5</span>] = <span class="string">&quot;ACCESSIBLE&quot;</span>;</span><br><span class="line">    words[<span class="number">6</span>] = <span class="string">&quot;GOOD&quot;</span>;</span><br><span class="line">    words[<span class="number">7</span>] = <span class="string">&quot;GOODNESS&quot;</span>;</span><br><span class="line">    words[<span class="number">8</span>] = <span class="string">&quot;GOOGLE&quot;</span>;</span><br><span class="line">    words[<span class="number">9</span>] = <span class="string">&quot;ABSO&quot;</span>;</span><br><span class="line">    words[<span class="number">10</span>] = <span class="string">&quot;ABSOR&quot;</span>;</span><br><span class="line">    words[<span class="number">11</span>] = <span class="string">&quot;ABST&quot;</span>;</span><br><span class="line">    words[<span class="number">12</span>] = <span class="string">&quot;ABSTENT&quot;</span>;</span><br><span class="line">    words[<span class="number">13</span>] = <span class="string">&quot;ACCE&quot;</span>;</span><br><span class="line">    words[<span class="number">14</span>] = <span class="string">&quot;ACCESSIE&quot;</span>;</span><br><span class="line">    words[<span class="number">15</span>] = <span class="string">&quot;OD&quot;</span>;</span><br><span class="line">    words[<span class="number">16</span>] = <span class="string">&quot;NESS&quot;</span>;</span><br><span class="line">    words[<span class="number">17</span>] = <span class="string">&quot;GOGLE&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">8</span>; i++) &#123;</span><br><span class="line">        root.<span class="built_in">insert</span>(words[i].<span class="built_in">c_str</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">17</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (root.<span class="built_in">find</span>(words[i].<span class="built_in">c_str</span>())) &#123;</span><br><span class="line">            cout &lt;&lt; words[i] &lt;&lt; <span class="string">&quot;가 존재합니다.&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            cout &lt;&lt; words[i] &lt;&lt; <span class="string">&quot;가 존재하지 않습니다.&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="결과"><a href="#결과" class="headerlink" title="결과"></a>결과</h3><p><img src="/img/%EC%9E%90%EB%A3%8C%EA%B5%AC%EC%A1%B0-Trie-%ED%8A%B8%EB%9D%BC%EC%9D%B4-%EA%B0%9C%EB%85%90%EA%B3%BC-%EA%B5%AC%ED%98%84%EB%B0%A9%EB%B2%95%EC%9D%84-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90/result.png" alt="실행 결과"></p>
+<h2 id="단점"><a href="#단점" class="headerlink" title="단점"></a>단점</h2><p><code>Trie</code>는 문자열 탐색에 있어 매우 빠른 속도를 가지지만 공간복잡도에 있어서는 접두사를 나타내는 모든 노드에서 포인터 배열을 가지므로 <code>O(포인터 크기 * 자식 노드 배열 길이 * 트라이 노드의 총 개수)</code>가 됩니다. 이를 감안하고 빠른 문자열 탐색이 필요한 경우 좋은 선택이 될 수 있습니다.</p>
+<h2 id="Trie-활용"><a href="#Trie-활용" class="headerlink" title="Trie 활용"></a>Trie 활용</h2><p><code>Trie</code>는 문자열의 <code>Prefix</code>를 판단하거나 탐색할때 매우 빠른 속도로 이용할 수 있습니다. 알고리즘 문제를 해결하기 위해서 사용되는 경우도 종종 있습니다. 예를 들어 아래의 백준 5052번 [전화번호 목록]에서 이용될 수 있습니다.</p>
+<p><a href="https://www.acmicpc.net/problem/5052" rel="external nofollow noreferrer">전화번호 목록</a> &lt;- 백준 문제로 바로 가기</p>
+<p>위 문제에서 <code>Trie</code>를 이용한 풀이가 궁금하다면 제 <code>Github</code>의 <a href="https://github.com/techbless/algorithm-playground/blob/master/challenges/BOJ5052.md" rel="external nofollow noreferrer">풀이</a>를 참고해주세요.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/알고리즘/">#알고리즘</a> <a class="fw5 ph1 dib" href="/tags/자료구조/">#자료구조</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/자료구조/">자료구조</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

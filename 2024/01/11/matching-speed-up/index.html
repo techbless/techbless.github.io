@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Halcon - Optimize the Matching Speed"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Halcon - Optimize the Matching Speed - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2024/01/11/matching-speed-up/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">Halcon - Optimize the Matching Speed</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2024-01-11</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-tachometer"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h2 id="속도-향상-방법"><a href="#속도-향상-방법" class="headerlink" title="속도 향상 방법"></a>속도 향상 방법</h2><p>매칭을 수행할 때, 검색 속도를 향상시키는 것은 매우 중요하다. 특히, 대용량 이미지나 실시간 처리 시스템에서는 속도가 중요한 요소로 작용한다. HALCON에서는 검색 속도를 향상시키기 위한 여러 가지 방법을 제공하고 있으며, 이들을 적절히 사용하면 매칭 프로세스를 크게 최적화할 수 있다. 다음은 속도를 높이는 몇 가지 주요 방법이다.</p>
+<h3 id="검색-공간-제한"><a href="#검색-공간-제한" class="headerlink" title="검색 공간 제한"></a>검색 공간 제한</h3><p>검색할 공간을 제한하면 매칭을 더 빨리 수행할 수 있다. 이미 알고 있는 객체의 예상 위치나 크기, 방향에 대한 정보를 바탕으로 검색 범위를 줄이면 불필요한 계산을 줄일 수 있다. 이를 통해 불필요한 영역을 제외하고 매칭 속도를 높일 수 있다.</p>
+<ul>
+<li><strong>ROI 사용</strong>: 전체 이미지를 검색하는 대신 특정 영역(ROI)을 지정하여 그 범위 내에서만 검색을 수행한다. 이렇게 하면 이미지 전체를 검색할 필요가 없어 속도가 향상된다.</li>
+</ul>
+<h3 id="이미지-피라미드-활용"><a href="#이미지-피라미드-활용" class="headerlink" title="이미지 피라미드 활용"></a>이미지 피라미드 활용</h3><p><img src="/img/matching-speed/pyramid.png"></p>
+<p>이미지 피라미드는 원본 이미지를 여러 크기의 하위 이미지들로 다운샘플링한 구조로, 각 피라미드 레벨에서 차례대로 검색을 수행하면서 점점 더 정확한 결과를 얻는다. 높은 해상도에서 전체 검색을 진행하기보다는, 처음에는 작은 해상도에서 빠르게 매칭을 수행한 뒤, 점점 더 높은 해상도로 내려가면서 정확도를 높일 수 있다.</p>
+<h3 id="그리디-greedy-검색"><a href="#그리디-greedy-검색" class="headerlink" title="그리디(greedy) 검색"></a>그리디(greedy) 검색</h3><p>그리디 알고리즘을 사용하면 빠르게 매칭 후보를 걸러낼 수 있다. 이 방법은 매칭 후보를 한 번에 모두 검사하지 않고, 유망한 후보만 선택적으로 검사하여 불필요한 계산을 피하는 방식이다.</p>
+<ul>
+<li><strong>그리디 검색 설정</strong>: <code>Greediness</code> 값을 설정하여, 얼마나 빨리 검색을 중단할 것인지를 제어할 수 있다. 값이 높으면 더 빨리 중단되고, 값이 낮으면 더 세밀하게 검사를 진행한다. <code>MinScore</code>와 함께 설정하여 성능을 최적화할 수 있다.</li>
+</ul>
+<h3 id="후보-수-제한-Limit-the-Number-of-Candidates"><a href="#후보-수-제한-Limit-the-Number-of-Candidates" class="headerlink" title="후보 수 제한 (Limit the Number of Candidates)"></a>후보 수 제한 (Limit the Number of Candidates)</h3><p>후보의 수를 제한하는 것도 매칭 속도를 높이는 중요한 방법이다. <code>MinScore</code>와 <code>NumMatches</code> 파라미터를 설정하여, 일정 점수 이상의 매칭 후보만 추출하거나, 찾을 수 있는 매칭의 수를 제한함으로써 속도를 최적화할 수 있다.</p>
+<ul>
+<li><strong>MinScore</strong>: 후보가 일정 점수 이상일 때만 매칭을 고려하도록 설정하여 불필요한 후보를 제거한다.</li>
+<li><strong>NumMatches</strong>: 최대 매칭 수를 제한하여, 필요한 매칭만을 반환하도록 한다.</li>
+</ul>
+<h2 id="여러-결과-사용"><a href="#여러-결과-사용" class="headerlink" title="여러 결과 사용"></a>여러 결과 사용</h2><p><code>Shape-based matching</code>은 객체의 형태를 기반으로 매칭을 수행하는 강력한 방법으로, 다양한 객체의 변형을 처리할 수 있다. 이 매칭 방식은 여러 형태를 비교하고, 그 중 가장 적합한 모델을 찾는 데 유용하다. 하지만 하나의 매칭만을 수행하는 것이 아니라, 여러 매칭 결과를 동시에 처리해야 할 경우도 있다. 이 때 <code>Use Multiple Shape-Based Matching Results</code> 기능이 중요한 역할을 한다.</p>
+<h3 id="여러-모델을-동시에-매칭하기"><a href="#여러-모델을-동시에-매칭하기" class="headerlink" title="여러 모델을 동시에 매칭하기"></a>여러 모델을 동시에 매칭하기</h3><p>여러 모델을 동시에 찾고, 각 모델을 개별적으로 추적하는 방식은 복잡한 장면에서 매우 유용하다. 여러 개의 모델을 찾을 때는 각 모델에 대해 매칭을 개별적으로 수행한 후, 그 결과를 조합하여 최종 매칭 결과를 도출한다. 이를 통해 더 복잡한 장면에서 효율적으로 객체를 식별할 수 있다.</p>
+<h4 id="주요-단계"><a href="#주요-단계" class="headerlink" title="주요 단계"></a>주요 단계</h4><ol>
+<li><strong>여러 모델 ID 사용</strong>: 여러 모델을 찾을 때는 각 모델을 구별할 수 있는 ID를 설정하고, 이를 통해 개별적으로 매칭을 수행한다.</li>
+<li><strong>다수 모델 결과 처리</strong>: 각 모델의 매칭 결과를 별도로 추적하여, 그 결과를 나중에 합치거나 개별적으로 분석할 수 있다.</li>
+<li><strong>속도 최적화</strong>: 여러 모델을 동시에 매칭할 때, 피라미드를 활용하거나, 후보 수를 제한하여 성능을 최적화할 수 있다.</li>
+</ol>
+<h3 id="적용-사례"><a href="#적용-사례" class="headerlink" title="적용 사례"></a>적용 사례</h3><p>이 방식은 다수의 객체를 동시에 찾거나, 객체들이 서로 겹쳐 있는 장면에서 유용하게 사용된다. 예를 들어, 공장 자동화 시스템에서는 여러 제품을 동시에 찾거나, 로봇 비전 시스템에서 여러 객체를 추적하는 데 활용된다. 또한, 다양한 크기나 모양의 객체를 다룰 때 유용하게 적용할 수 있다.</p>
+<p><code>Shape-based matching</code>의 강력한 점은 변형된 형태를 인식하고, 이를 정확히 매칭할 수 있다는 것이다. 그러나 여러 결과를 동시에 활용해야 할 때는 처리 속도와 성능을 고려한 최적화가 필요하다. 여러 모델을 동시에 매칭하면서도 속도와 정확성을 유지할 수 있도록, 적절한 매칭 파라미터와 후처리 방법을 선택하는 것이 중요하다.</p>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="3-2-9의-Optimize-the-Matching-Speed"><a href="#3-2-9의-Optimize-the-Matching-Speed" class="headerlink" title="3.2.9의 Optimize the Matching Speed"></a>3.2.9의 Optimize the Matching Speed</h2><p>다음은 매칭 속도를 최적화하는 두 가지 단계에 대해 설명한다. 매칭을 최적화하려면 애플리케이션에서 객체가 위치, 방향, 가려짐, 조명 등에서 허용되는 모든 변형에 대해 나타날 수 있는 대표적인 테스트 이미지 세트를 보유하는 것이 매우 중요하다.</p>
+<h3 id="Step-1-모든-객체가-발견되도록-보장하기"><a href="#Step-1-모든-객체가-발견되도록-보장하기" class="headerlink" title="Step 1: 모든 객체가 발견되도록 보장하기"></a>Step 1: 모든 객체가 발견되도록 보장하기</h3><p>속도를 조정하기 전에, 매칭이 모든 테스트 이미지에서 성공하도록 설정을 찾아야 한다. 즉, 모든 객체 인스턴스가 발견되도록 해야 한다. 기본값을 사용하여 이 작업이 이루어지지 않는 경우, 다음 사항을 확인해보자:</p>
+<ul>
+<li><p><strong>검색 알고리즘이 “너무 greedy”한가?</strong><br>일부 경우, ‘greediness’ 값이 너무 높으면 완전히 보이는 객체도 찾을 수 없다. 철저한 검색을 위해 값을 0으로 설정해보자.</p>
+</li>
+<li><p><strong>객체가 부분적으로 가려졌는가?</strong><br>객체가 가려진 상태에서도 인식해야 하는 경우, ‘min_score’ 파라미터를 낮춰보자. 추가 정보는 섹션 3.2.6.2에서 참조할 수 있다.</p>
+</li>
+<li><p><strong>최고 피라미드 레벨에서 매칭이 실패하는가?</strong><br>일부 경우, 최고 피라미드 레벨에서 min_score에 도달하지 못할 수 있다. 이 경우 ‘num_levels’를 줄이거나 ‘pyramid_level_highest’ 값을 설정하거나, ‘min_score’를 낮춰보자.</p>
+</li>
+<li><p><strong>객체의 대비가 낮은가?</strong><br>객체가 낮은 대비에서도 인식되어야 한다면, ‘min_contrast’ 값을 낮춰보자. 관련된 내용은 섹션 3.2.4.1에서 확인할 수 있다.</p>
+</li>
+<li><p><strong>대비의 극성이 전역적으로 또는 지역적으로 반전되었는가?</strong><br>객체가 이런 상태에서도 인식되도록 해야 한다면, 모델을 생성할 때 ‘metric’ 파라미터의 적절한 값을 사용해보자. 만약 객체의 일부만 영향을 받는다면, ‘min_score’를 줄이는 것이 더 나을 수 있다.</p>
+</li>
+<li><p><strong>객체가 다른 객체 인스턴스와 겹쳐 있는가?</strong><br>객체가 겹쳐져서도 인식되어야 한다면, ‘max_overlap’ 파라미터를 늘려보자.</p>
+</li>
+<li><p><strong>동일 객체에서 여러 개의 매칭이 발견되는가?</strong><br>객체가 거의 대칭인 경우, 섹션 3.2.6.1에서 설명된 대로 회전 범위를 제한하거나, ‘max_overlap’ 값을 줄여서 해결할 수 있다.</p>
+</li>
+</ul>
+<h3 id="Step-2-속도에-맞게-파라미터-조정하기"><a href="#Step-2-속도에-맞게-파라미터-조정하기" class="headerlink" title="Step 2: 속도에 맞게 파라미터 조정하기"></a>Step 2: 속도에 맞게 파라미터 조정하기</h3><p>모든 객체가 발견되었지만 애플리케이션의 속도가 향상되어야 한다면, 모델과 검색 파라미터에 따라 속도를 조정할 수 있는 몇 가지 방법이 있다. 매칭 파이프라인의 주요 부분들의 실행 시간을 살펴보는 것은 어떤 검색 단계가 속도 향상 잠재력이 큰지 알 수 있는 좋은 지표가 될 수 있다. 시간 측정은 호출마다 달라질 수 있으며, 외부 요인(예: os 인터럽트, 바이러스 백신 프로그램 등)에 의해 영향을 받을 수 있다는 점을 유의해야 한다. 시간 측정은 <code>set_generic_shape_model_param</code>을 사용하여 pipeline을 활성화하여 할 수 있다. 매칭 작업의 결과 핸들은 <code>get_generic_shape_model_result</code>를 사용하여 조회할 수 있으며, 매칭 파이프라인에 따라 실행 시간을 표시할 수 있다.</p>
+<p><strong>만약 시간이 최고 수준 단계에서 많이 소요된다면, 다음과 같이 진행할 수 있다:</strong></p>
+<ul>
+<li><strong>‘min_score’ 값을 가능한 한 높게 설정</strong> 하여 매칭이 성공하도록 한다.</li>
+<li><strong>‘greediness’ 값을 증가시켜, 매칭이 실패할 때까지 테스트</strong> 한 후, 실패한다면 ‘min_score’를 낮추어 보자. 그래도 실패하면 이전 값을 복원한다.</li>
+<li><strong>회전 및 스케일 범위를 가능한 한 제한</strong>한다. 이는 섹션 3.2.6.1에서 설명된 대로 수행할 수 있으며, 모델 레벨에서 미리 이 파라미터들을 조정하는 방법도 있다.</li>
+<li><strong>검색을 ROI으로 제한</strong>한다. 이는 섹션 3.2.7에서 설명된 대로 할 수 있다.</li>
+</ul>
+<p><strong>만약 시간이 추적 단계에서 많이 소요되고 정확성과 강건성을 속도에 맞춰서 희생할 의향이 있다면, 다음과 같이 할 수 있다:</strong><br><img src="/img/matching-speed/pyramid-fail.png"></p>
+<ul>
+<li><strong>더 높은 피라미드 레벨에서 검색을 종료</strong> 한다. <ul>
+<li>하지만, 이미지의 예시와 같이 낮은 대비로 인해 MVTec에서 V가 사라지는 현상이 생길 수 있다.</li>
+</ul>
+</li>
+<li><strong>모델 변형을 최대한 제한</strong>한다.</li>
+</ul>
+<p><strong>만약 서브픽셀 정밀화가 매칭 파이프라인에서 상당한 시간을 소요한다면, 다음과 같은 방법을 사용할 수 있다:</strong></p>
+<ul>
+<li><strong>서브픽셀 정밀화를 ‘interpolation’으로 설정하거나</strong> , 정확도를 속도와 교환하기 위해 ‘none’으로 설정할 수 있다.</li>
+</ul>
+<p>이미지를 획득하고 모델을 생성할 때, 검색 속도에 크게 영향을 미칠 수 있는 모델을 선호하는 것이 중요하다. 예를 들어, 약한 구조보다 우세한 구조를 가진 모델을 선호하면 속도에 긍정적인 영향을 미친다.</p>
+<h3 id="추가-방법들-이-방법들은-더-“위험한”-방법일-수-있으며-부적절한-파라미터-값을-선택할-경우-매칭-실패가-발생할-수-있다"><a href="#추가-방법들-이-방법들은-더-“위험한”-방법일-수-있으며-부적절한-파라미터-값을-선택할-경우-매칭-실패가-발생할-수-있다" class="headerlink" title="추가 방법들 (이 방법들은 더 “위험한” 방법일 수 있으며, 부적절한 파라미터 값을 선택할 경우 매칭 실패가 발생할 수 있다):"></a>추가 방법들 (이 방법들은 더 “위험한” 방법일 수 있으며, 부적절한 파라미터 값을 선택할 경우 매칭 실패가 발생할 수 있다):</h3><ul>
+<li><strong>‘min_contrast’ 값을 높여서 매칭이 성공하는 한까지 설정</strong> 한다.</li>
+<li><strong>특히 큰 객체를 검색하는 경우, ‘optimization’ 파라미터에서 더 높은 점수 축소를 선택</strong> 하는 것이 도움이 된다. 관련된 정보는 섹션 3.2.4.2에서 확인할 수 있다.</li>
+<li><strong>‘angle_step’(및 ‘iso_scale_step’ 또는 비균일 스케일링에 대한 해당 파라미터)을 매칭이 성공하는 한까지 늘린다.</strong></li>
+</ul>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/영상처리/">영상처리</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

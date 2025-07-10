@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리 - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2025/02/05/dotnet-gc-generation-loh-soh/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2025-02-05</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-trash-o"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a> <a class="fw5 ph1 dib" href="/tags/dotnet/">#dotnet</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="C-NET의-GC와-LOH-SOH에-대해-알아보자"><a href="#C-NET의-GC와-LOH-SOH에-대해-알아보자" class="headerlink" title="C# .NET의 GC와 LOH/SOH에 대해 알아보자"></a>C# .NET의 GC와 LOH/SOH에 대해 알아보자</h1><p>C#은 메모리 관리를 자동으로 처리하는 Managed 언어로, 그 핵심 기능 중 하나가 <strong>Garbage Collection</strong> 다. 개발자가 메모리 할당과 해제를 신경 쓸 필요 없이, 프로그램이 실행되는 동안 메모리를 자동으로 관리해준다. 이를 통해 메모리 누수나 비효율적인 메모리 사용을 방지할 수 있다. 이번 글에서는 .NET에서 GC가 어떻게 동작하는지, 그리고 <strong>Large Object Heap(LOH)</strong> 와 <strong>Small Object Heap(SOH)</strong> 에 대해 알아보려고 한다.</p>
+<h2 id="Garbage-Collection이란"><a href="#Garbage-Collection이란" class="headerlink" title="Garbage Collection이란?"></a>Garbage Collection이란?</h2><p><strong>Garbage Collection</strong> 은 .NET에서 더 이상 사용되지 않는 객체를 자동으로 추적해서 메모리에서 제거하는 기능이다. 메모리 관리가 제대로 이루어지지 않으면 프로그램의 성능이 떨어지거나 메모리 누수가 발생할 수 있다. GC는 이런 문제를 해결하기 위해 설계되었고, 이를 통해 개발자는 메모리 관리를 자동으로 맡기고 성능 최적화에 집중할 수 있다.</p>
+<p>GC의 역할은 크게 세 가지다:</p>
+<ol>
+<li>메모리 할당: 새로운 객체가 메모리에 할당된다.</li>
+<li>메모리 해제: 더 이상 사용되지 않는 객체를 찾아 메모리에서 해제한다.</li>
+<li>메모리 압축: 가비지가 제거된 후, 힙 공간을 최적화해 새로운 객체들이 효율적으로 할당될 수 있도록 한다.</li>
+</ol>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="NET의-GC-제너레이션-Generation"><a href="#NET의-GC-제너레이션-Generation" class="headerlink" title=".NET의 GC 제너레이션(Generation)"></a>.NET의 GC 제너레이션(Generation)</h2><p>. NET에서는 GC가 객체를 추적하고 수집하는 방식을 <strong>Generation</strong> 으로 나눈다. 제너레이션은 객체의 수명이 길어질수록 GC가 더 효율적으로 동작하도록 돕는다. .NET에서는 객체의 수명에 따라 GC를 3개의 제너레이션으로 구분한다.</p>
+<h3 id="1-Generation-0"><a href="#1-Generation-0" class="headerlink" title="1. Generation 0"></a>1. Generation 0</h3><p>제너레이션 0은 가장 새로운 객체들이 할당되는 영역이다. 보통 새로 생성된 객체들이 제너레이션 0에 할당된다. 제너레이션 0에 있는 객체들은 수명이 짧고, 자주 GC가 실행되어 이들을 회수한다. 만약 객체가 제너레이션 0에서 살아남으면 제너레이션 1로 승격된다.</p>
+<p>GC가 제너레이션 0을 수집할 때 살아남은 객체만 제너레이션 1로 승격된다. 이 과정은 비교적 자주 발생한다.</p>
+<h3 id="2-Generation-1"><a href="#2-Generation-1" class="headerlink" title="2. Generation 1"></a>2. Generation 1</h3><p>제너레이션 1은 제너레이션 0에서 승격된 객체들이 있는 영역이다. 제너레이션 1에 있는 객체들은 제너레이션 0보다 상대적으로 더 오래 살아남은 객체들이다. GC는 이들을 자주 수집하지 않는다. 제너레이션 0에 비해 객체가 더 오래 살아남았기 때문에, GC는 제너레이션 1에 대해 덜 자주 수집을 한다.</p>
+<p>제너레이션 1에서 살아남은 객체들은 제너레이션 2로 승격된다. 이 과정은 비교적 적은 빈도로 일어난다.</p>
+<h3 id="3-Generation-2"><a href="#3-Generation-2" class="headerlink" title="3. Generation 2"></a>3. Generation 2</h3><p>제너레이션 2는 가장 오래 살아남은 객체들이 모인 영역이다. 이 객체들은 애플리케이션 전체 실행 동안 계속 살아남을 가능성이 높고, GC가 이들을 수집하는 빈도는 매우 낮다. 제너레이션 2에 있는 객체들은 다른 제너레이션에 비해 수명이 길고, 대체로 대규모 데이터 구조나 상태를 가진 객체들이다.</p>
+<p>제너레이션 2의 수집은 <strong>Full GC</strong> 라고 불리며, 이는 모든 객체를 검사하고 수집하는 작업이다. Full GC는 시간이 오래 걸리고 성능에 큰 영향을 미칠 수 있기 때문에 자주 일어나지 않도록 해야 한다.</p>
+<h2 id="LOH와-SOH"><a href="#LOH와-SOH" class="headerlink" title="LOH와 SOH"></a>LOH와 SOH</h2><p>C#에서 GC는 <strong>Small Object Heap</strong> 와 <strong>Large Object Heap</strong> 라는 두 가지 중요한 메모리 영역을 관리한다. 이 두 영역은 GC가 객체를 관리하는 방식에 있어 중요한 차이를 만든다.</p>
+<h3 id="1-Small-Object-Heap"><a href="#1-Small-Object-Heap" class="headerlink" title="1. Small Object Heap"></a>1. Small Object Heap</h3><p><strong>Small Object Heap</strong> 는 제너레이션 0과 제너레이션 1에 할당되는 작은 객체들이 저장되는 메모리 영역이다. 일반적으로 85,000바이트 이하의 객체들이 SOH에 저장된다.</p>
+<ol>
+<li>빠른 수집 주기: SOH의 객체들은 자주 메모리에서 수집된다. GC가 자주 실행되며, 제너레이션 0과 1의 객체들은 자주 회수되고 승격된다.</li>
+<li>효율적 메모리 관리: SOH에 저장된 객체들은 상대적으로 작은 크기이므로 메모리 관리가 효율적이다.</li>
+<li>GC 최적화: 작은 객체들은 자주 GC가 수집되고, 압축도 빠르게 이루어지기 때문에 성능을 최적화하는 데 유리하다.</li>
+</ol>
+<h3 id="2-Large-Object-Heap"><a href="#2-Large-Object-Heap" class="headerlink" title="2. Large Object Heap"></a>2. Large Object Heap</h3><p><strong>Large Object Heap</strong> 는 제너레이션 2에 속하는 큰 객체들이 저장되는 메모리 영역이다. LOH에는 85,000바이트 이상의 크기를 가진 객체들이 할당된다.</p>
+<ul>
+<li>Full GC: LOH에 있는 객체들은 Full GC에서만 수집될 수 있다. Full GC는 제너레이션 0, 1, 2 모두를 검사하고 수집하는 작업으로 시간이 많이 걸리며 성능에 큰 영향을 미칠 수 있다.</li>
+<li>압축 불가: LOH는 큰 객체들이 저장되기 때문에 압축이 어렵다. 이로 인해 메모리에서 파편화가 발생할 수 있으며, 성능 저하를 유발할 수 있다.</li>
+</ul>
+<h2 id="LOH와-SOH의-차이점"><a href="#LOH와-SOH의-차이점" class="headerlink" title="LOH와 SOH의 차이점"></a>LOH와 SOH의 차이점</h2><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Small Object Heap (SOH)</th>
+<th>Large Object Heap (LOH)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>객체 크기</td>
+<td>85,000바이트 이하</td>
+<td>85,000바이트 이상</td>
+</tr>
+<tr>
+<td>GC 제너레이션</td>
+<td>제너레이션 0, 1</td>
+<td>제너레이션 2</td>
+</tr>
+<tr>
+<td>GC 주기</td>
+<td>자주 발생</td>
+<td>드물게 발생 (Full GC)</td>
+</tr>
+<tr>
+<td>수집 방식</td>
+<td>빠르고 자주 수집 (Generation 0, 1)</td>
+<td>Full GC에서만 수집</td>
+</tr>
+<tr>
+<td>메모리 압축</td>
+<td>압축이 빠르게 이루어짐</td>
+<td>압축이 어려움 (메모리 파편화 가능)</td>
+</tr>
+<tr>
+<td>파편화 리스크</td>
+<td>낮음</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>메모리 관리 효율성</td>
+<td>매우 효율적</td>
+<td>상대적으로 비효율적 (Full GC에서만 관리)</td>
+</tr>
+</tbody></table>
+<h2 id="LOH의-성능-문제와-최적화-방법"><a href="#LOH의-성능-문제와-최적화-방법" class="headerlink" title="LOH의 성능 문제와 최적화 방법"></a>LOH의 성능 문제와 최적화 방법</h2><p>LOH에 할당된 큰 객체들은 제너레이션 2에서 관리되므로, Full GC가 발생해야만 수집된다. Full GC는 시간이 오래 걸리고 성능에 큰 영향을 미칠 수 있다. LOH를 잘 관리하는 방법은 다음과 같다:</p>
+<ol>
+<li>객체 크기 분할: 너무 큰 객체는 여러 개의 작은 객체로 나누는 것이 좋다. 이를 통해 SOH에 할당되도록 유도할 수 있으며, GC 성능을 향상시킬 수 있다.</li>
+<li>배열 최적화: 큰 배열을 자주 사용한다면, 배열 크기를 최소화하거나 메모리에서 자주 해제할 수 있는 방식으로 배열을 처리해야 한다.</li>
+<li>MemoryPool 사용: ArrayPool<t>나 MemoryPool<t>와 같은 객체 풀을 사용하여 큰 객체들을 재사용할 수 있다. 이는 GC의 부담을 줄이고 메모리 관리 효율성을 높인다.</t></t></li>
+<li>GC.Collect() 사용: GC.Collect() 메서드를 사용하여 강제로 GC를 호출할 수 있지만, LOH에서는 자주 호출하지 않는 것이 좋다. LOH는 Full GC가 필요하기 때문에, 강제 GC 호출은 성능 저하를 초래할 수 있다.</li>
+<li>큰 객체 사용 최소화: 가능한 경우 LOH에 큰 객체를 할당하지 않는 것이 가장 좋다. 큰 객체를 사용하는 경우, 시스템의 메모리 상태나 GC의 영향을 고려해야 한다.</li>
+</ol>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>C#에서 <strong>GC</strong> 는 자동으로 메모리를 관리하는 강력한 시스템이다. 하지만 <strong>SOH</strong> 와 <strong>Large Object Heap</strong> 라는 두 가지 메모리 영역을 이해하는 것이 성능 최적화에 매우 중요하다. SOH는 작은 객체를 관리하고 빠른 GC가 가능하지만, LOH는 큰 객체들을 관리하고 상대적으로 자주 GC가 발생하지 않는다. Large Object Heap의 관리 방법에 대한 최적화를 통해 C# 애플리케이션의 메모리 사용을 효율적으로 개선할 수 있다.</p>
+<p>따라서, C# 개발자는 GC 제너레이션과 LOH/SOH의 차이를 이해하고, 이를 바탕으로 최적화 전략을 적용하여 성능을 극대화할 수 있다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/BetterCode/">#BetterCode</a> <a class="fw5 ph1 dib" href="/tags/Operating-System/">#Operating System</a> <a class="fw5 ph1 dib" href="/tags/C/">#C#</a> <a class="fw5 ph1 dib" href="/tags/dotnet/">#dotnet</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/C/">C#</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

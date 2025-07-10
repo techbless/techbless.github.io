@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2025/02/11/deepseek-r1/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2025-02-11</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-modx"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/DL/">#DL</a> <a class="fw5 ph1 dib" href="/tags/Review/">#Review</a> <a class="fw5 ph1 dib" href="/tags/NLP/">#NLP</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h2 id="DeepSeek-R1-강화학습을-통한-추론-능력-고취"><a href="#DeepSeek-R1-강화학습을-통한-추론-능력-고취" class="headerlink" title="DeepSeek-R1: 강화학습을 통한 추론 능력 고취"></a>DeepSeek-R1: 강화학습을 통한 추론 능력 고취</h2><p>링크: <a href="https://arxiv.org/abs/2501.12948" rel="external nofollow noreferrer">https://arxiv.org/abs/2501.12948</a><br>연구목적: SFT없이 강화학습만으로 LLM추론 능력을 향상시킬 수 있는지 탐구<br>데이터셋: 약 800K 개의 샘플 (600K 추론, 200K 비추론)<br>주요결과: Pure RL만으로 추론 능력 발현을 보임, DeepSeek-R1, Distillation<br>저자: DeepSeek-AI</p>
+<hr>
+<p>DeepSeek-R1은 대규모 언어 모델(LLM)에 강화학습(RL)을 적용해, 모델이 스스로 ‘Reasoning’ 능력을 발달시키도록 유도한 연구이다. 본 연구에서는 <strong>DeepSeek-R1-Zero</strong>와 <strong>DeepSeek-R1</strong>이라는 두 가지 모델을 단계적으로 제안하며, 이후 지식 증류(Distillation)를 통해 소형 모델에서도 강력한 추론 능력을 발휘할 수 있게 한다. 수학, 코딩, 논리적 추론 등 체계적 문제에서 뛰어난 성능을 보이며, 궁극적으로 OpenAI의 o1-1217(일명 ChatGPT-4o 시리즈의 고급 버전)과 유사한 추론 성능을 달성하였다.</p>
+<h2 id="연구-배경"><a href="#연구-배경" class="headerlink" title="연구 배경"></a>연구 배경</h2><p>최근 LLM 연구에서는 사전학습(Pre-training) 이후 후처리(Post-training)를 통해 성능을 높이는 방식을 주로 사용한다. 기존에는 Supervised Fine-Tuning(SFT)을 거친 뒤, 추가적인 RL을 적용해 모델을 더 정교화하는 방식이 일반적이었다.</p>
+<p>DeepSeek-R1 연구진은 다음과 같은 질문에서 출발했다.</p>
+<blockquote>
+<p>“SFT 없이 순수 RL만으로도 추론 능력을 발전시킬 수 있을까?”</p>
+</blockquote>
+<p>이에 대한 해답으로 DeepSeek-R1-Zero 모델을 통해, 자동화된 규칙 기반 보상만으로 독자적 추론 능력을 개발할 수 있음을 보였다. 하지만 이 방식은 가독성과 언어 혼합 문제가 있어, Cold-start 데이터를 추가로 활용한 개선 모델인 DeepSeek-R1을 제안하였다.</p>
+<h2 id="Main-Contribution"><a href="#Main-Contribution" class="headerlink" title="Main Contribution"></a>Main Contribution</h2><p>이 연구의 두 가지 주요 기여는 다음과 같다:</p>
+<h3 id="1-순수-RL-기반-추론-모델-DeepSeek-R1-Zero"><a href="#1-순수-RL-기반-추론-모델-DeepSeek-R1-Zero" class="headerlink" title="1. 순수 RL 기반 추론 모델: DeepSeek-R1-Zero"></a>1. 순수 RL 기반 추론 모델: DeepSeek-R1-Zero</h3><ul>
+<li>Supervised Fine-Tuning(SFT) 없이, Base Model에 직접 강화학습(RL)을 적용해 추론 능력을 개발.</li>
+<li>Chain-of-Thought(CoT) 기반 학습을 통해 수학, 코딩 등 복잡한 문제를 해결하는 과정에서 자기 검증(self-verification), 반성(reflection), ‘아하!’ 모멘트(insightful realization) 등 인간과 유사한 고차원적 사고 행동이 자발적으로 나타남.</li>
+<li>인간 피드백 없이도 스스로 학습 경로를 찾는 능력이 강화되면서, 지도 데이터 의존도를 크게 줄임.</li>
+</ul>
+<h3 id="2-멀티-스테이지-학습-전략-DeepSeek-R1"><a href="#2-멀티-스테이지-학습-전략-DeepSeek-R1" class="headerlink" title="2. 멀티 스테이지 학습 전략: DeepSeek-R1"></a>2. 멀티 스테이지 학습 전략: DeepSeek-R1</h3><ul>
+<li>Cold-start 데이터를 활용해 모델을 가볍게 미세 조정한 후, 추론 중심의 RL을 적용해 언어 혼합, 비문 등 실제 사용에서의 문제를 개선.</li>
+<li>RL을 통해 생성된 고품질 결과물을 다시 SFT 학습 데이터로 활용하여, 추론력과 언어 표현력을 동시에 강화.</li>
+<li>모든 시나리오를 고려한 추가 RL 단계를 거쳐 최종 모델 성능을 극대화함.</li>
+<li>이 과정을 통해 필요한 컴퓨팅 자원과 학습 비용을 대폭 절감하면서도 기존 대형 모델에 견줄 만한 성능을 달성.</li>
+</ul>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="DeepSeek-R1-학습-구조"><a href="#DeepSeek-R1-학습-구조" class="headerlink" title="DeepSeek-R1 학습 구조"></a>DeepSeek-R1 학습 구조</h2><p>DeepSeek-R1의 학습 과정은 다음과 같은 단계로 구성된다:</p>
+<h3 id="1-Cold-Start-단계"><a href="#1-Cold-Start-단계" class="headerlink" title="1. Cold-Start 단계"></a>1. Cold-Start 단계</h3><ul>
+<li>미리 준비된 긴 Chain-of-Thought(CoT) 데이터로 기초 모델(DeepSeek-V3-Base)을 미세 조정.</li>
+</ul>
+<h3 id="2-추론-중심-강화학습-RL-단계"><a href="#2-추론-중심-강화학습-RL-단계" class="headerlink" title="2. 추론 중심 강화학습(RL) 단계"></a>2. 추론 중심 강화학습(RL) 단계</h3><ul>
+<li>Group Relative Policy Optimization(GRPO)를 사용하여 정확성과 형식 보상을 기반으로 추론 성능 강화.</li>
+</ul>
+<h3 id="3-Negative-Sampling-및-SFT"><a href="#3-Negative-Sampling-및-SFT" class="headerlink" title="3. Negative Sampling 및 SFT"></a>3. Negative Sampling 및 SFT</h3><ul>
+<li>RL 결과 중 우수한 데이터만 선별하여 새로운 SFT 데이터로 활용.</li>
+</ul>
+<h3 id="4-최종-RL-학습"><a href="#4-최종-RL-학습" class="headerlink" title="4. 최종 RL 학습"></a>4. 최종 RL 학습</h3><ul>
+<li>추론 외에도 일반 작업에서 유용성과 안전성을 동시에 높이는 추가 RL 과정.</li>
+</ul>
+<h3 id="Cold-Start-SFT-DeepSeek-R1에만-적용"><a href="#Cold-Start-SFT-DeepSeek-R1에만-적용" class="headerlink" title="Cold-Start SFT (DeepSeek-R1에만 적용)"></a>Cold-Start SFT (DeepSeek-R1에만 적용)</h3><p>DeepSeek-R1-Zero는 전혀 SFT 없이 순수 RL만을 이용해 모델의 추론 능력을 개발하는 반면, DeepSeek-R1은 <strong>매우 소량의 Cold-Start 데이터를 이용한 SFT</strong>로 초기 모델을 정교화한 뒤 강화학습(RL)을 시작한다. 이 Cold-Start 데이터는 사람이 읽기 쉬운 코멘트와 긴 CoT(Chain-of-Thought)를 포함하며, 이를 통해 모델의 초기 출력 가독성을 높이는 효과를 얻는다.</p>
+<table>
+<thead>
+<tr>
+<th>모델 이름</th>
+<th>SFT 여부</th>
+<th>RL 여부</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek-R1-Zero</td>
+<td>X (전혀 사용 X)</td>
+<td>O (순수RL)</td>
+<td>순수 RL로만 모델의 추론능력을 발전시키는 접근법</td>
+</tr>
+<tr>
+<td>DeepSeek-R1</td>
+<td>O (소량의 Cold-start SFT)</td>
+<td>O (RL)</td>
+<td>초기 소량의 SFT로 가독성을 높이고, RL로 성능을 추가 개선</td>
+</tr>
+</tbody></table>
+<ul>
+<li>정답만 맞추는 것이 아니라, 명료한 언어와 요약 중심의 출력을 강조하여 가독성을 향상한다.</li>
+<li>특히 수학이나 코딩 문제의 경우 논리적 전개 과정과 최종 결론을 명확히 드러내도록 설계된다.</li>
+</ul>
+<h3 id="흥미로운-발견-DeepSeek-R1-Zero의-‘Aha-Moment’"><a href="#흥미로운-발견-DeepSeek-R1-Zero의-‘Aha-Moment’" class="headerlink" title="흥미로운 발견: DeepSeek-R1-Zero의 ‘Aha Moment’"></a>흥미로운 발견: DeepSeek-R1-Zero의 ‘Aha Moment’</h3><p>DeepSeek-R1-Zero 모델이 훈련 중 겪은 **’Aha Moment’**는 특히 주목할 만한 발견이다. 이는 모델이 문제 해결 과정에서 스스로 더 긴 사고 시간을 할애하고 초기 접근 방식을 재검토하는 행동을 자발적으로 보여주는 현상이다. 이 과정에서 모델은 마치 사람처럼 자신의 오류를 인지하고 더 나은 해결책을 모색하며, 강화학습(RL)이 명확한 지침 없이도 <strong>적절한 인센티브만으로</strong> 모델의 자율적이고 정교한 추론 전략을 효과적으로 발전시킬 수 있음을 증명하였다.</p>
+<p><img src="/img/deepseek/aha.png"></p>
+<h2 id="성능-결과-요약"><a href="#성능-결과-요약" class="headerlink" title="성능 결과 요약"></a>성능 결과 요약</h2><p>DeepSeek-R1은 다양한 벤치마크에서 뛰어난 성능을 입증하였다:</p>
+<ul>
+<li><strong>수학 (AIME 2024)</strong>: Pass@1 기준 79.8%, OpenAI의 o1-1217보다 우수한 성능.</li>
+<li><strong>코딩 (Codeforces)</strong>: 상위 96.3% 전문가급 성능 달성.</li>
+<li><strong>일반 지식 및 추론 (MMLU, GPQA Diamond)</strong>: 기존 모델 대비 우수한 결과.</li>
+</ul>
+<p>특히, 강화학습을 통한 체계적 문제 해결에서 뛰어난 성능을 발휘하였다.</p>
+<h2 id="Distillation을-통한-소형-모델-강화"><a href="#Distillation을-통한-소형-모델-강화" class="headerlink" title="Distillation을 통한 소형 모델 강화"></a>Distillation을 통한 소형 모델 강화</h2><p>DeepSeek-R1의 지식을 작은 모델(Qwen, Llama 등)에 distillation하여 전달하는 실험 결과는 매우 성공적이었다. 이를 통해 소형 모델이 별도의 RL 과정 없이도 우수한 추론 성능을 달성하였고, 특히 Distill-Qwen-32B 모델은 동급 모델 대비 월등한 성능을 기록하였다.</p>
+<h2 id="연구의-한계점-및-향후-연구-방향"><a href="#연구의-한계점-및-향후-연구-방향" class="headerlink" title="연구의 한계점 및 향후 연구 방향"></a>연구의 한계점 및 향후 연구 방향</h2><p>연구진은 다음과 같은 한계와 향후 연구 방향을 제시하였다:</p>
+<ul>
+<li>다중 언어 지원 및 언어 혼합 문제 개선</li>
+<li>소프트웨어 엔지니어링 관련 작업 평가 및 향상</li>
+<li>프로세스 기반 보상 모델과 몬테카를로 트리 탐색(MCTS) 접근법 효율성 향상</li>
+</ul>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/DL/">#DL</a> <a class="fw5 ph1 dib" href="/tags/Review/">#Review</a> <a class="fw5 ph1 dib" href="/tags/NLP/">#NLP</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Paper-Review/">Paper Review</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

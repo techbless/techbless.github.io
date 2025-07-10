@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Pagination 방식 비교: Offset Pagination vs. Cursor Pagination"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Pagination 방식 비교: Offset Pagination vs. Cursor Pagination - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2018/12/19/offest-cursor-pagination/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">Pagination 방식 비교: Offset Pagination vs. Cursor Pagination</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2018-12-19</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-database"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/NodeJs/">#NodeJs</a> <a class="fw5 ph1 dib" href="/tags/Mysql/">#Mysql</a> <a class="fw5 ph1 dib" href="/tags/Database/">#Database</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h1 id="Offset-Pagination-vs-Cursor-Pagination"><a href="#Offset-Pagination-vs-Cursor-Pagination" class="headerlink" title="Offset Pagination vs. Cursor Pagination"></a>Offset Pagination vs. Cursor Pagination</h1><p>데이터베이스에서 데이터를 페이지 단위로 가져올 때 사용하는 두 가지 방법, Offset Pagination과 Cursor Pagination에 대해 살펴보고, 각각의 특징과 장단점이 왜 발생하는지 원인을 분석하고 정리해보았다.</p>
+<h2 id="1-Pagination-간단히-정리하기"><a href="#1-Pagination-간단히-정리하기" class="headerlink" title="1. Pagination 간단히 정리하기"></a>1. Pagination 간단히 정리하기</h2><p>Pagination은 데이터베이스에서 데이터를 한번에 모두 가져오기 힘들 때, 데이터를 잘라서 페이지 형태로 나누어 보여주는 방식을 말한다. 보통 크게 두 가지 방식으로 나눌 수 있다.</p>
+<ul>
+<li>Offset Pagination</li>
+<li>Cursor Pagination</li>
+</ul>
+<p>아래에서 이 두 가지 방법을 조금 더 자세히 알아본다.</p>
+<h2 id="2-Offset-Pagination의-개념과-특징"><a href="#2-Offset-Pagination의-개념과-특징" class="headerlink" title="2. Offset Pagination의 개념과 특징"></a>2. Offset Pagination의 개념과 특징</h2><h3 id="Offset-Pagination-개념"><a href="#Offset-Pagination-개념" class="headerlink" title="Offset Pagination 개념"></a>Offset Pagination 개념</h3><p>Offset Pagination은 원하는 데이터가 전체 데이터에서 몇 번째(offset) 위치에 있는지 지정하고, 그 위치에서부터 몇 개(limit)의 데이터를 가져올지 정하는 방식이다.</p>
+<p>예시 SQL 쿼리:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> posts <span class="keyword">ORDER</span> <span class="keyword">BY</span> id <span class="keyword">ASC</span> LIMIT <span class="number">10</span> <span class="keyword">OFFSET</span> <span class="number">20</span>; <span class="comment">-- 3번째 페이지 (페이지당 10개)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> offset = (page - <span class="number">1</span>) * pageSize;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> [rows] = <span class="keyword">await</span> db.<span class="title function_">query</span>(</span><br><span class="line">  <span class="string">&#x27;SELECT * FROM users ORDER BY id ASC LIMIT ? OFFSET ?&#x27;</span>,</span><br><span class="line">  [pageSize, offset]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>이 쿼리는 21번째부터 30번째 데이터를 가져온다.</p>
+<h3 id="장점과-그-원인"><a href="#장점과-그-원인" class="headerlink" title="장점과 그 원인"></a>장점과 그 원인</h3><ul>
+<li><strong>직관적이고 간단한 구현</strong><ul>
+<li>원인: offset 값만 알면 바로 특정 위치를 찾아서 데이터를 가져올 수 있어서 직관적이다.</li>
+</ul>
+</li>
+<li><strong>페이지 번호로 직접 접근이 쉬움</strong><ul>
+<li>원인: offset이 페이지 번호를 곱해서 얻어지기 때문에 원하는 페이지로 바로 이동하는 기능을 쉽게 구현할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="단점과-그-원인"><a href="#단점과-그-원인" class="headerlink" title="단점과 그 원인"></a>단점과 그 원인</h3><ul>
+<li><strong>데이터가 많아질수록 속도가 크게 느려짐</strong><ul>
+<li>원인: offset이 커질수록 데이터베이스는 앞쪽 데이터를 계속해서 읽고 건너뛰어야 한다. 따라서 데이터가 많아질수록 성능이 떨어진다.</li>
+</ul>
+</li>
+<li><strong>데이터가 추가되거나 삭제되면 중복 또는 누락이 발생할 수 있음</strong><ul>
+<li>원인: offset은 데이터의 고정된 위치를 기반으로 하기 때문에, 중간에 데이터가 추가되거나 삭제되면 데이터의 위치가 바뀌어 중복 또는 누락이 발생할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="데이터-삽입-삭제-시-발생하는-Duplicate-Skipped-문제-사례"><a href="#데이터-삽입-삭제-시-발생하는-Duplicate-Skipped-문제-사례" class="headerlink" title="데이터 삽입&#x2F;삭제 시 발생하는 Duplicate&#x2F;Skipped 문제 사례"></a>데이터 삽입&#x2F;삭제 시 발생하는 Duplicate&#x2F;Skipped 문제 사례</h3><p>실제 데이터 삽입이나 삭제 상황에서 offset pagination이 일으키는 문제는 다음과 같다.</p>
+<h4 id="1-데이터-삽입으로-인한-Duplicate-Skipped-문제"><a href="#1-데이터-삽입으로-인한-Duplicate-Skipped-문제" class="headerlink" title="(1) 데이터 삽입으로 인한 Duplicate&#x2F;Skipped 문제"></a>(1) 데이터 삽입으로 인한 Duplicate&#x2F;Skipped 문제</h4><p><strong>초기 데이터 예시</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>D</td>
+</tr>
+</tbody></table>
+<p>첫 번째 페이지(offset&#x3D;0, limit&#x3D;2)를 조회하면 결과는 <code>[A,B]</code>이다.</p>
+<p>이때 새로운 데이터(E)가 최상단(offset&#x3D;0)에 삽입되면, 데이터는 아래와 같이 바뀐다.</p>
+<p><strong>데이터 삽입 후</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>5</td>
+<td>E(NEW)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>B</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>D</td>
+</tr>
+</tbody></table>
+<p>두 번째 페이지(offset&#x3D;2, limit&#x3D;2)를 조회하면 결과는 <code>[B,C]</code>가 되어 이미 본 데이터(B)가 중복되어 나타나고, 새로 추가된 데이터(E)는 누락(skipped)된다.</p>
+<blockquote>
+<p>왜 중복이 일어나는가?: Offset 방식은 “앞에서 n개를 건너뛴 후(limit, offset)” 데이터를 가져오는데, 중간에 새 데이터가 삽입되면 ‘전체 목록의 순서’ 자체가 바뀐다. 이미 첫 페이지에서 본 데이터가, 두 번째 페이지에 다시 포함될 수도 있다.</p>
+</blockquote>
+<h4 id="2-데이터-삭제로-인한-Skipped-문제"><a href="#2-데이터-삭제로-인한-Skipped-문제" class="headerlink" title="(2) 데이터 삭제로 인한 Skipped 문제"></a>(2) 데이터 삭제로 인한 Skipped 문제</h4><p><strong>초기 데이터 예시</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>D</td>
+</tr>
+</tbody></table>
+<p>첫 번째 페이지(offset&#x3D;0, limit&#x3D;2)를 조회하면 <code>[A,B]</code>이다.</p>
+<p>이때 데이터 B(ID&#x3D;2)가 삭제되면, 데이터는 다음과 같이 변경된다.</p>
+<p><strong>데이터 삭제 후</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>D</td>
+</tr>
+</tbody></table>
+<p>두 번째 페이지(offset&#x3D;2, limit&#x3D;2)를 조회하면 결과는 <code>[D]</code>가 되어, 데이터 C가 누락(skipped)되는 문제가 발생한다.</p>
+<blockquote>
+<p>왜 누락이 일어나는가?: 중간 레코드가 사라져서 전체 기록의 위치(순서)가 당겨지면, OFFSET에서 “이미 본 만큼 건너뛰겠다”라고 계산했을 때 실제로는 건너뛸 행이 줄어들어 버려, 원래 두 번째 페이지에서 보여야 할 데이터가 건너뛰기에 포함될 수 있다.</p>
+</blockquote>
+<hr>
+<h2 id="3-Cursor-Pagination의-개념과-특징"><a href="#3-Cursor-Pagination의-개념과-특징" class="headerlink" title="3. Cursor Pagination의 개념과 특징"></a>3. Cursor Pagination의 개념과 특징</h2><h3 id="Cursor-Pagination-개념"><a href="#Cursor-Pagination-개념" class="headerlink" title="Cursor Pagination 개념"></a>Cursor Pagination 개념</h3><p>Cursor Pagination은 이전 페이지 마지막으로 가져온 데이터의 특정 키(id 또는 timestamp 등)를 기준으로, 그 뒤에 있는 데이터를 가져오는 방식이다.</p>
+<p>예시 SQL 쿼리:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 이전 페이지의 마지막 id가 100일 때, 다음 10개 데이터를 가져옴</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> posts <span class="keyword">WHERE</span> id <span class="operator">&gt;</span> <span class="number">100</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> id <span class="keyword">ASC</span> LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [rows] = <span class="keyword">await</span> db.<span class="title function_">query</span>(</span><br><span class="line">  <span class="string">&#x27;SELECT * FROM users WHERE id &gt; ? ORDER BY id ASC LIMIT ?&#x27;</span>,</span><br><span class="line">  [cursor, pageSize]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>이 쿼리는 id가 100 이후의 데이터를 가져오게 된다.</p>
+<h3 id="장점과-그-원인-1"><a href="#장점과-그-원인-1" class="headerlink" title="장점과 그 원인"></a>장점과 그 원인</h3><ul>
+<li><strong>데이터가 많아져도 성능이 거의 변하지 않음</strong><ul>
+<li>원인: 특정 키(cursor)를 기준으로 데이터를 바로 가져오기 때문에, 데이터를 처음부터 스캔할 필요가 없어서 성능 저하가 거의 없다.</li>
+</ul>
+</li>
+<li><strong>데이터가 실시간으로 추가&#x2F;삭제되더라도 중복이나 누락이 없음</strong><ul>
+<li>원인: 명확한 키 값을 기준(cursor)으로 데이터를 가져오기 때문에 중간에 데이터가 변하더라도 데이터를 놓치거나 중복으로 가져오는 문제가 발생하지 않는다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="단점과-그-원인-1"><a href="#단점과-그-원인-1" class="headerlink" title="단점과 그 원인"></a>단점과 그 원인</h3><ul>
+<li><strong>특정 페이지로 바로 이동하는 것이 어려움</strong><ul>
+<li>원인: cursor를 기반으로 움직이기 때문에 중간 페이지로 바로 이동하려면, 그 페이지까지 cursor를 계속 따라가야 한다. 페이지 번호를 바로 찾아가는 것이 어렵다.</li>
+</ul>
+</li>
+<li><strong>커서(cursor)가 될 수 있는 키 값이 반드시 유일하고 정렬 가능한 값이어야 함</strong><ul>
+<li>원인: cursor가 명확히 정렬되지 않거나 중복이 있으면 데이터를 제대로 가져올 수 없기 때문에 안정적인 키 값을 반드시 사용해야 한다.</li>
+</ul>
+</li>
+</ul>
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="4-Offset-Pagination과-Cursor-Pagination-비교-정리"><a href="#4-Offset-Pagination과-Cursor-Pagination-비교-정리" class="headerlink" title="4. Offset Pagination과 Cursor Pagination 비교 정리"></a>4. Offset Pagination과 Cursor Pagination 비교 정리</h2><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Offset Pagination</th>
+<th>Cursor Pagination</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>성능</td>
+<td>데이터 양에 따라 성능 저하 심각</td>
+<td>데이터 양에 상관없이 일정한 성능</td>
+</tr>
+<tr>
+<td>데이터 일관성</td>
+<td>데이터 추가&#x2F;삭제에 취약(중복&#x2F;누락)</td>
+<td>데이터 추가&#x2F;삭제 시에도 안정적</td>
+</tr>
+<tr>
+<td>임의 접근 가능성</td>
+<td>페이지 번호로 직접 접근 가능</td>
+<td>페이지 번호로 바로 접근 어려움</td>
+</tr>
+<tr>
+<td>구현 난이도</td>
+<td>간단하고 쉬움</td>
+<td>약간 복잡하며 키 값 선정이 중요함</td>
+</tr>
+</tbody></table>
+<h2 id="5-각-Pagination-방식의-적합한-상황-정리"><a href="#5-각-Pagination-방식의-적합한-상황-정리" class="headerlink" title="5. 각 Pagination 방식의 적합한 상황 정리"></a>5. 각 Pagination 방식의 적합한 상황 정리</h2><h3 id="Offset-Pagination이-더-좋은-상황"><a href="#Offset-Pagination이-더-좋은-상황" class="headerlink" title="Offset Pagination이 더 좋은 상황"></a>Offset Pagination이 더 좋은 상황</h3><ul>
+<li>게시판, 쇼핑몰처럼 페이지 번호로 바로 이동해야 하는 서비스</li>
+<li>데이터 양이 많지 않고, 실시간 변동이 적어 성능 문제가 크지 않은 경우</li>
+</ul>
+<h3 id="Cursor-Pagination이-더-좋은-상황"><a href="#Cursor-Pagination이-더-좋은-상황" class="headerlink" title="Cursor Pagination이 더 좋은 상황"></a>Cursor Pagination이 더 좋은 상황</h3><ul>
+<li>소셜 미디어, 채팅 등 데이터가 실시간으로 계속 추가&#x2F;삭제되는 서비스</li>
+<li>무한 스크롤 방식을 사용하는 서비스로 성능이 매우 중요할 때</li>
+<li>데이터 양이 많아서 offset 방식으로 성능을 유지하기 어려운 경우</li>
+</ul>
+<hr>
+<h2 id="6-결론과-권장-사항"><a href="#6-결론과-권장-사항" class="headerlink" title="6. 결론과 권장 사항"></a>6. 결론과 권장 사항</h2><p>Offset Pagination은 간단하고 직관적이지만, 데이터가 많아지면 성능이 떨어지고 데이터 일관성이 문제될 수 있다. 반면 Cursor Pagination은 데이터가 많아져도 성능과 일관성을 유지할 수 있지만, 페이지 번호로의 직접 접근이 어렵고, 커서(cursor)를 신중히 선택해야 하는 단점이 있다.</p>
+<p>따라서 Pagination 방식을 선택할 때는 데이터의 양, 변동성, 그리고 사용자가 원하는 페이지 접근 방식 등을 고려하여 적절한 방법을 결정하는 것이 중요하다.</p>
+<p>정리하자면, 일반적인 웹사이트라면 Offset Pagination을, 데이터가 많고 실시간 변동이 많은 서비스라면 Cursor Pagination을 사용하는 것이 더 좋다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/NodeJs/">#NodeJs</a> <a class="fw5 ph1 dib" href="/tags/Mysql/">#Mysql</a> <a class="fw5 ph1 dib" href="/tags/Database/">#Database</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/Database/">Database</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>

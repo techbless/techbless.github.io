@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://adservice.google.com/">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="preconnect" href="https://www.googletagservices.com/">
+    <link rel="preconnect" href="https://tpc.googlesyndication.com/">
+
+    <!-- Font -->
+    <!-- <link href='//techbless.github.io/css/SpoqaHanSans-kr.css' rel="stylesheet" type='text/css'> -->
+    <link rel="preload" href="https://techbless.github.io/css/SpoqaHanSans-kr.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://techbless.github.io/css/SpoqaHanSans-kr.css"></noscript>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+
+    <!--    네이버 소유권 인증-->
+    <meta name="naver-site-verification" content="3a7ce7ef6ef65ba8e664e217922e76aa8eec4d37" /
+
+    <!-- Tachyons Core CSS -->
+    <link href="https://unpkg.com/tachyons/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <!-- <link rel="preload" href="https://unpkg.com/tachyons/css/tachyons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css"></noscript> -->
+
+    <!-- Custom Fonts -->
+    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="preload" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript>
+
+
+    <!--Description-->
+    
+        <meta name="description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="창윤빈 (Yunbin Chang)">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Halcon - 2D Metrology Recap"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="개발, 알고리즘, 시스템 최적화까지 깊이 있는 기술 이야기 🛠️🚀" />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="빈챙의 뚝딱뚝딱 개발 블로그"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Halcon - 2D Metrology Recap - 빈챙의 뚝딱뚝딱 개발 블로그</title>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-156372137-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <link rel="canonical" href="http://techbless.github.io/2024/06/23/halcon-2d-metrology/"/>
+
+
+
+<meta name="generator" content="Hexo 5.4.2"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style><link rel="alternate" href="/rss2.xml" title="빈챙의 뚝딱뚝딱 개발 블로그" type="application/rss+xml">
+</head>
+
+
+<body>
+
+<!-- Main Content -->
+<!-- Banner -->
+<!-- Banner -->
+<div class="w-100 banner-bg ph5-ns ph3 text-light">
+
+    <nav class="db dt-l w-100 mw8 center border-box pt3 pt-35">
+      <!--<a class="db dtc-l v-mid link dim w-100 w-25-l tc tl-l mb2 mb0-l white" href="/" title="빈챙의 뚝딱뚝딱 개발 블로그">
+            <img src="http://www.codeblocq.com/assets/projects/hexo-theme-anodyne/assets/anodyne.svg" class="dib h3" alt="빈챙의 뚝딱뚝딱 개발 블로그">
+        </a>-->
+        <div class="db dtc-l v-mid w-100 w-100-l tc tr-l">
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/"
+                    title="Home">
+                    Home
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/archives"
+                    title="Archives">
+                    Archives
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/tags"
+                    title="Tags">
+                    Tags
+                </a>
+            
+                <a class="link dim f4-l fw6 dib ml1 mr1 mr4-l white"
+                    href="/about-me"
+                    title="About">
+                    About
+                </a>
+            
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <div class="w-100 mw8 center dt vh-40">
+        <div class="dtc v-mid white">
+            <h1 class="tc tc-m tl-ns title-font">Halcon - 2D Metrology Recap</h1>
+            <p class="sub-title-font fw6 tc tc-m tl-ns">2024-06-23</p>
+        </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="relative w-100 mw8 center white dn dn-m db-ns">
+        <i class="header-icon fa fa-bar-chart"></i>
+    </div>
+</div>
+
+
+<!-- Content -->
+<div class="w-100 ph2 ph4-m ph5-l mv3 mv5-l">
+    <div class="content">
+        <div class="mw8 center">
+            <div class="cf">
+                <div class="fl w-100 w-70-l mw7 left f5-ns f6 fw5 pr4-ns pr0-m post-content" style="line-height: 1.8;">
+                    <!-- Tags Vertical -->
+                    
+                        <div class="tags-container-vertical">
+                            <div class="tags-sub-container">
+                                <a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                            </div>
+                        </div>
+                    
+
+                    <div style="text-align: center;">
+                        <!-- Upper Ads -->
+                        <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Upper -->
+<ins class="adsbygoogle"
+     style="display: inline-block; min-width: 300px; max-width: 970px; width:100%; height: 90px;"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="5160559273">
+</ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                    </div>
+
+                    <!-- Main Post Content -->
+                    <!-- 광고서식 (AD_HERE) 치환 -->
+                    <h2 id="할콘-2D-Metrology-개요"><a href="#할콘-2D-Metrology-개요" class="headerlink" title="할콘 2D Metrology 개요"></a>할콘 2D Metrology 개요</h2><p>할콘의 <strong>2D Metrology</strong> 를 이용하면 특정 기하학적 기본 도형으로 표현 가능한 물체—원, 타원, 직사각형, 직선—의 치수를 측정할 수 있습니다. 이때 측정하려는 물체의 위치, 방향, 치수에 대한 근사값이 필요합니다. 그런 다음, 이미지에서 실제 물체의 가장자리는 이러한 근사 물체의 경계 근처에서 탐지됩니다. 이렇게 탐지된 가장자리 위치를 기반으로 기하학적 형태의 파라미터를 이미지 데이터에 더 잘 맞도록 최적화한 뒤, 이를 측정 결과로 반환합니다.</p>
+<p>물체의 형상 파라미터에 대한 근사값과 측정을 제어하는 여러 파라미터들은 <code>metrology object</code>라는 데이터 구조에 저장됩니다. 이미지에서 물체의 가장자리는 ‘측정 영역’ 내에서 탐지되며, 이 측정 영역은 Metrology 객체의 경계에 수직으로 배열된 직사각형 영역입니다. 측정 영역의 크기와 분포를 조정하는 파라미터들은 각 Metrology 객체에 대해 형상 파라미터의 근사값과 함께 설정됩니다. 측정을 수행하면 모든 측정 영역 내부에서 가장자리 위치가 결정되며, 이 위치들에 RANSAC 알고리즘을 사용하여 기하학적 형태를 fitting하게 됩니다. 모든 Metrology 객체와 측정에 필요한 추가 정보 및 측정 결과는 <code>metrology model</code>에 저장됩니다.</p>
+<p>할콘에서는 <strong><code>create_metrology_model</code></strong> 함수로 측정 모델을 생성하고, <strong><code>apply_metrology_model</code></strong> 함수로 해당 모델을 이미지에 적용하여 정확한 측정을 수행할 수 있습니다.</p>
+<h2 id="2D-Metrology-주요-함수-설명"><a href="#2D-Metrology-주요-함수-설명" class="headerlink" title="2D Metrology 주요 함수 설명"></a>2D Metrology 주요 함수 설명</h2><p>2D Metrology에서 자주 사용되는 주요 함수는 다음과 같습니다:</p>
+<ul>
+<li><p><strong><code>add_metrology_object_circle_measure</code></strong><br>원의 중심 좌표와 반지름을 추가합니다. 하나 이상의 원을 측정할 수 있습니다.</p>
+</li>
+<li><p><strong><code>add_metrology_object_ellipse_measure</code></strong><br>타원의 중심 좌표, 주축의 방향, 큰 반지름과 작은 반지름을 추가합니다.</p>
+</li>
+<li><p><strong><code>add_metrology_object_line_measure</code></strong><br>직선의 시작점과 끝점의 좌표를 추가합니다.</p>
+</li>
+<li><p><strong><code>add_metrology_object_rectangle2_measure</code></strong><br>직사각형의 중심 좌표, 주축의 방향, 작은 반지름과 큰 반지름을 추가합니다.</p>
+</li>
+<li><p><strong><code>add_metrology_object_generic</code></strong><br>원, 타원, 직선, 직사각형 등을 포함하는 다양한 형태의 객체를 측정할 수 있습니다.</p>
+</li>
+</ul>
+<p>각 함수는 객체의 기하학적 특성을 정의하고, 이를 바탕으로 정밀한 측정을 수행할 수 있게 합니다. 모델을 생성한 후 <strong><code>apply_metrology_model</code></strong> 함수를 사용하여 실제 이미지를 측정할 수 있습니다.</p>
+<h2 id="2D-Metrology-활용-예시"><a href="#2D-Metrology-활용-예시" class="headerlink" title="2D Metrology 활용 예시"></a>2D Metrology 활용 예시</h2><ol>
+<li><p><strong>모델 초기화 및 이미지 크기 설정</strong><br>측정을 시작하려면 먼저 모델을 생성하고, 이미지의 크기를 설정해야 합니다. 예를 들어, <code>create_metrology_model</code>과 <code>set_metrology_model_image_size</code>를 사용하여 이미지를 설정합니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">read_image (Image, 'pads') </span><br><span class="line">get_image_size (Image, Width, Height) </span><br><span class="line">create_metrology_model (MetrologyHandle) </span><br><span class="line">set_metrology_model_image_size (MetrologyHandle, Width, Height)</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p><strong>측정 객체 추가</strong><br>예를 들어, 원을 측정할 때는 <strong><code>add_metrology_object_circle_measure</code></strong> 를 사용하여 원의 중심과 반지름을 설정합니다.</p>
+</li>
+</ol>
+<p><img src="/img/2d-metrology/circle_measurement.png"></p>
+<blockquote>
+<p>⚠️ <strong>Solution Guide</strong> 의 pdf에서는 위의 방식으로 표기 되어있지만 실제 프로시저의 문서에 따르면 실제 사용 방식은 <strong>아래와 같은 것으로</strong> 보입니다.</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_metrology_object_circle_measure (MetrologyHandle, CircleInitRow, CircleInitColumn, CircleInitRadius, CircleRadiusTolerance, 5, 1.5, 2, [], [], MetrologyCircleIndices)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_metrology_object_circle_measure( : : MetrologyHandle, Row, Column, Radius, MeasureLength1, MeasureLength2, MeasureSigma, MeasureThreshold, GenParamName, GenParamValue : Index)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong><code>MetrologyHandle</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: metrology 모델 핸들. 측정할 객체를 포함한 메트롤로지 모델을 지정합니다.</li>
+</ul>
+</li>
+<li><p><strong><code>Row</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 원 또는 원호의 중심 Y 좌표입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>Column</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 원 또는 원호의 중심 X 좌표입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>Radius</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 원 또는 원호의 반지름입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>MeasureLength1</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 경계에 수직인 측정 영역의 절반 길이입니다. 기본값은 <code>20.0</code>입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>MeasureLength2</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 경계에 수평인 측정 영역의 절반 길이입니다. 기본값은 <code>5.0</code>입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>MeasureSigma</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 이미지의 그레이 값에 대한 가우시안 함수의 시그마 값입니다. 기본값은 <code>1.0</code>입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>MeasureThreshold</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 에지의 최소 진폭을 정의하는 값입니다. 기본값은 <code>30.0</code>입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>GenParamName</code></strong> (optional)</p>
+<ul>
+<li><strong>입력</strong>: 일반적인 측정 매개변수의 이름입니다. 선택적으로 설정할 수 있습니다. 예를 들어, <code>'start_phi'</code>, <code>'end_phi'</code>, <code>'point_order'</code> 등이 있습니다.</li>
+</ul>
+</li>
+<li><p><strong><code>GenParamValue</code></strong> (optional)</p>
+<ul>
+<li><strong>입력</strong>: <strong><code>GenParamName</code></strong> 에서 설정한 이름에 대한 값입니다. 예를 들어, <code>'start_phi'</code>의 값은 원호의 시작 각도를 정의합니다.</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li><strong>측정 적용</strong></li>
+</ol>
+<p><img src="/img/2d-metrology/result.png"></p>
+<p>모델을 이미지에 적용하여 실제 측정을 수행합니다. 연산자는 측정된 영역 내에서 가장자리들을 찾아내고, <strong>RANSAC</strong> 알고리즘을 사용하여 지정된 기하학적 형태를 가장자리 위치에 맞춥니다. 가장자리는 연산자 <code>measure_pos</code> 또는 <code>fuzzy_measure_pos</code>를 사용하여 내부적으로 찾습니다 (1D Measuring 장 참조). 후자는 퍼지 방법을 사용하며, 적어도 하나의 퍼지 함수가 <code>set_metrology_object_fuzzy_param</code>을 통해 설정된 후에 측정을 적용할 때만 사용됩니다. 반환된 객체 형태의 인스턴스가 여러 개 필요할 경우 (위의 이미지 참조), <code>num_instances</code>라는 일반 매개변수를 설정하여 반환할 인스턴스의 수를 지정해야 합니다. 이 매개변수는 개별 측정 객체를 추가할 때 설정할 수 있으며, 이후에 <code>set_metrology_object_param</code>을 통해 설정할 수도 있습니다.</p>
+<ul>
+<li><p><code>fuzzy_measure_pos</code></p>
+<ul>
+<li>Extract <strong>straight edges perpendicular</strong> to a rectangle or an annular arc.</li>
+</ul>
+</li>
+<li><p><code>fuzzy_measure_pos</code></p>
+<ul>
+<li>Extract <strong>straight edges perpendicular</strong> to a rectangle or an annular arc.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply_metrology_model (Image, MetrologyHandle) get_metrology_object_result (MetrologyHandle, MetrologyCircleIndices, 'all', 'result_type', 'all_param', CircleParameter)</span><br></pre></td></tr></table></figure>
+
+<p><ins class="adsbygoogle"style="display:block"data-ad-client="ca-pub-9129125082811791"data-ad-slot="7483879403"data-ad-format="auto"data-full-width-responsive="true"></ins><script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></p>
+<h2 id="add-metrology-object-line-measure"><a href="#add-metrology-object-line-measure" class="headerlink" title="add_metrology_object_line_measure"></a>add_metrology_object_line_measure</h2><p><code>add_metrology_object_line_measure</code>는 자주 사용하는 프로시저중 하나로, 참고하기 위해 추가적으로 정리해두도록 하겠습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_metrology_object_line_measure( : : MetrologyHandle, RowBegin, ColumnBegin, RowEnd, ColumnEnd, MeasureLength1, MeasureLength2, MeasureSigma, MeasureThreshold, GenParamName, GenParamValue : Index)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong><code>MetrologyHandle</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 메트롤로지 모델 핸들. 측정할 객체를 포함한 metrology 모델을 지정합니다.</li>
+</ul>
+</li>
+<li><p><strong><code>RowBegin</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 선의 시작점 Y 좌표입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>ColumnBegin</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 선의 시작점 X 좌표입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>RowEnd</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 선의 끝점 Y 좌표입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>ColumnEnd</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 선의 끝점 X 좌표입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>MeasureLength1</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 경계에 수직인 측정 영역의 절반 길이입니다. 기본값은 <code>20.0</code>입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>MeasureLength2</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 경계에 접선 방향(선 방향)에 수평인 측정 영역의 절반 길이입니다. 기본값은 <code>5.0</code>입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>MeasureSigma</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 이미지의 그레이 값에 대한 가우시안 함수의 시그마 값입니다. 기본값은 <code>1.0</code>입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>MeasureThreshold</code></strong>  </p>
+<ul>
+<li><strong>입력</strong>: 에지의 최소 진폭을 정의하는 값입니다. 기본값은 <code>30.0</code>입니다.</li>
+</ul>
+</li>
+<li><p><strong><code>GenParamName</code></strong> (optional)  </p>
+<ul>
+<li><strong>입력</strong>: 일반적인 측정 매개변수의 이름입니다. 선택적으로 설정할 수 있습니다. 예를 들어 <code>'measure_transition'</code>, <code>'num_measures'</code>, <code>'measure_select'</code> 등이 있습니다.</li>
+</ul>
+</li>
+<li><p><strong><code>GenParamValue</code></strong> (optional)  </p>
+<ul>
+<li><strong>입력</strong>: <strong><code>GenParamName</code></strong> 에서 설정한 이름에 대한 값입니다. 예를 들어, <code>'measure_transition'</code>의 값은 <code>'positive'</code>, <code>'negative'</code>, <code>'all'</code> 등이 될 수 있습니다.</li>
+</ul>
+</li>
+<li><p><strong><code>Index</code></strong>  </p>
+<ul>
+<li><strong>출력</strong>: 생성된 메트롤로지 객체의 인덱스입니다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2D-Metrology-모델-정렬"><a href="#2D-Metrology-모델-정렬" class="headerlink" title="2D Metrology 모델 정렬"></a>2D Metrology 모델 정렬</h2><p>2D Metrology는 객체의 위치가 이미지마다 달라질 수 있기 때문에, 모델을 정렬할 수 있는 다양한 방법을 제공합니다; 필요시, 할콘 Solution Guide 2D Measuring의 2.3.1 Aligning the Metrology Model based on different methods 참고</p>
+<ol>
+<li><p><strong>형태 기반 매칭 (Shape-based Matching)</strong><br>객체의 모양을 기반으로 매칭하여 모델을 정렬합니다.</p>
+</li>
+<li><p><strong>영역 처리 기반 정렬 (Region Processing)</strong><br>객체의 위치와 방향을 기반으로 모델을 정렬합니다.</p>
+</li>
+<li><p><strong>강체 변환 정렬 (Rigid Transformation)</strong><br>이미지에서 기준 점들을 추출하여 강체 변환을 통해 모델을 정렬합니다.</p>
+</li>
+</ol>
+<h2 id="2D-Metrology의-장점"><a href="#2D-Metrology의-장점" class="headerlink" title="2D Metrology의 장점"></a>2D Metrology의 장점</h2><ul>
+<li><p><strong>정밀한 측정</strong><br>초기 파라미터만으로 매우 정확한 측정이 가능합니다.</p>
+</li>
+<li><p><strong>빠른 처리 속도</strong><br>모델을 초기화한 후 빠르게 측정을 시작할 수 있습니다.</p>
+</li>
+<li><p><strong>다양한 객체 지원</strong><br>원, 타원, 직선, 직사각형 등 다양한 기하학적 객체를 정밀하게 측정할 수 있습니다.</p>
+</li>
+</ul>
+<p>2D Metrology는 기하학적 객체들의 정확한 측정을 위해 필수적인 도구입니다. HALCON의 2D Metrology 기능을 사용하면, 다양한 형태의 객체를 정밀하고 효율적으로 측정할 수 있습니다.</p>
+
+
+                    <!-- Tags Bottom -->
+                    
+                        <div class="tags-container-bottom">
+                            <i class="fa fa-tag pr3 text-main-color"></i><a class="fw5 ph1 dib" href="/tags/Computer-Vision/">#Computer Vision</a> <a class="fw5 ph1 dib" href="/tags/Halcon/">#Halcon</a> <a class="fw5 ph1 dib" href="/tags/Image-Processing/">#Image Processing</a>
+                        </div>
+                    
+
+                    <br><br>
+                    <div class="center-widget">
+
+                      <!-- <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/YunbinChang" rel="external nofollow noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+                      <br><br> -->
+                      <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+                    </div>
+
+                    <br><br>
+
+                      
+                    <!-- Bottom Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- Bottom -->
+<!-- Mobile -->
+<ins class="adsbygoogle db dn-ns"
+     data-ad-client="ca-pub-9129125082811791"
+     data-ad-slot="7989407759"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+
+<!-- PC -->
+<ins class="adsbygoogle dn db-ns"
+data-ad-format="autorelaxed"
+data-ad-client="ca-pub-9129125082811791"
+data-ad-slot="5963160156"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+                    <!-- Comments -->
+                    
+<div id="disqus_thread" class="mt4">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+
+
+
+                </div>
+                <div class="fl w-100 w-30-l center fw5 lh-copy pl4-ns tl black-50">
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 1: About -->
+                    <div class="mt4 mt0-l">
+    <article class="dt db-l mw8 mw8-m mw5-ns center ml0-l bg-white mv3">
+        <div class="dn dtc-m db-l v-mid tc pr4 pr0-l" style="min-width: 6rem;">
+            <img src="https://github.com/techbless/about-me/blob/master/profile.jpeg?raw=true" class="mb4-l br-100 h3 w3 w4-l w4-m h-auto dib" title="창윤빈 (Yunbin Chang)">
+        </div>
+        
+        <div class="center-widget dn db-l">
+            <a class="github-button" href="https://github.com/techbless" rel="external nofollow noreferrer" data-size="large" data-show-count="true" aria-label="Follow @techbless on GitHub">Follow @techbless</a>
+        </div>
+        <br>
+
+
+        <div class="dtc db-l v-mid lh-copy measure center f6 fw5 black-50 tc">
+            <!-- Place this tag where you want the button to render. -->
+            
+            안녕하세요✋<br> 밥 먹은지 24년, 앞으로 더 많이 먹고싶어요.
+        </div>
+    </article>
+</div>
+
+
+                    <hr class="dn-l mw4 black-50 mt4" />
+
+                    <!-- Widget 2: Categories -->
+                    
+                        <div class="mt4 tc tl-l">
+    <h3>Categories</h3>
+    
+        <p>
+            <a href="/categories/영상처리/">영상처리</a>
+        </p>
+    
+</div>
+
+
+                        <hr class="dn-l mw4 black-50 mt4" />
+                    
+
+                    <!-- Widget 3: Recent Posts -->
+                    <div class="mt4 tc tl-l f5-ns f6">
+    <h3>Recent Posts</h3>
+    
+        <p>
+            <a href="/2025/03/27/back-pressure/">Backpressure: 생산자-소비자 속도 불균형 문제 해결과 Little’s Law [...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/25/channel-blocking-collection/">C#에서 Channel&lt;T&gt;와 BlockingCollection&lt;T&gt; 대기 방식 비교 (B...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/19/ransac/">RANSAC 알고리즘 Recap</a>
+        </p>
+    
+        <p>
+            <a href="/2025/03/06/dotnet-LOH-fragmentation/">C# LOH Fragmentation과 고가용성을 위한 단편화 방지 전략</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/11/deepseek-r1/">[논문 리뷰] DeepSeek-R1: Incentivizing Reasoning Capab...</a>
+        </p>
+    
+        <p>
+            <a href="/2025/02/05/dotnet-GC-Generation-LOH-SOH/">C# .NET GC 제너레이션과 LOH/SOH 이해하기: 효율적인 메모리 관리</a>
+        </p>
+    
+        <p>
+            <a href="/2025/01/09/halcon-countobj/">Halcon - count_obj의 함정: EmptyObject vs. EmptyRegio...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/12/02/blocking-w-semaphore/">세마포어(Semaphore)를 이용한 블로킹(Blocking) 구현 원리와 활용 예제 (C...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/12/dotnet-concurrentbag-observer/">C#의 ConcurrentBag으로 멀티스레드 환경에서 옵저버 패턴의 생산자-소비자 문제 ...</a>
+        </p>
+    
+        <p>
+            <a href="/2024/11/05/ENIAC-ABC/">[Computer History Museum] ENIAC은 진정한 최초의 컴퓨터인가?</a>
+        </p>
+    
+</div>
+
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+
+                    <!-- SideBar Ads -->
+                    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+<!-- SideBar -->
+<script>
+     if(window.innerWidth >= 942) {
+          document.write('<ins class="adsbygoogle side_ads" \
+          style="display:block" \
+          data-ad-client="ca-pub-9129125082811791" \
+          data-ad-slot="1995339882" \
+          data-ad-format="auto" \
+          data-full-width-responsive="true"></ins>');
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     }
+</script>
+                </div>
+
+                  
+                  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="bg-1 ph2 ph5-ns pv4">
+        <div class="mv8">
+            <div class="center tc">
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="https://github.com/techbless" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="mailto:techblessme@gmail.com" rel="external nofollow noreferrer" target="_blank">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                
+                    <div class="dib mh3">
+                        <a class="f3 f2-ns white dim" href="/rss2.xml" target="_blank">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </div>
+                
+            </div>
+            <div class="f6 f5-ns center tc white pt5 fw4">
+                창윤빈 (Yunbin Chang). All right reserved
+            </div>
+        </div>
+    </div>
+
+
+<!-- After Footer -->
+<!-- Disqus Comments -->
+
+<script type="text/javascript">
+    var disqus_shortname = 'techbless';
+    (async function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    
+</script>
+
+
+
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+<script>
+    if (window.mermaid) {
+    mermaid.initialize({theme: 'natural'});
+    }
+</script>
+
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- AdSense -->
+<script data-ad-client="ca-pub-9129125082811791" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+</body>
+
+</html>
